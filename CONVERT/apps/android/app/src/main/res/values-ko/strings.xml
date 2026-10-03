@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Downloader 다운로더</string>
+    <string name="tab_browser">브라우저</string>
+    <string name="tab_progress">진행 상태</string>
+    <string name="tab_player">플레이어</string>
+    <string name="tab_settings">설정</string>
+    <string name="title_settings">설정</string>
+    <string name="title_language">언어 설정</string>
+    <string name="title_vault">비밀 금고</string>
+    <string name="card_subscription_title">AI Downloader Pro 정기구독</string>
+    <string name="card_subscription_subtitle">4K 다운로드, 초고속 속도 및 광고 제거</string>
+    <string name="card_policy_title">개인정보 처리방침</string>
+    <string name="card_policy_desc">데이터 보호 및 보안 정책</string>
+    <string name="card_tos_title">서비스 이용약관</string>
+    <string name="card_tos_desc">이용 규정 및 법적 고지사항</string>
+    <string name="card_version_title">앱 버전</string>
+    <string name="card_version_desc">v2.2.0-pro (최신 버전)</string>
+    <string name="btn_upgrade_pro">지금 업그레이드</string>
+    <string name="btn_check_update">업데이트 확인</string>
+    <string name="btn_download">다운로드</string>
+    <string name="btn_cancel">취소</string>
+    <string name="btn_play">재생</string>
+    <string name="btn_pause">일시정지</string>
+    <string name="btn_resume">계속하기</string>
+    <string name="btn_set_default">기본값으로 설정</string>
+    <string name="btn_clear_all">모두 지우기</string>
+    <string name="downloading">다운로드 중</string>
+    <string name="downloaded">완료됨</string>
+    <string name="search_hint">Google 검색 또는 URL 입력...</string>
+    <string name="paywall_title">AI Downloader PRO 잠금 해제</string>
+    <string name="paywall_subtitle">초고속 다운로드 및 완벽한 광고 제거</string>
+    <string name="paywall_benefit_1">완전한 무광고 환경</string>
+    <string name="paywall_benefit_2">5배 빠른 멀티스레드 터보 다운로드</string>
+    <string name="paywall_benefit_3">4K 및 8K 초고화질 완벽 지원</string>
+    <string name="paywall_benefit_4">무제한 암호화 개인 금고</string>
+    <string name="paywall_plan_weekly">주간 플랜</string>
+    <string name="paywall_plan_yearly">연간 플랜 (최대 혜택)</string>
+    <string name="paywall_plan_lifetime">평생 이용권</string>
+    <string name="paywall_btn_subscribe">지금 구독하기</string>
+    <string name="paywall_btn_restore">구매 복원</string>
+    <string name="msg_update_latest">이미 최신 버전을 사용하고 있습니다!</string>
+    <string name="msg_pro_unlocked">축하합니다! AI Downloader PRO가 잠금 해제되었습니다!</string>
+</resources>

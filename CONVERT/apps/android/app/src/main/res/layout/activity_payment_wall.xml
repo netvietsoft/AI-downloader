@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_payment_wall"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#090D16"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:padding="20dp">
+
+        <!-- Top Bar: Close Button -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/btn_close_paywall"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="start|center_vertical"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Close"
+                android:padding="6dp"
+                android:src="@drawable/ic_small_close"
+                app:tint="#94A3B8" />
+
+            <TextView
+                android:id="@+id/btn_restore_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="8dp"
+                android:text="@string/paywall_btn_restore"
+                android:textColor="#94A3B8"
+                android:textSize="12sp" />
+        </FrameLayout>
+
+        <!-- Hero Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <!-- VIP Crown Badge -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_pill_btn_outline"
+                android:paddingStart="14dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="14dp"
+                android:paddingBottom="6dp"
+                android:text="@string/paywall_badge_vip"
+                android:textColor="#F59E0B"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_paywall_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/paywall_title"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_paywall_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/paywall_subtitle"
+                android:textColor="#94A3B8"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Feature Benefits Box -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_card_dark"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Item 1: No Ads -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🚫"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:text="@string/paywall_benefit_1"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="#1E293B" />
+
+            <!-- Item 2: 5x Speed -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⚡"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:text="@string/paywall_benefit_2"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="#1E293B" />
+
+            <!-- Item 3: 4K / 8K -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🎬"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:text="@string/paywall_benefit_3"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="#1E293B" />
+
+            <!-- Item 4: Unlimited Vault -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔒"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:text="@string/paywall_benefit_4"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Subscription Plans Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/paywall_choose_plan"
+            android:textColor="#94A3B8"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <!-- Plan 1: Weekly -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/card_plan_weekly_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_plan_unselected"
+            android:clipToOutline="true">
+
+            <LinearLayout
+                android:id="@+id/card_plan_weekly"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingTop="18dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="18dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <RadioButton
+                    android:id="@+id/rb_plan_weekly"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:buttonTint="#F59E0B" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/paywall_plan_weekly"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_subtext_weekly"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Flexible weekly billing"
+                        android:textColor="#94A3B8"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_price_weekly"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$2.99"
+                    android:textColor="#FFFFFF"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Ánh sáng chéo nhẹ khi card Weekly được chọn -->
+            <View
+                android:id="@+id/view_sheen_weekly"
+                android:layout_width="80dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_shimmer_sheen"
+                android:rotation="25"
+                android:scaleY="1.8"
+                android:translationX="-160dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Plan 2: Yearly (Best Value) -->
+        <FrameLayout
+            android:id="@+id/card_plan_yearly_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingTop="10dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/card_plan_yearly_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_plan_selected"
+                android:clipToOutline="true">
+
+                <LinearLayout
+                    android:id="@+id/card_plan_yearly"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="16dp"
+                    android:paddingTop="18dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="18dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <RadioButton
+                        android:id="@+id/rb_plan_yearly"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:clickable="false"
+                        android:buttonTint="#F59E0B" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/paywall_plan_yearly"
+                            android:textColor="#FFFFFF"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_subtext_yearly"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Just $1.66 / month • Save 70%"
+                            android:textColor="#F59E0B"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_price_yearly"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$19.99"
+                        android:textColor="#F59E0B"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Ánh sáng chéo nhẹ khi card Yearly được chọn -->
+                <View
+                    android:id="@+id/view_sheen_yearly"
+                    android:layout_width="80dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/bg_shimmer_sheen"
+                    android:rotation="25"
+                    android:scaleY="1.8"
+                    android:translationX="-160dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Best Value Badge -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|top"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_btn_pro_gold"
+                android:paddingStart="10dp"
+                android:paddingTop="3dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="3dp"
+                android:text="@string/paywall_best_value"
+                android:textColor="#090D16"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <!-- Plan 3: Lifetime -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/card_plan_lifetime_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_plan_unselected"
+            android:clipToOutline="true">
+
+            <LinearLayout
+                android:id="@+id/card_plan_lifetime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingTop="18dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="18dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <RadioButton
+                    android:id="@+id/rb_plan_lifetime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:buttonTint="#F59E0B" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/paywall_plan_lifetime"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_subtext_lifetime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pay once, own forever"
+                        android:textColor="#94A3B8"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_price_lifetime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$39.99"
+                    android:textColor="#FFFFFF"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Ánh sáng chéo nhẹ khi card Lifetime được chọn -->
+            <View
+                android:id="@+id/view_sheen_lifetime"
+                android:layout_width="80dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_shimmer_sheen"
+                android:rotation="25"
+                android:scaleY="1.8"
+                android:translationX="-160dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- CTA Subscribe Button with Diagonal Sheen Shimmer Animation -->
+        <FrameLayout
+            android:id="@+id/layout_btn_subscribe_container"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@drawable/bg_btn_pro_gold"
+            android:clipToOutline="true"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:id="@+id/btn_paywall_subscribe"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/paywall_btn_subscribe"
+                android:textColor="#090D16"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- Ánh sáng chéo nhẹ trượt qua nút (Diagonal Sheen Beam) -->
+            <View
+                android:id="@+id/view_shimmer_sheen"
+                android:layout_width="65dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/bg_shimmer_sheen"
+                android:rotation="25"
+                android:translationX="-120dp" />
+        </FrameLayout>
+
+        <!-- Legal and Terms Links -->
+        <TextView
+            android:id="@+id/tv_paywall_legal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:text="@string/paywall_legal_text"
+            android:textColor="#64748B"
+            android:textSize="11sp" />
+
+    </LinearLayout>
+</ScrollView>

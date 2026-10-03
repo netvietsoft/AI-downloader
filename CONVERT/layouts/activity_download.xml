@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@id/root_download" android:background="@color/main_page_color" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.Toolbar android:id="@id/toolbar" android:layout_width="fill_parent" android:layout_height="?actionBarSize" app:contentInsetStartWithNavigation="0.0dip" app:theme="@style/ToolbarTheme" app:titleMarginStart="0.0dip" />
+    <android.supprot.design.widgit.view.MyViewPager android:id="@id/viewpager" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_above="@id/ad_layout" android:layout_below="@id/toolbar" />
+    <LinearLayout android:gravity="center_horizontal" android:layout_gravity="center_horizontal" android:orientation="vertical" android:id="@id/ad_layout" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_above="@id/bottom_nav_view" />
+    <videoplayer.videodownloader.downloader.view.bottomnavigationviewex.BottomNavigationViewEx android:id="@id/bottom_nav_view" android:background="#ffffffff" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" app:itemTextAppearanceActive="@style/blackText" app:itemTextAppearanceInactive="@style/boldText" app:itemTextColor="@color/selector_nav_color" app:menu="@menu/menu_navigation" />
+</RelativeLayout>

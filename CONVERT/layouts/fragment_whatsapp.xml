@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.recyclerview.widget.RecyclerView android:id="@id/rv_whatsapp" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginStart="@dimen/cm_dp_12" android:layout_marginEnd="@dimen/cm_dp_12" />
+    <LinearLayout android:gravity="center" android:layout_gravity="center" android:orientation="vertical" android:id="@id/view_empty" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/ic_list_empty" />
+        <TextView android:textSize="@dimen/cm_sp_14" android:textColor="@color/sub_title_color" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110292" android:fontFamily="@font/lato_regular" />
+    </LinearLayout>
+</FrameLayout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@id/all_videos_root" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.Toolbar android:id="@id/toolbar" android:layout_width="fill_parent" android:layout_height="?actionBarSize" app:contentInsetStartWithNavigation="0.0dip" app:theme="@style/ToolbarTheme" app:title="@string/APKTOOL_DUPLICATE_string_0x7f110067" app:titleMarginStart="0.0dip" />
+    <RelativeLayout android:id="@id/video_cleaning" android:background="@drawable/bg_item_video" android:layout_width="fill_parent" android:layout_height="@dimen/cm_dp_72" android:layout_below="@id/toolbar" android:layout_marginStart="@dimen/cm_dp_14" android:layout_marginEnd="@dimen/cm_dp_14">
+        <ImageView android:id="@id/iv_video_cleaning" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_marginStart="@dimen/cm_dp_14" android:layout_marginEnd="@dimen/cm_dp_8" app:srcCompat="@drawable/ic_cleaning" />
+        <TextView android:textSize="@dimen/cm_sp_18" android:textColor="@color/title_color" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110455" android:layout_centerVertical="true" android:fontFamily="@font/lato_black" android:layout_toEndOf="@id/iv_video_cleaning" />
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_marginEnd="@dimen/cm_dp_21" android:layout_alignParentEnd="true" app:srcCompat="@drawable/ic_right_arrow" />
+    </RelativeLayout>
+    <LinearLayout android:gravity="center" android:orientation="horizontal" android:id="@id/ad_layout" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" />
+    <FrameLayout android:id="@id/main_container" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginTop="@dimen/cm_dp_20" android:layout_above="@id/ad_layout" android:layout_below="@id/video_cleaning" />
+</RelativeLayout>

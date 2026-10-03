@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_gravity="bottom" android:orientation="vertical" android:background="@drawable/bg_e60f0f0f_top_radius" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:gravity="center_vertical" android:layout_width="fill_parent" android:layout_height="@dimen/dp_64">
+        <androidx.appcompat.widget.AppCompatImageView android:id="@id/iv_back" android:padding="@dimen/dp_4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dp_16" app:srcCompat="@drawable/ic_back" />
+        <androidx.appcompat.widget.AppCompatTextView android:textSize="@dimen/sp_16" android:textColor="@color/white" android:id="@id/tv_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110306" android:fontFamily="@font/lato_bold" />
+    </LinearLayout>
+    <ScrollView android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <TableLayout android:id="@id/property_layout" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/dp_20" android:layout_marginRight="@dimen/dp_20" android:layout_marginBottom="@dimen/dp_32" android:layout_marginHorizontal="@dimen/dp_20">
+            <TableRow android:layout_marginTop="@dimen/dp_10" android:layout_marginBottom="@dimen/dp_10" android:layout_marginVertical="@dimen/dp_10">
+                <TextView android:textSize="@dimen/sp_14" android:textColor="#99ffffff" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110281" android:layout_weight="0.0" />
+                <TextView android:textSize="@dimen/sp_14" android:textColor="@color/white" android:id="@id/value_name" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1.0" android:textAlignment="viewStart" android:layout_marginStart="@dimen/dp_20" />
+            </TableRow>
+            <TableRow android:id="@id/location_layout" android:layout_marginTop="@dimen/dp_10" android:layout_marginBottom="@dimen/dp_10" android:layout_marginVertical="@dimen/dp_10">
+                <TextView android:textSize="@dimen/sp_14" android:textColor="#99ffffff" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f1102d4" android:layout_weight="0.0" />
+                <TextView android:textSize="@dimen/sp_14" android:textColor="@color/white" android:id="@id/value_location" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1.0" android:textAlignment="viewStart" android:layout_marginStart="@dimen/dp_20" />
+            </TableRow>
+            <TableRow android:id="@id/size_layout" android:layout_marginTop="@dimen/dp_10" android:layout_marginBottom="@dimen/dp_10" android:layout_marginVertical="@dimen/dp_10">
+                <TextView android:textSize="@dimen/sp_14" android:textColor="#99ffffff" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f11036b" android:layout_weight="0.0" />
+                <TextView android:textSize="@dimen/sp_14" android:textColor="@color/white" android:id="@id/value_size" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1.0" android:textAlignment="viewStart" android:layout_marginStart="@dimen/dp_20" />
+            </TableRow>
+            <TableRow android:id="@id/date_layout" android:layout_marginTop="@dimen/dp_10" android:layout_marginBottom="@dimen/dp_10" android:layout_marginVertical="@dimen/dp_10">
+                <TextView android:textSize="@dimen/sp_14" android:textColor="#99ffffff" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110131" android:layout_weight="0.0" />
+                <TextView android:textSize="@dimen/sp_14" android:textColor="@color/white" android:id="@id/value_date" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1.0" android:textAlignment="viewStart" android:layout_marginStart="@dimen/dp_20" />
+            </TableRow>
+            <TableRow android:id="@id/format_layout" android:layout_marginTop="@dimen/dp_10" android:layout_marginBottom="@dimen/dp_10" android:layout_marginVertical="@dimen/dp_10">
+                <TextView android:textSize="@dimen/sp_14" android:textColor="#99ffffff" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f1101ba" android:layout_weight="0.0" />
+                <TextView android:textSize="@dimen/sp_14" android:textColor="@color/white" android:id="@id/value_format" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1.0" android:textAlignment="viewStart" android:layout_marginStart="@dimen/dp_20" />
+            </TableRow>
+            <TableRow android:layout_marginTop="@dimen/dp_10" android:layout_marginBottom="@dimen/dp_10" android:layout_marginVertical="@dimen/dp_10">
+                <TextView android:textSize="@dimen/sp_14" android:textColor="#99ffffff" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f11016c" android:layout_weight="0.0" />
+                <TextView android:textSize="@dimen/sp_14" android:textColor="@color/white" android:id="@id/value_length" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1.0" android:textAlignment="viewStart" android:layout_marginStart="@dimen/dp_20" />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+</LinearLayout>

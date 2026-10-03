@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Downloader Pengunduh</string>
+    <string name="tab_browser">Peramban</string>
+    <string name="tab_progress">Progres</string>
+    <string name="tab_player">Pemutar</string>
+    <string name="tab_settings">Pengaturan</string>
+    <string name="title_settings">Pengaturan</string>
+    <string name="title_language">Bahasa</string>
+    <string name="title_vault">Brankas Pribadi</string>
+    <string name="card_subscription_title">Langganan AI Downloader Pro</string>
+    <string name="card_subscription_subtitle">Buka unduhan 4K, kecepatan turbo &amp; tanpa iklan</string>
+    <string name="card_policy_title">Kebijakan Privasi</string>
+    <string name="card_policy_desc">Komitmen keamanan &amp; privasi data</string>
+    <string name="card_tos_title">Ketentuan Layanan</string>
+    <string name="card_tos_desc">Pedoman penggunaan &amp; ketentuan hukum</string>
+    <string name="card_version_title">Versi Aplikasi</string>
+    <string name="card_version_desc">v2.2.0-pro (Versi terbaru)</string>
+    <string name="btn_upgrade_pro">Tingkatkan Sekarang</string>
+    <string name="btn_check_update">Periksa Pembaruan</string>
+    <string name="btn_download">Unduh</string>
+    <string name="btn_cancel">Batal</string>
+    <string name="btn_play">Putar</string>
+    <string name="btn_pause">Jeda</string>
+    <string name="btn_resume">Lanjutkan</string>
+    <string name="btn_set_default">Jadikan Default</string>
+    <string name="btn_clear_all">Hapus Semua</string>
+    <string name="downloading">Mengunduh</string>
+    <string name="downloaded">Selesai</string>
+    <string name="search_hint">Cari Google atau masukkan URL...</string>
+    <string name="paywall_title">Buka AI Downloader PRO</string>
+    <string name="paywall_subtitle">Unduh ultra-cepat &amp; tanpa iklan</string>
+    <string name="paywall_benefit_1">Bebas dari segala iklan</string>
+    <string name="paywall_benefit_2">Kecepatan unduh multi-thread 5X</string>
+    <string name="paywall_benefit_3">Dukungan resolusi 4K &amp; 8K</string>
+    <string name="paywall_benefit_4">Brankas pribadi terenkripsi tanpa batas</string>
+    <string name="paywall_plan_weekly">Paket Mingguan</string>
+    <string name="paywall_plan_yearly">Paket Tahunan (Paling Hemat)</string>
+    <string name="paywall_plan_lifetime">Akses Seumur Hidup</string>
+    <string name="paywall_btn_subscribe">LANGGANAN SEKARANG</string>
+    <string name="paywall_btn_restore">Pulihkan Pembelian</string>
+    <string name="msg_update_latest">Anda sudah menggunakan versi terbaru!</string>
+    <string name="msg_pro_unlocked">Selamat! AI Downloader PRO berhasil dibuka!</string>
+</resources>

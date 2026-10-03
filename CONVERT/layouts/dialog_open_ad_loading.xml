@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <ImageView android:id="@id/splash_icon" android:background="@drawable/bg_round_corner" android:layout_width="@dimen/cm_dp_80" android:layout_height="@dimen/cm_dp_80" android:src="@drawable/app_icon" android:layout_centerHorizontal="true" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.28" />
+        <TextView android:textSize="@dimen/cm_sp_18" android:textColor="@color/title_color" android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_20" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110066" android:layout_below="@id/splash_icon" android:fontFamily="@font/lato_black" android:layout_marginStart="@dimen/cm_dp_8" android:layout_marginEnd="@dimen/cm_dp_8" app:layout_constraintTop_toBottomOf="@id/splash_icon" />
+        <com.airbnb.lottie.LottieAnimationView android:id="@id/splash_progress_bar" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/cm_dp_36" android:layout_alignParentBottom="true" android:layout_marginStart="@dimen/cm_dp_86" android:layout_marginEnd="@dimen/cm_dp_86" app:layout_constraintBottom_toBottomOf="parent" app:lottie_autoPlay="true" app:lottie_loop="true" app:lottie_rawRes="@raw/splash_progress" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

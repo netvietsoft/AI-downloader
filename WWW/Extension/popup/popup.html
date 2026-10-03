@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Video Downloader Pro</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="popup-container">
+        <!-- Header -->
+        <header class="popup-header">
+            <div class="brand">
+                <div class="brand-logo">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                </div>
+                <div class="brand-info">
+                    <h2>AI Downloader</h2>
+                    <span class="version">v2.2.0 Pro • Sniffer Active</span>
+                </div>
+            </div>
+            <div class="status-indicator">
+                <span class="status-dot"></span>
+                <span class="status-text">Sẵn Sàng</span>
+            </div>
+        </header>
+
+        <!-- User Authentication & Account Card -->
+        <section class="user-card" id="user-section">
+            <!-- Dynamic State injected by JS (Logged in vs Logged out) -->
+            <div class="loading-spinner">Đang kiểm tra tài khoản...</div>
+        </section>
+
+        <!-- Detected Videos on Active Tab -->
+        <section class="detected-section">
+            <div class="section-title">
+                <span>Video Khả Dụng Trên Tab Này</span>
+                <span class="badge" id="detected-count">1</span>
+            </div>
+            <div class="video-item" id="detected-video-box">
+                <div class="video-thumb-container">
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200" alt="Video Thumb" id="tab-video-thumb">
+                    <span class="video-duration" id="tab-video-duration">03:45</span>
+                </div>
+                <div class="video-meta">
+                    <h4 class="video-title" id="tab-video-title">Tự động phát hiện video stream trên trang đang mở...</h4>
+                    <p class="video-domain" id="tab-video-domain">Chất lượng cao Full HD 1080p</p>
+                    <div class="quick-download-actions">
+                        <button class="btn-quick-dl" id="btn-quick-dl-1080">Tải 1080p MP4</button>
+                        <button class="btn-quick-dl btn-audio" id="btn-quick-dl-mp3">Tải MP3</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Action Links -->
+        <footer class="popup-footer">
+            <button class="btn-footer primary" id="btn-open-web">
+                <span>⚡ Mở Web AI Downloader (Port 5100)</span>
+            </button>
+            <button class="btn-footer vip" id="btn-upgrade-vip">
+                <span>👑 Nâng Cấp VIP Không Giới Hạn</span>
+            </button>
+        </footer>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

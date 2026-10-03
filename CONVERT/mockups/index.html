@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ace Video Downloader & Player - Redesign System & UI Architecture</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #3B82F6;
+      --primary-gradient: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+      --accent: #10B981;
+      --accent-orange: #F59E0B;
+      --accent-purple: #8B5CF6;
+      --accent-pink: #EC4899;
+      --bg-dark: #0B0F19;
+      --bg-surface: #111827;
+      --bg-surface-elevated: #1F2937;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(59, 130, 246, 0.5);
+      --text-main: #F9FAFB;
+      --text-secondary: #9CA3AF;
+      --text-muted: #6B7280;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+    header { background: var(--bg-surface); border-bottom: 1px solid var(--border); padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 50; }
+    .brand { display: flex; align-items: center; gap: 0.75rem; }
+    .brand-icon { width: 38px; height: 38px; border-radius: 10px; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 0 15px rgba(37, 99, 235, 0.5); }
+    .brand h1 { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em; }
+    .brand p { font-size: 0.75rem; color: var(--text-secondary); }
+    .container { max-width: 1400px; margin: 0 auto; padding: 2rem; width: 100%; display: grid; grid-template-columns: 360px 1fr; gap: 2.5rem; }
+    
+    /* Device Mockup */
+    .device-wrapper { position: sticky; top: 90px; height: fit-content; display: flex; flex-direction: column; align-items: center; }
+    .phone-mockup { width: 340px; height: 690px; background: #000; border: 10px solid #1e293b; border-radius: 44px; overflow: hidden; box-shadow: var(--shadow-lg), 0 0 40px rgba(37, 99, 235, 0.15); display: flex; flex-direction: column; position: relative; }
+    .notch { width: 120px; height: 22px; background: #1e293b; border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; position: absolute; top: 0; left: 50%; transform: translateX(-50%); z-index: 40; }
+    .phone-screen { flex: 1; background: #0F172A; display: flex; flex-direction: column; overflow-y: auto; padding-top: 26px; }
+    
+    /* Mobile App UI */
+    .app-topbar { padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+    .app-title { font-size: 1rem; font-weight: 700; color: #fff; }
+    .app-actions { display: flex; gap: 0.5rem; }
+    .icon-btn { width: 32px; height: 32px; border-radius: 8px; background: var(--bg-surface-elevated); border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+    
+    /* Search / Sniffer Bar */
+    .search-section { padding: 1rem; }
+    .url-bar { background: var(--bg-surface-elevated); border-radius: 12px; padding: 0.6rem 0.85rem; display: flex; align-items: center; gap: 0.5rem; border: 1px solid var(--border); }
+    .url-input { background: transparent; border: none; outline: none; color: #fff; font-size: 0.85rem; width: 100%; }
+    
+    /* Shortcuts Grid */
+    .shortcuts-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; padding: 0 1rem 1rem; text-align: center; }
+    .shortcut-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 0.75rem 0.25rem; cursor: pointer; transition: all 0.2s; }
+    .shortcut-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+    .shortcut-icon { width: 36px; height: 36px; border-radius: 10px; margin: 0 auto 0.4rem; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; }
+    .sc-fb { background: rgba(24, 119, 242, 0.2); color: #1877F2; }
+    .sc-ins { background: rgba(225, 48, 108, 0.2); color: #E1306C; }
+    .sc-wa { background: rgba(37, 211, 102, 0.2); color: #25D366; }
+    .sc-tt { background: rgba(0, 242, 234, 0.2); color: #00F2EA; }
+    .shortcut-label { font-size: 0.7rem; font-weight: 500; color: var(--text-secondary); }
+    
+    /* Sniffer Floating Card */
+    .sniffer-popup { margin: 0 1rem 1rem; background: linear-gradient(135deg, rgba(37, 99, 235, 0.2) 0%, rgba(16, 185, 129, 0.15) 100%); border: 1px solid rgba(59, 130, 246, 0.4); border-radius: 14px; padding: 0.85rem; position: relative; }
+    .sniffer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+    .sniffer-badge { background: var(--accent); color: #000; font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
+    .sniffer-title { font-size: 0.8rem; font-weight: 600; }
+    .sniffer-options { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.5rem; }
+    .res-pill { background: rgba(0, 0, 0, 0.4); padding: 0.4rem 0.6rem; border-radius: 8px; font-size: 0.75rem; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); }
+    .btn-download-now { background: var(--primary); color: #fff; border: none; border-radius: 6px; padding: 3px 8px; font-size: 0.7rem; font-weight: 600; cursor: pointer; }
+    
+    /* Bottom Navigation Bar */
+    .bottom-nav { margin-top: auto; background: var(--bg-surface); border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 0.6rem 0.25rem; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; color: var(--text-muted); font-size: 0.65rem; cursor: pointer; }
+    .nav-item.active { color: var(--primary); font-weight: 600; }
+    .nav-icon { font-size: 16px; }
+
+    /* Right Specs & Design System */
+    .spec-content { display: flex; flex-direction: column; gap: 2rem; }
+    .card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.75rem; }
+    .card h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .token-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
+    .token-chip { border-radius: var(--radius-sm); padding: 0.75rem; border: 1px solid var(--border); background: var(--bg-surface-elevated); }
+    .color-swatch { height: 38px; border-radius: 6px; margin-bottom: 0.5rem; }
+    .token-chip span { display: block; font-size: 0.75rem; }
+    .token-name { font-weight: 600; color: var(--text-main); }
+    .token-hex { font-family: 'JetBrains Mono', monospace; color: var(--text-secondary); font-size: 0.7rem; }
+    
+    .table-container { overflow-x: auto; margin-top: 1rem; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
+    th { background: var(--bg-surface-elevated); color: var(--text-secondary); padding: 0.75rem 1rem; font-weight: 600; border-bottom: 1px solid var(--border); }
+    td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--border); }
+    tr:hover td { background: rgba(255, 255, 255, 0.02); }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
+    .badge-primary { background: rgba(59, 130, 246, 0.2); color: #60A5FA; }
+    .badge-success { background: rgba(16, 185, 129, 0.2); color: #34D399; }
+    .badge-warning { background: rgba(245, 158, 11, 0.2); color: #FBBF24; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="brand-icon">⚡</div>
+      <div>
+        <h1>Ace Video Downloader & Player — Modern Redesign System</h1>
+        <p>Package: videoplayer.videodownloader.downloader | Target SDK 35 | Material 3 & Dark Aesthetic</p>
+      </div>
+    </div>
+    <div style="font-size: 0.85rem; color: var(--text-secondary); font-family: 'JetBrains Mono', monospace;">
+      Design Architecture v2.0
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Left: Mobile Device Mockup -->
+    <div class="device-wrapper">
+      <div class="phone-mockup">
+        <div class="notch"></div>
+        <div class="phone-screen">
+          <div class="app-topbar">
+            <span class="app-title">Ace Downloader</span>
+            <div class="app-actions">
+              <button class="icon-btn" title="Private Vault">🔒</button>
+              <button class="icon-btn" title="Cleaner">🧹</button>
+              <button class="icon-btn" title="Settings">⚙️</button>
+            </div>
+          </div>
+
+          <div class="search-section">
+            <div class="url-bar">
+              <span style="color: var(--text-muted); font-size: 14px;">🔍</span>
+              <input type="text" class="url-input" value="https://instagram.com" readonly>
+              <span style="color: var(--primary); font-size: 12px; font-weight: 600;">GO</span>
+            </div>
+          </div>
+
+          <div class="shortcuts-grid">
+            <div class="shortcut-card">
+              <div class="shortcut-icon sc-fb">f</div>
+              <span class="shortcut-label">Facebook</span>
+            </div>
+            <div class="shortcut-card">
+              <div class="shortcut-icon sc-ins">📷</div>
+              <span class="shortcut-label">Instagram</span>
+            </div>
+            <div class="shortcut-card">
+              <div class="shortcut-icon sc-wa">💬</div>
+              <span class="shortcut-label">WhatsApp</span>
+            </div>
+            <div class="shortcut-card">
+              <div class="shortcut-icon sc-tt">🎵</div>
+              <span class="shortcut-label">TikTok</span>
+            </div>
+          </div>
+
+          <!-- Sniffer Card Notification -->
+          <div class="sniffer-popup">
+            <div class="sniffer-header">
+              <div style="display:flex; align-items:center; gap:0.4rem;">
+                <span class="sniffer-badge">DETECTED</span>
+                <span class="sniffer-title">Video Resource Ready</span>
+              </div>
+              <span style="font-size: 11px; color: var(--text-muted);">1080p MP4</span>
+            </div>
+            <div class="sniffer-options">
+              <div class="res-pill">
+                <span>1080p Full HD (60fps)</span>
+                <button class="btn-download-now">42.5 MB</button>
+              </div>
+              <div class="res-pill">
+                <span>720p HD (High)</span>
+                <button class="btn-download-now">18.2 MB</button>
+              </div>
+              <div class="res-pill">
+                <span>M4A High Audio (320k)</span>
+                <button class="btn-download-now">3.4 MB</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Navigation Bar -->
+          <div class="bottom-nav">
+            <div class="nav-item active">
+              <span class="nav-icon">🌐</span>
+              <span>Browse</span>
+            </div>
+            <div class="nav-item">
+              <span class="nav-icon">⬇️</span>
+              <span>Downloads</span>
+            </div>
+            <div class="nav-item">
+              <span class="nav-icon">▶️</span>
+              <span>Player</span>
+            </div>
+            <div class="nav-item">
+              <span class="nav-icon">📁</span>
+              <span>Files</span>
+            </div>
+            <div class="nav-item">
+              <span class="nav-icon">👤</span>
+              <span>Me</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Design System & Architectural Blueprint -->
+    <div class="spec-content">
+      <!-- Section 1: Color Tokens -->
+      <div class="card">
+        <h2>🎨 Color Tokens (Material 3 Palette)</h2>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem;">
+          Extracted directly from decompiled <code>res/values/colors.xml</code> and mapped to modern sleek Dark Mode variables.
+        </p>
+        <div class="token-grid">
+          <div class="token-chip">
+            <div class="color-swatch" style="background: #2563EB;"></div>
+            <span class="token-name">colorPrimary</span>
+            <span class="token-hex">#2563EB</span>
+          </div>
+          <div class="token-chip">
+            <div class="color-swatch" style="background: #10B981;"></div>
+            <span class="token-name">colorAccent</span>
+            <span class="token-hex">#10B981</span>
+          </div>
+          <div class="token-chip">
+            <div class="color-swatch" style="background: #0B0F19;"></div>
+            <span class="token-name">bgDark</span>
+            <span class="token-hex">#0B0F19</span>
+          </div>
+          <div class="token-chip">
+            <div class="color-swatch" style="background: #1F2937;"></div>
+            <span class="token-name">surfaceElevated</span>
+            <span class="token-hex">#1F2937</span>
+          </div>
+          <div class="token-chip">
+            <div class="color-swatch" style="background: #1877F2;"></div>
+            <span class="token-name">brandFacebook</span>
+            <span class="token-hex">#1877F2</span>
+          </div>
+          <div class="token-chip">
+            <div class="color-swatch" style="background: #E1306C;"></div>
+            <span class="token-name">brandInstagram</span>
+            <span class="token-hex">#E1306C</span>
+          </div>
+          <div class="token-chip">
+            <div class="color-swatch" style="background: #25D366;"></div>
+            <span class="token-name">brandWhatsApp</span>
+            <span class="token-hex">#25D366</span>
+          </div>
+          <div class="token-chip">
+            <div class="color-swatch" style="background: #F59E0B;"></div>
+            <span class="token-name">colorWarning</span>
+            <span class="token-hex">#F59E0B</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Screen Architecture Blueprint -->
+      <div class="card">
+        <h2>📱 Screen Architecture & Module Mapping</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Screen / Activity</th>
+                <th>Layout File</th>
+                <th>Primary Function</th>
+                <th>Monetization / Security</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>SplashActivity</strong></td>
+                <td><code>activity_splash.xml</code></td>
+                <td>App bootstrap, /proc/cmdline anti-tamper, Play Store fallback verification</td>
+                <td><span class="badge badge-warning">App Open Ad</span></td>
+              </tr>
+              <tr>
+                <td><strong>MainActivity</strong></td>
+                <td><code>activity_main.xml</code></td>
+                <td>Multi-tab Web browser hub, URL bar, social shortcuts, sniffer coordinator</td>
+                <td><span class="badge badge-primary">Bottom Banner</span></td>
+              </tr>
+              <tr>
+                <td><strong>WebDownloadActivity</strong></td>
+                <td><code>activity_web_download.xml</code></td>
+                <td>Active download queue, chunked multi-thread progress, pause/resume</td>
+                <td><span class="badge badge-warning">Finish Interstitial</span></td>
+              </tr>
+              <tr>
+                <td><strong>AcePlayerActivity</strong></td>
+                <td><code>activity_ace_player.xml</code></td>
+                <td>Hardware-accelerated video player (FFmpegKit/ExoPlayer), gesture control</td>
+                <td><span class="badge badge-warning">AdMob Interstitial</span></td>
+              </tr>
+              <tr>
+                <td><strong>SecurityActivity</strong></td>
+                <td><code>activity_security.xml</code></td>
+                <td>Private video vault with 4-digit PIN, recovery email, AES encryption</td>
+                <td><span class="badge badge-success">Vault Security</span></td>
+              </tr>
+              <tr>
+                <td><strong>VideoCleaningActivity</strong></td>
+                <td><code>activity_video_cleaning.xml</code></td>
+                <td>Duplicate video scanner, cache cleaner, WhatsApp media junk sweeper</td>
+                <td><span class="badge badge-primary">Native Ad Card</span></td>
+              </tr>
+              <tr>
+                <td><strong>WhatsSaverActivity</strong></td>
+                <td><code>activity_whats_saver.xml</code></td>
+                <td>WhatsApp & WA Business Status video/image saver using Storage Access Framework</td>
+                <td><span class="badge badge-primary">Interstitial</span></td>
+              </tr>
+              <tr>
+                <td><strong>FbActivity / InsActivity</strong></td>
+                <td><code>activity_fb.xml / ins.xml</code></td>
+                <td>Direct URL parser & Cookie-authenticated WebView downloader</td>
+                <td><span class="badge badge-success">Deepthought API</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

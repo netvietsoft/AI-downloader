@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Downloader 下载器</string>
+    <string name="tab_browser">浏览器</string>
+    <string name="tab_progress">下载进度</string>
+    <string name="tab_player">播放器</string>
+    <string name="tab_settings">设置</string>
+    <string name="title_settings">设置</string>
+    <string name="title_language">语言选择</string>
+    <string name="title_vault">私密保险箱</string>
+    <string name="card_subscription_title">AI Downloader Pro 会员订阅</string>
+    <string name="card_subscription_subtitle">解锁4K超清、极速下载与免广告</string>
+    <string name="card_policy_title">隐私政策</string>
+    <string name="card_policy_desc">安全保障与个人信息保护</string>
+    <string name="card_tos_title">服务条款</string>
+    <string name="card_tos_desc">用户协议与法律声明</string>
+    <string name="card_version_title">软件版本</string>
+    <string name="card_version_desc">v2.2.0-pro (最新版本)</string>
+    <string name="btn_upgrade_pro">立即升级</string>
+    <string name="btn_check_update">检查更新</string>
+    <string name="btn_download">下载</string>
+    <string name="btn_cancel">取消</string>
+    <string name="btn_play">播放</string>
+    <string name="btn_pause">暂停</string>
+    <string name="btn_resume">继续</string>
+    <string name="btn_set_default">设为默认</string>
+    <string name="btn_clear_all">全部清除</string>
+    <string name="downloading">下载中</string>
+    <string name="downloaded">已完成</string>
+    <string name="search_hint">搜索谷歌或输入网址...</string>
+    <string name="paywall_title">解锁 AI Downloader PRO</string>
+    <string name="paywall_subtitle">超速下载，零广告干扰</string>
+    <string name="paywall_benefit_1">纯净体验，零广告</string>
+    <string name="paywall_benefit_2">5倍多线程急速下载引擎</string>
+    <string name="paywall_benefit_3">支持4K和8K超高清视频</string>
+    <string name="paywall_benefit_4">无限私密加密空间</string>
+    <string name="paywall_plan_weekly">周会员</string>
+    <string name="paywall_plan_yearly">年度会员 (推荐)</string>
+    <string name="paywall_plan_lifetime">终身买断</string>
+    <string name="paywall_btn_subscribe">立即开通</string>
+    <string name="paywall_btn_restore">恢复购买</string>
+    <string name="msg_update_latest">您使用的已经是最新版本！</string>
+    <string name="msg_pro_unlocked">恭喜！您已成功开通 AI Downloader PRO！</string>
+</resources>

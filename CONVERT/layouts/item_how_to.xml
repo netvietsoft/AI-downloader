@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:textSize="@dimen/cm_sp_24" android:gravity="center_horizontal" android:id="@id/howto_method" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_26" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110247" android:fontFamily="@font/lato_black" />
+    <LinearLayout android:orientation="horizontal" android:id="@id/howto_second" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_20" android:layout_marginStart="@dimen/cm_dp_30" android:layout_marginEnd="@dimen/cm_dp_30">
+        <TextView android:textSize="@dimen/cm_sp_15" android:textColor="@color/white" android:gravity="center" android:layout_gravity="top" android:id="@id/howto_index" android:layout_width="@dimen/cm_dp_24" android:layout_height="@dimen/cm_dp_24" android:fontFamily="@string/APKTOOL_DUPLICATE_string_0x7f110331" android:layout_marginEnd="@dimen/cm_dp_12" />
+        <TextView android:textSize="@dimen/cm_sp_18" android:layout_gravity="center_vertical" android:id="@id/howto_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="@font/lato_regular" />
+    </LinearLayout>
+    <ScrollView android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginTop="@dimen/cm_dp_16">
+        <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <android.supprot.design.widgit.view.ScalingImageView android:id="@id/howto_image" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginStart="@dimen/cm_dp_30" android:layout_marginEnd="@dimen/cm_dp_30" />
+            <LinearLayout android:gravity="center" android:orientation="horizontal" android:id="@id/howto_done" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_16">
+                <TextView android:textSize="@dimen/cm_sp_22" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f11039f" android:fontFamily="@font/lato_black" />
+                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/congratulate" />
+            </LinearLayout>
+            <TextView android:textSize="@dimen/cm_sp_18" android:gravity="center" android:id="@id/howto_auto_start" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_6" android:layout_marginBottom="@dimen/cm_dp_12" android:text="@string/APKTOOL_DUPLICATE_string_0x7f11039c" android:fontFamily="@font/lato_regular" android:layout_marginStart="@dimen/cm_dp_30" android:layout_marginEnd="@dimen/cm_dp_30" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

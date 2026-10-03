@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:padding="@dimen/cm_dp_16" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:textSize="@dimen/cm_sp_18" android:textColor="@color/title_color" android:layout_gravity="center_horizontal" android:id="@id/tv_dialog_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_16" android:layout_marginBottom="@dimen/cm_dp_16" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110128" android:fontFamily="@font/lato_bold" android:layout_marginVertical="@dimen/cm_dp_16" />
+    <ProgressBar android:id="@id/progress_bar" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/cm_dp_16" android:max="100" android:progress="0" style="?android:progressBarStyleHorizontal" />
+</LinearLayout>

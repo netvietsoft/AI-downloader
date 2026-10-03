@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Downloader İndirici</string>
+    <string name="tab_browser">Tarayıcı</string>
+    <string name="tab_progress">İlerleme</string>
+    <string name="tab_player">Oynatıcı</string>
+    <string name="tab_settings">Ayarlar</string>
+    <string name="title_settings">Ayarlar</string>
+    <string name="title_language">Dil</string>
+    <string name="title_vault">Gizli Kasa</string>
+    <string name="card_subscription_title">AI Downloader Pro Aboneliği</string>
+    <string name="card_subscription_subtitle">4K, ultra hız ve reklamsız deneyim</string>
+    <string name="card_policy_title">Gizlilik Politikası</string>
+    <string name="card_policy_desc">Güvenlik taahhütleri ve veri koruma</string>
+    <string name="card_tos_title">Kullanım Şartları</string>
+    <string name="card_tos_desc">Hizmet kuralları ve yasal koşullar</string>
+    <string name="card_version_title">Uygulama Sürümü</string>
+    <string name="card_version_desc">v2.2.0-pro (En son sürüm)</string>
+    <string name="btn_upgrade_pro">Hemen Yükselt</string>
+    <string name="btn_check_update">Güncellemeleri Denetle</string>
+    <string name="btn_download">İndir</string>
+    <string name="btn_cancel">İptal</string>
+    <string name="btn_play">Oynat</string>
+    <string name="btn_pause">Duraklat</string>
+    <string name="btn_resume">Devam Et</string>
+    <string name="btn_set_default">Varsayılan Yap</string>
+    <string name="btn_clear_all">Tümünü Temizle</string>
+    <string name="downloading">İndiriliyor</string>
+    <string name="downloaded">Tamamlandı</string>
+    <string name="search_hint">Google\'da ara veya URL girin...</string>
+    <string name="paywall_title">AI Downloader PRO Kilidini Aç</string>
+    <string name="paywall_subtitle">Ultra hızlı indirmeler ve sıfır reklam</string>
+    <string name="paywall_benefit_1">Tamamen reklamsız deneyim</string>
+    <string name="paywall_benefit_2">5X çok iş parçacıklı turbo hız</string>
+    <string name="paywall_benefit_3">4K ve 8K ultra HD desteği</string>
+    <string name="paywall_benefit_4">Sınırsız şifreli gizli kasa</string>
+    <string name="paywall_plan_weekly">Haftalık Plan</string>
+    <string name="paywall_plan_yearly">Yıllık Plan (En İyi Fiyat)</string>
+    <string name="paywall_plan_lifetime">Ömür Boyu Erişim</string>
+    <string name="paywall_btn_subscribe">ŞİMDİ ABONE OL</string>
+    <string name="paywall_btn_restore">Satın Alımları Geri Yükle</string>
+    <string name="msg_update_latest">Zaten en son sürümü kullanıyorsunuz!</string>
+    <string name="msg_pro_unlocked">Tebrikler! AI Downloader PRO başarıyla açıldı!</string>
+</resources>

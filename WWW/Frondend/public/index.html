@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Downloader Pro - Trình Tải Video Trực Tuyến Nhanh Nhất (SaveFrom Clone)</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/png" href="app-icon.png">
+    <link rel="stylesheet" href="style.css?v=2.2.3">
+</head>
+<body class="dark-theme">
+
+    <!-- FLOATING PROTOTYPE CONTROLLER BAR (Cho phép Chủ tịch click chuyển màn hình tự do) -->
+    <div class="prototype-nav-bar" id="prototype-bar">
+        <div class="prototype-nav-label">
+            <span class="pulse-indicator"></span> PROTOTYPE CONTROLLER:
+        </div>
+        <div class="prototype-buttons">
+            <button class="proto-btn active" data-target="view-home">🏠 1. Trang Chủ Downloader</button>
+            <button class="proto-btn" data-target="view-sniffer">⚡ 2. Kết Quả Sniffer Live</button>
+            <button class="proto-btn" data-target="view-admin">📊 3. Quản Trị Admin & Doanh Thu</button>
+            <button class="proto-btn" data-target="view-paywall">👑 4. Gói VIP Pro (Paywall)</button>
+            <button class="proto-btn" data-target="view-extension">🧩 5. Cài Đặt Extension</button>
+            <button class="proto-btn btn-auth-trigger" id="btn-proto-auth">👤 6. Đăng Nhập / Ký</button>
+        </div>
+    </div>
+
+    <!-- MAIN APP HEADER -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="header-brand" id="brand-logo-btn">
+                <div class="brand-badge-icon" style="background: transparent; box-shadow: none;">
+                    <img src="app-icon.png" width="34" height="34" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(70, 204, 107, 0.4);" alt="App Icon">
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">AI Downloader <span class="brand-pro">PRO</span></span>
+                    <span class="brand-sub">SaveFrom Architecture</span>
+                </div>
+            </div>
+
+            <!-- Platform Quick Nav -->
+            <nav class="header-nav">
+                <a href="#youtube" class="nav-item active" data-platform="youtube">YouTube</a>
+                <a href="#facebook" class="nav-item" data-platform="facebook">Facebook</a>
+                <a href="#tiktok" class="nav-item" data-platform="tiktok">TikTok</a>
+                <a href="#instagram" class="nav-item" data-platform="instagram">Instagram</a>
+                <a href="#extension" class="nav-item nav-ext-link">Cài Đặt Extension</a>
+                <a href="#vip" class="nav-item nav-vip-link">👑 Bảng Giá VIP</a>
+                <a href="#admin" class="nav-item nav-admin-link">📊 Admin Portal</a>
+            </nav>
+
+            <!-- User Auth Profile Box -->
+            <div class="header-user-actions" id="user-header-box">
+                <!-- Theme Toggle Button -->
+                <button class="btn-theme-toggle" id="btn-theme-toggle" title="Chuyển chế độ Sáng / Tối">
+                    <span class="theme-icon" id="theme-icon">☀️</span>
+                    <span class="theme-label" id="theme-label">Sáng</span>
+                </button>
+
+                <!-- Language Selector Dropdown -->
+                <div class="lang-selector-wrapper">
+                    <select class="lang-select" id="lang-select" title="Chọn ngôn ngữ hiển thị">
+                        <option value="vi">🇻🇳 VI</option>
+                        <option value="en">🇺🇸 EN</option>
+                        <option value="ja">🇯🇵 JA</option>
+                        <option value="ko">🇰🇷 KO</option>
+                        <option value="zh">🇨🇳 ZH</option>
+                        <option value="es">🇪🇸 ES</option>
+                    </select>
+                </div>
+
+                <button class="btn-primary-action" id="btn-login-modal">Đăng Nhập / Đăng Ký</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER (CHỨA CÁC MÀN HÌNH TƯƠNG TÁC) -->
+    <main class="main-content">
+
+        <!-- ======================================================== -->
+        <!-- MÀN HÌNH 1: TRANG CHỦ DOWNLOADER (SAVEFROM CORE HUB) -->
+        <!-- ======================================================== -->
+        <section class="view-panel active" id="view-home">
+            <!-- Hero Downloader Section -->
+            <div class="hero-section">
+                <!-- Platform Mode Selection Bar (Chuyển chế độ tải FB, TikTok, YouTube...) -->
+                <div class="platform-tabs-header">
+                    <button class="plat-tab active" data-platform="all">
+                        <span class="tab-icon">🌐</span> Tất Cả Nền Tảng
+                    </button>
+                    <button class="plat-tab" data-platform="facebook">
+                        <span class="tab-icon fb">f</span> Facebook Video / Reels
+                    </button>
+                    <button class="plat-tab" data-platform="tiktok">
+                        <span class="tab-icon tt">🎵</span> TikTok Không Logo
+                    </button>
+                    <button class="plat-tab" data-platform="youtube">
+                        <span class="tab-icon yt">▶</span> YouTube 4K / MP3
+                    </button>
+                    <button class="plat-tab" data-platform="instagram">
+                        <span class="tab-icon ig">📷</span> Instagram Reels / Story
+                    </button>
+                </div>
+
+                <div class="hero-badge" id="hero-badge">
+                    <span class="hero-badge-dot"></span> Bóc tách luồng video trực tuyến thông minh bằng AI Sniffer
+                </div>
+                <h1 class="hero-title" id="hero-title">Công cụ Tải video trực tuyến</h1>
+                <p class="hero-subtitle" id="hero-subtitle">Hỗ trợ tải video tốc độ cao từ YouTube, Facebook, TikTok, Instagram, Twitter và hơn 1.822+ trang web với chuẩn 1080p, 4K & MP3</p>
+
+                <!-- Search / Input Box -->
+                <div class="search-box-wrapper">
+                    <div class="search-box">
+                        <div class="search-input-container">
+                            <svg class="search-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <input type="text" id="video-url-input" placeholder="Dán liên kết video của bạn vào đây (YouTube, TikTok, Facebook...)" autocomplete="off">
+                            <button class="btn-paste" id="btn-paste-url" title="Dán liên kết từ bộ nhớ tạm">📋 Dán Link</button>
+                        </div>
+                        <button class="btn-download-hero" id="btn-sniff-action">
+                            <span class="btn-shine"></span>
+                            <span class="btn-text">TẢI VỀ ⚡</span>
+                        </button>
+                    </div>
+
+                    <!-- Quick Sample Links for 1-Click Testing -->
+                    <div class="sample-links" id="sample-links-box">
+                        <span class="sample-label" id="sample-label">Thử nhanh link mẫu:</span>
+                        <button class="sample-tag" data-url="https://www.facebook.com/reel/1463438202280979/?s=ifu">📘 Facebook Reels</button>
+                        <button class="sample-tag" data-url="https://www.tiktok.com/@scout2015/video/6718335390845095173">🎵 TikTok Không Logo</button>
+                        <button class="sample-tag" data-url="https://www.youtube.com/watch?v=dQw4w9WgXcQ">🎥 YouTube 4K</button>
+                        <button class="sample-tag" data-url="https://vimeo.com/76979871">🎬 Vimeo HD</button>
+                    </div>
+
+                    <div class="service-agreement">
+                        Thông qua việc sử dụng dịch vụ của chúng tôi, bạn đồng ý với <a href="#">Điều khoản Dịch vụ</a> và <a href="#">Chính sách Quyền riêng tư</a>.
+                    </div>
+                </div>
+
+                <!-- Supported Platforms Quick Bar -->
+                <div class="platform-cards-row">
+                    <div class="platform-card" data-url="https://facebook.com">
+                        <div class="plat-icon fb">f</div>
+                        <span>facebook.com</span>
+                    </div>
+                    <div class="platform-card" data-url="https://instagram.com">
+                        <div class="plat-icon insta">📷</div>
+                        <span>instagram.com</span>
+                    </div>
+                    <div class="platform-card" data-url="https://youtube.com">
+                        <div class="plat-icon yt">▶</div>
+                        <span>youtube.com</span>
+                    </div>
+                    <div class="platform-card" data-url="https://tiktok.com">
+                        <div class="plat-icon tt">🎵</div>
+                        <span>tiktok.com</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formats & Converters Grid (như ảnh 1.png của SaveFrom) -->
+            <section class="formats-section">
+                <h3 class="section-heading">Cách tải về & Các lưu trữ tập tin hỗ trợ</h3>
+                <div class="formats-grid">
+                    <div class="format-item"><span class="fmt-icon">🎬</span> dailymotion.com</div>
+                    <div class="format-item"><span class="fmt-icon">🎥</span> vimeo.com</div>
+                    <div class="format-item"><span class="fmt-icon">📱</span> vk.com</div>
+                    <div class="format-item"><span class="fmt-icon">⚡</span> tiktok.com</div>
+                    <div class="format-item"><span class="fmt-icon">💬</span> reddit.com</div>
+                    <div class="format-item"><span class="fmt-icon">📌</span> pinterest.com</div>
+                    <div class="format-item"><span class="fmt-icon">🧵</span> threads.net</div>
+                    <div class="format-item"><span class="fmt-icon">📕</span> xiaohongshu.com</div>
+                    <div class="format-item"><span class="fmt-icon">🔄</span> MP4 Converter</div>
+                    <div class="format-item"><span class="fmt-icon">🎵</span> MP4 to MP3</div>
+                    <div class="format-item"><span class="fmt-icon">🎞️</span> MOV to MP4</div>
+                    <div class="format-item"><span class="fmt-icon">🖼️</span> MP4 to GIF</div>
+                    <div class="format-item"><span class="fmt-icon">📦</span> MKV to MP4</div>
+                    <div class="format-item"><span class="fmt-icon">🌐</span> WEBM to MP4</div>
+                    <div class="format-item"><span class="fmt-icon">📝</span> YouTube Transcript</div>
+                    <div class="format-item"><span class="fmt-icon">💬</span> YouTube Subtitles</div>
+                </div>
+            </section>
+
+            <!-- 4-Step Instructions (SEO & Hướng Dẫn Chi Tiết) -->
+            <section class="instructions-section">
+                <h2 class="guide-title">Cách tải video nhanh chóng với SaveFrom AI Downloader</h2>
+                <p class="guide-desc">Trang web của chúng tôi cho phép bạn tải video miễn phí trực tiếp từ các nền tảng phổ biến mà không cần cài đặt phần mềm nặng máy. Dù bạn đang sử dụng máy tính hay điện thoại, bạn đều có thể lưu video nội dung mình muốn chỉ với 1 cú nhấp chuột.</p>
+
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-num">1</div>
+                        <h4>Sao chép liên kết</h4>
+                        <p>Sao chép URL của video bạn muốn tải từ trình duyệt hoặc ứng dụng.</p>
+                        <div class="step-img-mockup">
+                            <div class="mock-input">https://youtube.com/watch...</div>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">2</div>
+                        <h4>Dán vào AI Downloader</h4>
+                        <p>Dán link vào ô tìm kiếm và nhấn nút "Tải Về" để engine tự động bóc tách stream.</p>
+                        <div class="step-img-mockup">
+                            <div class="mock-btn">TẢI VỀ ⚡</div>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">3</div>
+                        <h4>Chọn chất lượng</h4>
+                        <p>Chọn định dạng mong muốn: 1080p Full HD, 720p HD hoặc tách file âm thanh MP3.</p>
+                        <div class="step-img-mockup">
+                            <div class="mock-pills">
+                                <span class="mock-pill active">1080p</span>
+                                <span class="mock-pill">720p</span>
+                                <span class="mock-pill">MP3</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">4</div>
+                        <h4>Cài Extension tự động</h4>
+                        <p>Cài đặt Extension AI Downloader để tự động xuất hiện nút Download trực tiếp trên video.</p>
+                        <button class="btn-install-helper" id="btn-quick-install-ext">🧩 CÀI ĐẶT TRÌNH HỖ TRỢ</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======================================================== -->
+            <!-- KHÚC GIỮA 1: HƯỚNG DẪN CHI TIẾT THEO TỪNG THIẾT BỊ -->
+            <!-- ======================================================== -->
+            <section class="device-guide-section" id="device-guide-section">
+                <div class="device-guide-card">
+                    <div class="device-guide-header">
+                        <h2 class="device-guide-title" id="guide-device-title">Hướng Dẫn Tải Video Trên Mọi Thiết Bị</h2>
+                        <p class="device-guide-subtitle" id="guide-device-subtitle">Dễ dàng lưu video về điện thoại hoặc máy tính chỉ trong 3 bước đơn giản</p>
+                    </div>
+
+                    <!-- Device Selection Tabs -->
+                    <div class="device-tabs-row">
+                        <button class="device-tab-btn active" data-device="android">📱 Điện thoại Android</button>
+                        <button class="device-tab-btn" data-device="ios">🍏 iPhone / iPad (iOS)</button>
+                        <button class="device-tab-btn" data-device="pc">💻 Máy tính PC / Mac</button>
+                    </div>
+
+                    <!-- Device Steps Display -->
+                    <div class="device-steps-grid" id="device-steps-container">
+                        <div class="device-step-item">
+                            <span class="device-step-badge">1</span>
+                            <h4>Mở App & Sao chép link</h4>
+                            <p>Mở ứng dụng YouTube, TikTok hoặc Facebook, nhấn nút <strong>Chia sẻ (Share)</strong> và chọn <strong>Sao chép liên kết</strong>.</p>
+                        </div>
+                        <div class="device-step-item">
+                            <span class="device-step-badge">2</span>
+                            <h4>Dán link vào trình duyệt</h4>
+                            <p>Mở Google Chrome trên Android, truy cập <strong>AI Downloader Pro</strong> và dán liên kết vào khung tìm kiếm.</p>
+                        </div>
+                        <div class="device-step-item">
+                            <span class="device-step-badge">3</span>
+                            <h4>Chọn chất lượng & Tải về</h4>
+                            <p>Chọn độ phân giải Full HD 1080p hoặc MP3, video sẽ tự động tải về thư mục <strong>Downloads / Bộ sưu tập</strong> của máy.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======================================================== -->
+            <!-- KHÚC GIỮA 2: 6 TÍNH NĂNG NỔI BẬT VƯỢT TRỘI -->
+            <!-- ======================================================== -->
+            <section class="features-showcase-section" id="features-section">
+                <div class="features-header">
+                    <h2 class="features-title" id="feat-title">Ưu Điểm Vượt Trội Của AI Downloader Pro</h2>
+                    <p class="features-subtitle" id="feat-subtitle">Công nghệ Sniffer thế hệ mới giúp bóc tách luồng video nhanh gấp 10 lần các website thông thường</p>
+                </div>
+
+                <div class="features-grid-6">
+                    <div class="feature-box">
+                        <div class="feature-icon-badge">⚡</div>
+                        <h4>Tốc Độ Siêu Tốc AI Đa Luồng</h4>
+                        <p>Hệ thống tự động phân tích và bóc tách luồng trực tiếp từ máy chủ gốc, tải video tốc độ tối đa không bóp băng thông.</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon-badge">💎</div>
+                        <h4>Chất Lượng Gốc Lên Đến 4K</h4>
+                        <p>Hỗ trợ đầy đủ các độ phân giải từ 360p, 720p HD, 1080p Full HD đến 2K, 4K 60fps kèm âm thanh sắc nét chuẩn phòng thu.</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon-badge">🎵</div>
+                        <h4>Tách Nhạc MP3 320kbps Tự Động</h4>
+                        <p>Dễ dàng chuyển đổi bất kỳ video YouTube, TikTok hay Facebook nào sang file âm thanh MP3 chất lượng cao để làm nhạc chuông.</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon-badge">🛡️</div>
+                        <h4>100% An Toàn & Bảo Mật Tuyệt Đối</h4>
+                        <p>Không chứa mã độc, không pop-up quảng cáo phiền toái, bảo mật với chứng chỉ SSL 256-bit và không thu thập dữ liệu cá nhân.</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon-badge">🧩</div>
+                        <h4>Tích Hợp Tiện Ích Extension Tiện Lợi</h4>
+                        <p>Tự động phát hiện video và xuất hiện nút Download trực tiếp trên video mọi lúc mọi nơi mà không cần copy paste link.</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon-badge">🌐</div>
+                        <h4>Mở Khóa Hơn 1.822+ Website</h4>
+                        <p>Khả năng nhận diện vượt trội từ các nền tảng mạng xã hội phổ biến đến các trang chia sẻ đa phương tiện chuyên sâu.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======================================================== -->
+            <!-- KHÚC GIỮA 3: CÂU HỎI THƯỜNG GẶP (FAQ ACCORDION) -->
+            <!-- ======================================================== -->
+            <section class="faq-section" id="faq-section">
+                <div class="faq-header">
+                    <h2 class="faq-title" id="faq-title">Câu Hỏi Thường Gặp (FAQ)</h2>
+                    <p class="faq-subtitle" id="faq-subtitle">Giải đáp tất cả thắc mắc phổ biến của người dùng về công cụ tải video AI Downloader</p>
+                </div>
+
+                <div class="faq-accordion">
+                    <div class="faq-item active">
+                        <div class="faq-question">
+                            <span>1. AI Downloader Pro có miễn phí không?</span>
+                            <span class="faq-chevron">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            Có! Công cụ của chúng tôi hoàn toàn miễn phí cho các nhu cầu tải video phổ thông từ YouTube, Facebook, TikTok, Instagram với 10 lượt tải đầu tiên. Người dùng có thể nâng cấp gói VIP Pro để tải không giới hạn tốc độ cao và mở khóa hơn 1.822+ trang web đối tác.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>2. Làm thế nào để tải video trên điện thoại iPhone / iPad?</span>
+                            <span class="faq-chevron">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            Trên iPhone hoặc iPad chạy iOS 13+, bạn chỉ cần mở trình duyệt Safari, dán liên kết video vào ô tìm kiếm của AI Downloader Pro và nhấn Tải về. Sau khi tải xong, nhấn vào biểu tượng Tải về ở góc trên Safari, chọn video và nhấn nút Chia sẻ > "Lưu video" để chuyển vào Thư viện Ảnh (Photos).
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>3. Video TikTok tải về có bị dính logo watermark không?</span>
+                            <span class="faq-chevron">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            Hoàn toàn không dính logo! Engine Sniffer thông minh của chúng tôi tự động tìm và bóc tách luồng video gốc của TikTok, loại bỏ hoàn toàn watermark và logo của người tạo video, mang lại cho bạn chất lượng hình ảnh nguyên bản rõ nét nhất.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>4. Video sau khi tải về sẽ được lưu trữ ở đâu trên thiết bị của tôi?</span>
+                            <span class="faq-chevron">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            Theo mặc định, mọi video hoặc file MP3 sau khi tải về sẽ nằm trong thư mục <strong>Downloads (Tải về)</strong> trên máy tính PC/Mac hoặc trên ứng dụng Quản lý tệp (Files) trên điện thoại Android/iOS.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>5. Tôi có thể tải video riêng tư (Private) hoặc video trong nhóm kín không?</span>
+                            <span class="faq-chevron">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            Đối với các video trong nhóm kín hoặc video riêng tư mà tài khoản của bạn có quyền xem, bạn chỉ cần cài đặt Chrome Extension của AI Downloader Pro. Tiện ích sẽ tự động nhận diện luồng video ngay khi bạn đang phát video trên trình duyệt và cho phép bạn tải về 1-click an toàn.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>6. Tiện ích mở rộng Chrome Extension có an toàn không?</span>
+                            <span class="faq-chevron">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            Extension AI Downloader tuân thủ nghiêm ngặt chuẩn Manifest V3 của Google Chrome, cam kết 100% không chứa mã độc, không theo dõi lịch sử duyệt web và không gửi dữ liệu cá nhân của người dùng lên bên thứ ba.
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+
+        <!-- ======================================================== -->
+        <!-- MÀN HÌNH 2: KẾT QUẢ SNIFFER LIVE (STREAM DETECTION) -->
+        <!-- ======================================================== -->
+        <section class="view-panel" id="view-sniffer">
+            <div class="sniffer-result-container">
+                <div class="sniffer-header-bar">
+                    <button class="btn-back-home" id="btn-sniffer-back">← Quay lại tìm kiếm</button>
+                    <div class="sniffer-status-tag" id="sniffer-status-count">
+                        <span class="status-pulse"></span> Bóc tách thành công 6 luồng tải
+                    </div>
+                </div>
+
+                <!-- Video Card -->
+                <div class="result-video-card">
+                    <div class="result-video-thumb">
+                        <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=640" alt="Video Thumbnail" id="res-thumb">
+                        <span class="video-runtime" id="res-duration">04:18</span>
+                        <div class="platform-badge-float" id="res-platform-badge">YouTube 4K</div>
+                    </div>
+                    <div class="result-video-info">
+                        <div class="res-source-pill" id="res-author">Kênh: Vevo Global Music Channel</div>
+                        <h2 class="res-title" id="res-title">Top Trending 4K Music & Cinematics - Official Ultra HD Stream</h2>
+                        <div class="res-meta-row">
+                            <span>Độ dài: <strong id="res-duration-detail">00:10</strong></span>
+                            <span>Trạng thái: <strong class="text-success">Đã giải mã luồng stream</strong></span>
+                            <span id="res-domain-category">Phân loại: <strong>Công cộng</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Format Selection Table -->
+                <div class="formats-table-card">
+                    <div class="table-header">
+                        <h3>Các Tùy Chọn Tải Về Sẵn Sàng (Download Options)</h3>
+                        <span class="table-badge">Tốc độ cao 100MB/s</span>
+                    </div>
+
+                    <div class="formats-list" id="formats-list-container">
+                        <!-- Dynamic rendered by JS -->
+                    </div>
+                </div>
+
+                <!-- Live Download Simulation Box -->
+                <div class="download-progress-card" id="download-progress-box" style="display: none;">
+                    <div class="progress-info">
+                        <div class="prog-title">
+                            <span class="spinner-icon"></span>
+                            <span id="prog-file-name">Đang tải: Video_1080p_60fps.mp4</span>
+                        </div>
+                        <div class="prog-percent" id="prog-percent-text">45%</div>
+                    </div>
+                    <div class="prog-bar-track">
+                        <div class="prog-bar-fill" id="prog-bar-fill" style="width: 45%;"></div>
+                    </div>
+                    <div class="prog-stats">
+                        <span id="prog-speed">Tốc độ: 24.8 MB/s</span>
+                        <span id="prog-size">Đã tải: 64.2 MB / 142.5 MB</span>
+                        <span id="prog-status" class="text-success">Đang truyền luồng trực tiếp...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ======================================================== -->
+        <!-- MÀN HÌNH 3: BẢNG QUẢN TRỊ ADMIN (USERS, SUB, DOANH THU) -->
+        <!-- ======================================================== -->
+        <section class="view-panel" id="view-admin">
+            <div class="admin-dashboard-container">
+                <!-- Admin Header -->
+                <div class="admin-header">
+                    <div>
+                        <h1 class="admin-title">Trung Tâm Quản Trị Hệ Thống (Admin Control Center)</h1>
+                        <p class="admin-subtitle">Quản lý người dùng, thuê bao VIP & Thống kê doanh thu theo Ngày / Tuần / Tháng / Năm</p>
+                    </div>
+                    <div class="admin-quick-stats">
+                        <div class="quick-stat-badge">
+                            <span>Người Dùng:</span>
+                            <strong id="stat-total-users">5</strong>
+                        </div>
+                        <div class="quick-stat-badge vip">
+                            <span>Thành Viên VIP:</span>
+                            <strong id="stat-vip-users">2</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4 KPI DOANH THU CARDS (NGÀY / TUẦN / THÁNG / NĂM) -->
+                <div class="kpi-grid">
+                    <div class="kpi-card today">
+                        <div class="kpi-header">
+                            <span class="kpi-tag">HÔM NAY (NGÀY)</span>
+                            <span class="kpi-icon">📅</span>
+                        </div>
+                        <div class="kpi-amount" id="kpi-today-usd">$124.97</div>
+                        <div class="kpi-sub" id="kpi-today-vnd">≈ 3.174.000 đ</div>
+                        <div class="kpi-footer">
+                            <span class="kpi-orders" id="kpi-today-orders">2 đơn hàng thành công</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card week">
+                        <div class="kpi-header">
+                            <span class="kpi-tag">TUẦN NÀY (7 NGÀY)</span>
+                            <span class="kpi-icon">📊</span>
+                        </div>
+                        <div class="kpi-amount" id="kpi-week-usd">$389.90</div>
+                        <div class="kpi-sub" id="kpi-week-vnd">≈ 9.903.000 đ</div>
+                        <div class="kpi-footer">
+                            <span class="kpi-orders" id="kpi-week-orders">11 đơn hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card month">
+                        <div class="kpi-header">
+                            <span class="kpi-tag">THÁNG NÀY</span>
+                            <span class="kpi-icon">🚀</span>
+                        </div>
+                        <div class="kpi-amount" id="kpi-month-usd">$845.80</div>
+                        <div class="kpi-sub" id="kpi-month-vnd">≈ 21.483.000 đ</div>
+                        <div class="kpi-footer">
+                            <span class="kpi-orders" id="kpi-month-orders">23 đơn hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card year">
+                        <div class="kpi-header">
+                            <span class="kpi-tag">NĂM 2026 (TỔNG KẾT)</span>
+                            <span class="kpi-icon">💰</span>
+                        </div>
+                        <div class="kpi-amount" id="kpi-year-usd">$1,757.53</div>
+                        <div class="kpi-sub" id="kpi-year-vnd">≈ 44.641.000 đ</div>
+                        <div class="kpi-footer">
+                            <span class="kpi-orders" id="kpi-year-orders">47 giao dịch</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Tabs -->
+                <div class="admin-tabs">
+                    <button class="admin-tab-btn active" data-tab="tab-users">👥 1. Quản Lý User Đăng Ký</button>
+                    <button class="admin-tab-btn" data-tab="tab-plans">📋 2. Quản Lý Gói Sub</button>
+                    <button class="admin-tab-btn" data-tab="tab-revenue">📈 3. Báo Cáo Doanh Thu Chi Tiết</button>
+                    <button class="admin-tab-btn" data-tab="tab-firebase">🔥 4. Firebase Live Monitor (28 Events)</button>
+                </div>
+
+                <!-- Tab 1: User Management -->
+                <div class="admin-tab-content active" id="tab-users">
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Người Dùng</th>
+                                    <th>Email</th>
+                                    <th>Cấp Bậc (Role)</th>
+                                    <th>Lượt Đã Tải</th>
+                                    <th>Gói VIP Hiện Tại</th>
+                                    <th>Hạn Sử Dụng</th>
+                                    <th>Hành Động</th>
+                                </tr>
+                            </thead>
+                            <tbody id="user-table-body">
+                                <!-- Populated dynamically by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Subscription Plans Management -->
+                <div class="admin-tab-content" id="tab-plans">
+                    <div class="plans-management-grid" id="plans-management-container">
+                        <!-- Populated dynamically by JS -->
+                    </div>
+                </div>
+
+                <!-- Tab 3: Detailed Revenue Chart & Transactions -->
+                <div class="admin-tab-content" id="tab-revenue">
+                    <div class="revenue-analytics-layout">
+                        <!-- Revenue Bar Chart (7 Days) -->
+                        <div class="analytics-card">
+                            <h3>Doanh Thu 7 Ngày Gần Nhất (USD)</h3>
+                            <div class="chart-bars-wrapper" id="revenue-chart-bars">
+                                <!-- Rendered dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Recent Transactions -->
+                        <div class="analytics-card">
+                            <h3>Lịch Sử Giao Dịch Gần Nhất</h3>
+                            <div class="transactions-list" id="transactions-list-box">
+                                <!-- Rendered dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 4: Firebase Live Event Monitor (28 Events) -->
+                <div class="admin-tab-content" id="tab-firebase">
+                    <div class="firebase-monitor-container">
+                        <!-- Project & Cloud Status Header -->
+                        <div class="firebase-status-banner">
+                            <div class="fb-banner-left">
+                                <img src="app-icon.png" alt="App Icon" style="width: 44px; height: 44px; border-radius: 12px; margin-right: 14px; object-fit: cover; box-shadow: 0 4px 15px rgba(70, 204, 107, 0.4);">
+                                <div>
+                                    <div class="fb-banner-title">Google Firebase & Crashlytics Realtime Telemetry</div>
+                                    <div class="fb-banner-sub">Project ID: <strong class="fb-highlight">ai-video-downloader-e9bc4</strong> | Number: <strong class="fb-highlight">70018456314</strong> | App ID: <strong class="fb-highlight">1:70018456314:android:714aefe609161c0acf8743</strong></div>
+                                </div>
+                            </div>
+                            <div class="fb-banner-right">
+                                <span class="fb-status-pill online"><span class="pulse-indicator"></span> Realtime Telemetry Live</span>
+                                <a href="app-debug.apk" download="app-debug.apk" class="fb-status-pill apk" style="text-decoration: none; cursor: pointer; color: #fff; font-weight: 700; background: linear-gradient(135deg, rgba(70,204,107,0.35), rgba(0,242,254,0.35));" title="Click để tải file APK về máy test ngay">📥 Tải APK Mới (15.5 MB)</a>
+                            </div>
+                        </div>
+
+                        <!-- Quick Metrics -->
+                        <div class="fb-metrics-grid">
+                            <div class="fb-metric-card">
+                                <span class="fb-metric-label">Tổng Sự Kiện Đã Ghi</span>
+                                <span class="fb-metric-value" id="fb-total-events-count">0</span>
+                            </div>
+                            <div class="fb-metric-card">
+                                <span class="fb-metric-label">Số Lượng Sự Kiện Chuẩn</span>
+                                <span class="fb-metric-value text-gold">28 / 28 Events</span>
+                            </div>
+                            <div class="fb-metric-card">
+                                <span class="fb-metric-label">Firebase Crashlytics</span>
+                                <span class="fb-metric-value text-success">🟢 Active & Catching</span>
+                            </div>
+                            <div class="fb-metric-card">
+                                <span class="fb-metric-label">Package Android</span>
+                                <span class="fb-metric-value" style="font-size: 13px; word-break: break-all; color: #46CC6B;">com.ai.video.downloader.videodownloader</span>
+                            </div>
+                        </div>
+
+                        <!-- 28 Events Quick Trigger Controls -->
+                        <div class="fb-triggers-wrapper">
+                            <div class="fb-triggers-header">
+                                <div>
+                                    <h3 class="fb-section-title">⚡ Bảng Điều Khiển Test 28 Sự Kiện (Chuẩn Firebase/event.txt)</h3>
+                                    <p class="fb-section-desc">Click vào bất kỳ nút nào dưới đây để phát và kiểm tra sự kiện Firebase Analytics / Crashlytics trực tiếp</p>
+                                </div>
+                                <div class="fb-header-actions">
+                                    <button class="btn-fb-action btn-primary" id="btn-fb-trigger-all">🚀 Kích Hoạt Tất Cả 28 Events</button>
+                                    <button class="btn-fb-action btn-danger" id="btn-fb-clear-logs">🗑️ Xóa Nhật Ký</button>
+                                </div>
+                            </div>
+
+                            <!-- Group 1: Màn hình -->
+                            <div class="fb-group-section">
+                                <div class="fb-group-title">📱 1. Nhóm Màn Hình & Chuyển Hướng (5 Events)</div>
+                                <div class="fb-buttons-grid">
+                                    <button class="btn-event-trigger" data-event="View_Home">View_Home</button>
+                                    <button class="btn-event-trigger" data-event="View_Progess">View_Progess</button>
+                                    <button class="btn-event-trigger" data-event="View_Player">View_Player</button>
+                                    <button class="btn-event-trigger" data-event="View_Setting">View_Setting</button>
+                                    <button class="btn-event-trigger" data-event="screen_view">screen_view</button>
+                                </div>
+                            </div>
+
+                            <!-- Group 2: Tương tác người dùng -->
+                            <div class="fb-group-section">
+                                <div class="fb-group-title">👆 2. Nhóm Tương Tác & Tải Xuống (4 Events)</div>
+                                <div class="fb-buttons-grid">
+                                    <button class="btn-event-trigger" data-event="Click_Search">Click_Search</button>
+                                    <button class="btn-event-trigger" data-event="Click_Play_video">Click_Play_video</button>
+                                    <button class="btn-event-trigger" data-event="Click_button_Download">Click_button_Download</button>
+                                    <button class="btn-event-trigger" data-event="Click_private Vault">Click_private Vault</button>
+                                </div>
+                            </div>
+
+                            <!-- Group 3: Quảng cáo AdMob -->
+                            <div class="fb-group-section">
+                                <div class="fb-group-title">📢 3. Nhóm Quảng Cáo AdMob (6 Events)</div>
+                                <div class="fb-buttons-grid">
+                                    <button class="btn-event-trigger" data-event="ad_requested">ad_requested</button>
+                                    <button class="btn-event-trigger" data-event="ad_loaded">ad_loaded</button>
+                                    <button class="btn-event-trigger" data-event="ad_failed_to_load">ad_failed_to_load</button>
+                                    <button class="btn-event-trigger" data-event="ad_impression">ad_impression</button>
+                                    <button class="btn-event-trigger" data-event="ad_clicked">ad_clicked</button>
+                                    <button class="btn-event-trigger" data-event="ad_dismissed">ad_dismissed</button>
+                                </div>
+                            </div>
+
+                            <!-- Group 4: Paywall & VIP -->
+                            <div class="fb-group-section">
+                                <div class="fb-group-title">👑 4. Nhóm Gói VIP & Paywall (5 Events)</div>
+                                <div class="fb-buttons-grid">
+                                    <button class="btn-event-trigger" data-event="paywall_view">paywall_view</button>
+                                    <button class="btn-event-trigger" data-event="paywall_plan_selected">paywall_plan_selected</button>
+                                    <button class="btn-event-trigger" data-event="paywall_cta_clicked">paywall_cta_clicked</button>
+                                    <button class="btn-event-trigger" data-event="paywall_restore_clicked">paywall_restore_clicked</button>
+                                    <button class="btn-event-trigger" data-event="premium_feature_used">premium_feature_used</button>
+                                </div>
+                            </div>
+
+                            <!-- Group 5: Vòng đời & Crashlytics -->
+                            <div class="fb-group-section">
+                                <div class="fb-group-title">⚙️ 5. Vòng Đời Ứng Dụng & Crashlytics (8 Events)</div>
+                                <div class="fb-buttons-grid">
+                                    <button class="btn-event-trigger" data-event="first_open">first_open</button>
+                                    <button class="btn-event-trigger" data-event="session_start">session_start</button>
+                                    <button class="btn-event-trigger" data-event="app_update">app_update</button>
+                                    <button class="btn-event-trigger" data-event="os_update">os_update</button>
+                                    <button class="btn-event-trigger" data-event="settings_action_clicked">settings_action_clicked</button>
+                                    <button class="btn-event-trigger" data-event="app_clear_data">app_clear_data</button>
+                                    <button class="btn-event-trigger" data-event="app_remove">app_remove</button>
+                                    <button class="btn-event-trigger btn-crash" data-event="app_exception">🚨 app_exception (Crashlytics)</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Real-time Event Log Stream Table -->
+                        <div class="fb-live-table-wrapper">
+                            <div class="fb-live-header">
+                                <div>
+                                    <h3 class="fb-section-title">🔴 Nhật Ký Sự Kiện Realtime (Live Event Stream)</h3>
+                                    <p class="fb-section-desc">Theo dõi các sự kiện đồng bộ từ App Android và Web Portal</p>
+                                </div>
+                                <span class="fb-badge-stream"><span class="pulse-indicator"></span> Trực Tiếp</span>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="admin-table fb-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 130px;">Thời Gian</th>
+                                            <th style="width: 220px;">Tên Sự Kiện</th>
+                                            <th style="width: 140px;">Phân Loại</th>
+                                            <th>Tham Số Payload</th>
+                                            <th style="width: 180px;">Nền Tảng / Client</th>
+                                            <th style="width: 120px;">Trạng Thái</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="fb-events-table-body">
+                                        <!-- Realtime event rows will be rendered here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ======================================================== -->
+        <!-- MÀN HÌNH 4: GÓI SUBSCRIPTION PRO (PAYWALL - CHUẨN APP) -->
+        <!-- ======================================================== -->
+        <section class="view-panel" id="view-paywall">
+            <div class="paywall-container">
+                <div class="paywall-header">
+                    <div class="paywall-badge">👑 MỞ KHÓA TÍNH NĂNG ĐỘC QUYỀN</div>
+                    <h1 class="paywall-title">Nâng Cấp AI Downloader Pro</h1>
+                    <p class="paywall-desc">Tải không giới hạn video 4K tốc độ cao, không quảng cáo và mở khóa mạng lưới 1.822+ trang web VIP!</p>
+                </div>
+
+                <!-- 3 Pricing Cards (với card Best Value được nới rộng và hiệu ứng ánh sáng trượt chéo) -->
+                <div class="pricing-cards-grid">
+                    <!-- Gói Tháng -->
+                    <div class="price-card" data-plan="plan_monthly">
+                        <div class="card-shimmer"></div>
+                        <div class="card-header">
+                            <span class="plan-name">GÓI THÁNG</span>
+                            <span class="plan-price">$4.99 <span>/tháng</span></span>
+                            <div class="plan-vnd">≈ 126.000 đ/tháng</div>
+                        </div>
+                        <ul class="plan-features">
+                            <li>✓ Tải không giới hạn video</li>
+                            <li>✓ Độ phân giải Full HD 1080p</li>
+                            <li>✓ Tốc độ tải chuẩn 35MB/s</li>
+                            <li>✓ Hỗ trợ tải qua Extension</li>
+                        </ul>
+                        <button class="btn-select-plan">CHỌN GÓI NÀY</button>
+                    </div>
+
+                    <!-- Gói Năm - BEST VALUE (Card nổi bật với animation trượt chéo ánh sáng) -->
+                    <div class="price-card best-value selected" data-plan="plan_annual">
+                        <div class="card-shimmer active-shimmer"></div>
+                        <div class="card-ribbon">TIẾT KIỆM 65% • BEST VALUE</div>
+                        <div class="card-header">
+                            <span class="plan-name">GÓI 1 NĂM (ANNUAL)</span>
+                            <span class="plan-price">$39.99 <span>/năm</span></span>
+                            <div class="plan-vnd">Chỉ $3.33/tháng (≈ 84.000 đ/tháng)</div>
+                        </div>
+                        <ul class="plan-features">
+                            <li>⚡ <strong>Tải không giới hạn tốc độ 100MB/s</strong></li>
+                            <li>🎬 <strong>Hỗ trợ chất lượng 4K HDR & 60fps</strong></li>
+                            <li>🔓 <strong>Mở khóa toàn bộ 1.822+ domains VIP</strong></li>
+                            <li>🛡️ Tách âm thanh MP3 320kbps phòng thu</li>
+                            <li>👑 Không giới hạn thiết bị (Web + Chrome + App)</li>
+                        </ul>
+                        <button class="btn-select-plan primary">ĐANG CHỌN GÓI NÀY</button>
+                    </div>
+
+                    <!-- Gói Trọn Đời -->
+                    <div class="price-card" data-plan="plan_lifetime">
+                        <div class="card-shimmer"></div>
+                        <div class="card-header">
+                            <span class="plan-name">GÓI TRỌN ĐỜI</span>
+                            <span class="plan-price">$79.99 <span>/vĩnh viễn</span></span>
+                            <div class="plan-vnd">Thanh toán 1 lần dùng mãi mãi</div>
+                        </div>
+                        <ul class="plan-features">
+                            <li>✓ Toàn bộ quyền lợi của gói Annual</li>
+                            <li>✓ Cập nhật trọn đời các thuật toán sniffer mới</li>
+                            <li>✓ Hỗ trợ kỹ thuật ưu tiên 24/7</li>
+                        </ul>
+                        <button class="btn-select-plan">CHỌN GÓI NÀY</button>
+                    </div>
+                </div>
+
+                <!-- Nút SUBSCRIBE NOW với hiệu ứng ánh sáng nhẹ trượt chéo -->
+                <div class="subscribe-action-box">
+                    <button class="btn-subscribe-now" id="btn-subscribe-trigger">
+                        <span class="btn-diagonal-light"></span>
+                        <span class="btn-sub-content">
+                            <span>👑 SUBSCRIBE NOW</span>
+                            <small id="sub-price-summary">Chỉ $39.99 / năm (Hủy bất cứ lúc nào)</small>
+                        </span>
+                    </button>
+                    <div class="guarantee-text">🔒 Thanh toán bảo mật SSL 256-bit • Hỗ trợ MoMo, VNPay QR, Thẻ Tín Dụng</div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ======================================================== -->
+        <!-- MÀN HÌNH 5: CÀI ĐẶT EXTENSION (CHROME / EDGE V3) -->
+        <!-- ======================================================== -->
+        <section class="view-panel" id="view-extension">
+            <div class="extension-guide-container">
+                <div class="ext-hero">
+                    <div class="ext-badge">CHROME EXTENSION MANIFEST V3</div>
+                    <h1 class="ext-title">Tiện Ích Mở Rộng AI Downloader Pro</h1>
+                    <p class="ext-desc">Tự động bắt link và hiển thị nút Tải Video trực tiếp trên giao diện phát video của mọi trang web bạn đang duyệt!</p>
+                    
+                    <div class="ext-download-cta">
+                        <a href="/download-extension" class="btn-ext-download" id="btn-download-zip">
+                            <span class="btn-shine"></span>
+                            <span class="ext-btn-icon">⬇</span>
+                            <div class="ext-btn-text">
+                                <strong>TẢI EXTENSION (.ZIP) NGAY</strong>
+                                <small>Dung lượng ~13KB • Tương thích Chrome, Edge, Brave, Cốc Cốc</small>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 4 Bước Cài Đặt Trực Quan -->
+                <div class="installation-steps-card">
+                    <h2>Hướng dẫn cài đặt Extension vào trình duyệt trong 30 giây</h2>
+                    <div class="ext-steps-grid">
+                        <div class="ext-step-box">
+                            <div class="step-circle">1</div>
+                            <h4>Giải nén file Zip</h4>
+                            <p>Tải file <code>AI_Video_Downloader_Extension.zip</code> về máy tính và giải nén ra một thư mục.</p>
+                        </div>
+                        <div class="ext-step-box">
+                            <div class="step-circle">2</div>
+                            <h4>Mở Quản lý Tiện ích</h4>
+                            <p>Truy cập đường dẫn <code>chrome://extensions</code> trên thanh địa chỉ Chrome hoặc Edge.</p>
+                        </div>
+                        <div class="ext-step-box">
+                            <div class="step-circle">3</div>
+                            <h4>Bật Developer mode</h4>
+                            <p>Bật công tắc <strong>Developer mode</strong> (Chế độ dành cho nhà phát triển) ở góc trên bên phải.</p>
+                        </div>
+                        <div class="ext-step-box">
+                            <div class="step-circle">4</div>
+                            <h4>Load unpacked</h4>
+                            <p>Nhấn nút <strong>Load unpacked</strong> (Tải tiện ích đã giải nén) và chọn thư mục <code>Extension</code> vừa giải nén!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Preview & Tính năng Extension -->
+                <div class="ext-features-grid">
+                    <div class="ext-feat-card">
+                        <span class="ext-feat-icon">🎯</span>
+                        <h4>Tự Động Xuất Hiện Nút Download</h4>
+                        <p>Bất kỳ khi nào bạn mở một video trên YouTube, Facebook, TikTok..., nút "TẢI VIDEO" sẽ xuất hiện nổi trên video.</p>
+                    </div>
+                    <div class="ext-feat-card">
+                        <span class="ext-feat-icon">⚡</span>
+                        <h4>Tải 1-Click Không Cần Dán Link</h4>
+                        <p>Nhấp chọn 1080p, 720p hoặc MP3, video sẽ được tải trực tiếp về thư mục Downloads của máy tính.</p>
+                    </div>
+                    <div class="ext-feat-card">
+                        <span class="ext-feat-icon">🔄</span>
+                        <h4>Đồng Bộ Tài Khoản Với Web</h4>
+                        <p>Tài khoản đăng nhập từ website sẽ được tự động nhận diện và đồng bộ số lượt tải và quyền VIP trên Extension.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ======================================================== -->
+    <!-- APP FOOTER (MENU CHÂN TRANG ĐẦY ĐỦ 5 CỘT) -->
+    <!-- ======================================================== -->
+    <footer class="app-footer">
+        <div class="footer-top">
+            <div class="footer-container">
+                <!-- Cột 1: Thông tin thương hiệu -->
+                <div class="footer-col col-brand">
+                    <div class="footer-brand">
+                        <div class="brand-badge-icon">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                        </div>
+                        <span class="brand-name">AI Downloader <span class="brand-pro">PRO</span></span>
+                    </div>
+                    <p class="footer-desc" id="footer-desc">
+                        Trình tải video trực tuyến hàng đầu áp dụng công nghệ AI Sniffer Engine. Cho phép bóc tách và tải xuống video tốc độ cao từ YouTube, Facebook, TikTok, Instagram và hơn 1.822+ website.
+                    </p>
+                    <div class="footer-trust-badges">
+                        <span class="trust-badge">🔒 256-Bit SSL Secured</span>
+                        <span class="trust-badge">🛡️ Malware Free</span>
+                        <span class="trust-badge">⚡ 99.9% Uptime</span>
+                    </div>
+                </div>
+
+                <!-- Cột 2: Công cụ tải video -->
+                <div class="footer-col">
+                    <h4 class="footer-col-title">Công Cụ Tải Video</h4>
+                    <ul class="footer-links">
+                        <li><a href="#youtube" class="footer-nav-link" data-platform="youtube">Tải video YouTube 4K</a></li>
+                        <li><a href="#facebook" class="footer-nav-link" data-platform="facebook">Tải video Facebook Reels</a></li>
+                        <li><a href="#tiktok" class="footer-nav-link" data-platform="tiktok">Tải video TikTok không logo</a></li>
+                        <li><a href="#instagram" class="footer-nav-link" data-platform="instagram">Tải video Instagram Story</a></li>
+                        <li><a href="#twitter" class="footer-nav-link" data-platform="all">Tải video Twitter / X</a></li>
+                        <li><a href="#threads" class="footer-nav-link" data-platform="all">Tải video Threads</a></li>
+                        <li><a href="#dailymotion" class="footer-nav-link" data-platform="all">Tải video Dailymotion</a></li>
+                    </ul>
+                </div>
+
+                <!-- Cột 3: Chuyển đổi & Tiện ích -->
+                <div class="footer-col">
+                    <h4 class="footer-col-title">Chuyển Đổi & Tiện Ích</h4>
+                    <ul class="footer-links">
+                        <li><a href="#mp3" class="footer-nav-link" data-platform="all">Chuyển đổi MP4 sang MP3</a></li>
+                        <li><a href="#subtitles" class="footer-nav-link" data-platform="all">Trích xuất phụ đề YouTube</a></li>
+                        <li><a href="#extension" class="footer-ext-trigger" id="footer-btn-ext">Cài đặt Chrome Extension</a></li>
+                        <li><a href="#vip" class="footer-vip-trigger" id="footer-btn-vip">Gói VIP Pro Unlimited</a></li>
+                        <li><a href="#api" class="footer-nav-link" data-platform="all">API Cho Nhà Phát Triển</a></li>
+                        <li><a href="#status" class="footer-nav-link" data-platform="all">Trạng Thái Máy Chủ</a></li>
+                    </ul>
+                </div>
+
+                <!-- Cột 4: Hướng dẫn & Trợ giúp -->
+                <div class="footer-col">
+                    <h4 class="footer-col-title">Hướng Dẫn & Hỗ Trợ</h4>
+                    <ul class="footer-links">
+                        <li><a href="#guide-ios" class="footer-guide-trigger" data-device="ios">Hướng dẫn trên iPhone</a></li>
+                        <li><a href="#guide-android" class="footer-guide-trigger" data-device="android">Hướng dẫn trên Android</a></li>
+                        <li><a href="#guide-pc" class="footer-guide-trigger" data-device="pc">Hướng dẫn trên PC/Mac</a></li>
+                        <li><a href="#faq" class="footer-faq-trigger" id="footer-btn-faq">Câu hỏi thường gặp FAQ</a></li>
+                        <li><a href="#feedback" class="footer-feedback-trigger">Báo lỗi & Góp ý</a></li>
+                        <li><a href="#contact" class="footer-contact-trigger">Liên hệ ban quản trị</a></li>
+                    </ul>
+                </div>
+
+                <!-- Cột 5: Chính sách & Pháp lý -->
+                <div class="footer-col">
+                    <h4 class="footer-col-title">Chính Sách & Pháp Lý</h4>
+                    <ul class="footer-links">
+                        <li><a href="#tos" class="footer-legal-trigger" data-type="tos">Điều khoản dịch vụ (TOS)</a></li>
+                        <li><a href="#privacy" class="footer-legal-trigger" data-type="privacy">Chính sách quyền riêng tư</a></li>
+                        <li><a href="#dmca" class="footer-legal-trigger" data-type="dmca">Bản quyền & DMCA</a></li>
+                        <li><a href="#disclaimer" class="footer-legal-trigger" data-type="disclaimer">Tuyên bố miễn trừ trách nhiệm</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-container">
+                <div class="copyright-text">
+                    © 2026 AI Video Downloader Inc. Giữ toàn bộ quyền sở hữu trí tuệ.
+                </div>
+                <div class="footer-disclaimer">
+                    Tuyên bố: Chúng tôi không lưu trữ hoặc sao chép bất kỳ nội dung đa phương tiện nào trên máy chủ của mình. Dịch vụ chỉ hỗ trợ người dùng truy xuất luồng tệp tin trực tiếp từ nguồn máy chủ bên thứ ba cho mục đích sử dụng cá nhân hợp pháp.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AUTHENTICATION MODAL (ĐĂNG NHẬP / ĐĂNG KÝ) -->
+    <div class="modal-overlay" id="auth-modal" style="display: none;">
+        <div class="modal-box">
+            <button class="modal-close" id="btn-close-auth">&times;</button>
+            <div class="modal-tabs">
+                <button class="modal-tab-btn active" id="tab-btn-login">Đăng Nhập</button>
+                <button class="modal-tab-btn" id="tab-btn-register">Đăng Ký Mới</button>
+            </div>
+
+            <!-- Login Form -->
+            <form class="auth-form active" id="login-form">
+                <div class="form-group">
+                    <label>Email đăng nhập</label>
+                    <input type="email" id="login-email" placeholder="name@example.com" value="chutich@nextai.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Mật khẩu</label>
+                    <input type="password" id="login-password" placeholder="Nhập mật khẩu" value="123456" required>
+                </div>
+                <button type="submit" class="btn-auth-submit">ĐĂNG NHẬP NGAY</button>
+                <div class="quick-admin-hint">
+                    Tài khoản mẫu: <strong>chutich@nextai.com</strong> (VIP) hoặc <strong>admin@aidownloader.com</strong> / admin123
+                </div>
+            </form>
+
+            <!-- Register Form -->
+            <form class="auth-form" id="register-form" style="display: none;">
+                <div class="form-group">
+                    <label>Họ và tên</label>
+                    <input type="text" id="reg-name" placeholder="Nguyễn Văn A" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="reg-email" placeholder="name@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Mật khẩu</label>
+                    <input type="password" id="reg-password" placeholder="Tối thiểu 6 ký tự" required>
+                </div>
+                <button type="submit" class="btn-auth-submit">TẠO TÀI KHOẢN MỚI</button>
+            </form>
+
+            <!-- Social Login Options (Google & Facebook) -->
+            <div class="social-login-section">
+                <div class="social-divider">
+                    <span>HOẶC TIẾP TỤC VỚI</span>
+                </div>
+                <div class="social-buttons-grid">
+                    <button type="button" class="btn-social btn-social-google" id="btn-login-google">
+                        <svg class="social-icon" viewBox="0 0 24 24" width="18" height="18">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                        </svg>
+                        <span>Google</span>
+                    </button>
+                    <button type="button" class="btn-social btn-social-facebook" id="btn-login-facebook">
+                        <svg class="social-icon" viewBox="0 0 24 24" width="18" height="18" fill="#1877F2">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        <span>Facebook</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICATION TOAST -->
+    <div class="web-toast" id="web-toast" style="display: none;">
+        <span id="toast-msg">Thông báo</span>
+    </div>
+
+    <script src="app.js?v=2.2.2"></script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+# UPDATETODOS.md — DANH MỤC CÔNG VIỆC TÁI DỰNG TOÀN DIỆN
+========================================================
+- [x] TASK-000: Khảo sát hiện trạng, nhận chỉ thị ủy quyền từ Chủ tịch, lập bộ khung chuẩn V2.1 tại CONVERT.
+- [x] TASK-001: Xây dựng OpenAPI Contract và Cấu trúc Bounded Context cho Backend & Mobile.
+- [x] TASK-002: Lập trình Backend Service (Dynamic Sniffing Rules API, Shortcuts API, CMS Dashboard).
+- [x] TASK-003: Xây dựng Core Network & Video Sniffer Engine (Android Kotlin).
+- [x] TASK-004: Xây dựng Multi-thread Downloader Engine (Android Kotlin Coroutines).
+- [x] TASK-005: Xây dựng Ace Video Player Engine (Media3 ExoPlayer + 200% Audio Boost + Equalizer).
+- [x] TASK-006: Xây dựng Private Vault Engine (Mã hóa file AES-256 + PIN pad).
+- [x] TASK-007: Xây dựng Giao diện người dùng Android hoàn chỉnh theo chuẩn Prototype index.html.
+- [x] TASK-008: Tích hợp hệ thống kiểm thử tự động (Unit test, Parity test, E2E test).
+- [x] TASK-009: Tổng nghiệm thu, kiểm tra an ninh, đóng gói sản phẩm hoàn thiện.
+- [x] TASK-010: Kiểm toán An toàn Bảo mật & Vá Lỗ Hổng Toàn Diện (Security Hardening):
+    - [x] Triển khai Network Security Config cấm cleartext traffic nội bộ và chuẩn bị SSL Pinning.
+    - [x] Khóa lỗ hổng ADB Backup rò rỉ Két Sắt qua backup_rules.xml và allowBackup=false.
+    - [x] Chống tấn công Arbitrary JS Injection qua Origin Whitelist và URL Scheme Sanitizer trong SnifferEngine.
+    - [x] Nâng cấp AesVaultManager với Salt 16-byte ngẫu nhiên chống Rainbow Table và Dictionary Attacks.
+    - [x] Gia cố Express Backend: Thêm Security Headers (Helmet style), Admin API Key Auth và Payload/Rate Limits.
+
+- [x] TASK-011: Bổ sung Nút 3 chấm (⋮) Căn Phải ở mỗi mục Video trong Danh sách Tải xuống (Progress Screen):
+    - [x] Thêm nút 3 chấm căn phải trên layout item_download.xml (36x36dp, icon ⋮, ripple background).
+    - [x] Tích hợp PopupMenu: Tùy chọn "Xóa tải xuống" (Delete Download) và "Xóa tệp vật lý" (Delete Physical File).
+    - [x] Thêm hiệu ứng hoạt họa mượt mà (Fade-out animation) khi xóa mục video khỏi danh sách.
+    - [x] Cập nhật tự động số lượng badge trên Bottom Navigation bar.
+- [x] TASK-012: Nâng cấp Thanh Tìm Kiếm (Search Bar) & Mặc định Tìm kiếm Google:
+    - [x] Thêm nút xóa nhanh URL "✕" (btn_clear_url) tự động hiện khi có ký tự và ẩn khi rỗng.
+    - [x] Tích hợp công cụ tìm kiếm Google mặc định (https://www.google.com/search?q=...): Tự động nhận diện từ khóa tìm kiếm để mở trang Google Search giúp người dùng tìm nhanh web video.
+    - [x] Hỗ trợ điều hướng trực tiếp khi nhập đúng cấu trúc tên miền hoặc đường dẫn URL đầy đủ (http://, https://).
+- [x] TASK-013: Triển khai Hệ thống Phòng vệ Anti-Popup & Anti-Clickjacking 3 Tầng:
+    - [x] Tầng 1 (WebSettings & WebChromeClient): Khóa javaScriptCanOpenWindowsAutomatically=false, setSupportMultipleWindows(false), chặn onCreateWindow trả về false.
+    - [x] Tầng 2 (Tiêm Script JS Hook ANTI_POPUP_JS): Ghi đè window.open trả về null, chặn sự kiện click thẻ a có target="_blank" trỏ sang domain ngoài, quét và xóa các lớp phủ click-jacking tàng hình (invisible overlay traps z-index >= 9999).
+    - [x] Tầng 3 (Chốt chặn shouldOverrideUrlLoading): handleUrlOverride chặn scheme ngoài (market://, intent://) và danh sách đen domain quảng cáo độc hại (flirtify, faphouse, stripchat, exoclick, adsterra, popads...).
+- [x] TASK-014: Build, Nạp & Kiểm thử Trực tiếp trên Thiết bị Samsung Galaxy A07 (SM-A075F):
+    - [x] Thiết lập kết nối Wireless ADB thành công tại 192.168.1.18:44781.
+    - [x] Build bản debug APK mới nhất và cài đặt Streamed Install thành công.
+    - [x] Chụp ảnh màn hình kiểm thử: Giao diện tìm kiếm, nút xoá "✕", duyệt web video, phát video luồng blob trực tiếp không bị popup hoặc tab mới đè mất trang chủ.
+- [x] TASK-015: Rebuild & Nạp APK lên Thiết bị Kiểm thử 192.168.1.18:34749 (Ghép nối 40129 / 780805):
+    - [x] Kết nối Wireless ADB thành công với endpoint 192.168.1.18:34749.
+    - [x] Rebuild APK debug sạch với Gradle (:app:assembleDebug -> BUILD SUCCESSFUL).
+    - [x] Cài đặt đè Streamed Install thành công (`Success`).
+    - [x] Khởi chạy MainActivity và trích xuất ảnh chụp màn hình nghiệm thu thực tế 100%.
+- [x] TASK-016: Khắc phục Triệt Để Tab Progress & Tab Player Video Offline:
+    - [x] Tab Progress kết nối trực tiếp `DownloadEngine.tasksFlow`: Hiển thị danh sách Downloading và Downloaded thời gian thực.
+    - [x] Thêm tiến trình tải từ 0% đến 100%: Thanh ProgressBar mượt mà, huy hiệu phần trăm (tv_task_percent: 0%-100%), tính tốc độ thực (KB/s, MB/s) và dung lượng đã tải / tổng dung lượng.
+    - [x] Hỗ trợ tải luồng HLS (.m3u8): Parse Media Playlist, bóc tách và tải toàn bộ các phân đoạn (.ts), ghép thành file video .mp4 hoàn chỉnh (thay vì chỉ lưu file text m3u8 574 bytes).
+    - [x] Fix triệt để Tab Player: Cấu hình `DefaultDataSource.Factory` bọc `FileDataSource` trong `AcePlayerActivity` cho phép đọc tệp cục bộ (`file://` hoặc đường dẫn tuyệt đối) tức thì 0ms, loại bỏ tình trạng đơ/load lâu hoặc lỗi `UnrecognizedInputFormatException`.
+    - [x] Lọc danh sách video đã tải trong Tab Player: Chỉ hiển thị các video offline thực sự (>50KB), phát mượt mà khi chạm vào card, nút PLAY hoặc thư mục Downloads.
+    - [x] Cài đặt bản build mới lên máy thật Samsung Galaxy A07 qua Wireless ADB (192.168.1.18:34749) và chụp ảnh màn hình nghiệm thu thực tế.
+- [x] TASK-017: Tích hợp i18n 50 Ngôn ngữ & Settings 5 Cards & AdMob & Firebase BoM:
+    - [x] Thiết lập `LocaleManager` hỗ trợ 50 ngôn ngữ phổ biến toàn cầu, cho phép chuyển đổi ngôn ngữ nóng ngay trong ứng dụng.
+    - [x] Hoàn thiện 5 cards Tab Settings: VIP Subscription, Language Picker, Privacy Policy, Terms of Service, Version Check.
+    - [x] Xây dựng `PaymentWallActivity` với 3 gói cước (Tuần, Tháng, Năm), 4 đặc quyền VIP, cơ chế mô phỏng nâng cấp Pro và tự động ẩn quảng cáo.
+    - [x] Tích hợp AdMob SDK (Banner, Interstitial, Rewarded Ad) và chuẩn bị Firebase BoM / Analytics / Messaging.
+- [x] TASK-018: Tiếp nhận Chỉ Thị Chủ Tịch & Thiết lập Quản Trị Chuẩn Meta-Standard V2.1.2:
+    - [x] Ban hành "Luật trao đổi với Chủ tịch": Bắt buộc đọc lại luật sau mỗi phiên giao tiếp, cấm báo cáo láo, kiểm chứng 100% bằng Evidence.
+    - [x] Thiết lập và chuẩn hóa hệ thống 6 tài liệu bộ nhớ dự án: `AGENTS.md`, `UPDATETODOS.md`, `TASK_LOG.md`, `Tasksrequiring.md`, `PROJECT_ERROR.md`, `ACQUIREMENTS.md`.
+- [/] TASK-019: Ma trận Kiểm thử 4 Bước (Play Web -> Sniff Stream -> Download -> Play Offline) trên Danh sách 50 Website:
+    - [x] Phân loại kỹ thuật 50 website theo 4 nhóm bản chất: Video Tubes VOD (27), Live Cam Streaming (5), Paywall/DRM (3), và Danh bạ/Diễn đàn/Ad Redirector (15).
+    - [x] Phân tích rào cản mạng thực tế trên thiết bị test Samsung Galaxy A07 (tường lửa nhà mạng chặn SNI đối với một số domain gốc -> giải pháp dùng mirror hoặc DoH).
+    - [/] Tiến hành kiểm thử thực tế theo từng đợt (Batch Testing) từ Batch 1 đến Batch 5, ghi nhận bằng chứng (evidence) và báo cáo trung thực tuyệt đối cho Chủ tịch.
+
+- [x] TASK-020: Tích hợp Danh Sách 1,822 Web Video & Cơ Chế Payment Wall Bắt Buộc Sau 1 Lượt Tải:
+    - [x] Bóc tách 1,822 tên miền duy nhất từ `web/Bao_cao_web_video.csv` nạp vào `assets/monetized_domains.txt`.
+    - [x] Xây dựng `MonetizedDomainRegistry` kiểm tra domain/subdomain bằng `HashSet` trong 0ms O(1).
+    - [x] Cấu hình `SettingsRepository` theo dõi `monetizedDownloadCount` và hàm kiểm tra quyền `canDownloadMonetizedVideo()`.
+    - [x] Cập nhật giao diện `showDownloadModal` hiển thị huy hiệu "🎁 Dùng thử (1 lượt miễn phí)" ở lượt tải đầu tiên.
+    - [x] Kích hoạt `PaymentWallActivity` ngay lập tức khi phát hiện video thứ 2 từ danh sách website bị kiếm tiền hóa, hiển thị thông báo giới hạn lượt tải miễn phí và khóa hoàn toàn luồng tải xuống cho đến khi nâng cấp Pro.
+    - [x] Kiểm thử trực tiếp E2E trên máy thật Samsung Galaxy A07 (`192.168.1.18:34749`), thu thập đầy đủ ảnh chụp màn hình chứng thực 100%.
+
+- [x] TASK-021: Xây dựng Bộ Công Cụ Kiểm Thử Tự Động Hàng Loạt Playwright (Automated Batch Sniffer Tester):
+    - [x] Khởi tạo `batch_sniffer_tester.mjs` tích hợp Playwright Chromium Engine, mô phỏng thiết bị di động Android.
+    - [x] Đồng bộ thuật toán bắt luồng video đa tầng từ `SnifferEngine.kt` (Network Interceptor, DOM Inspector, Script Evaluator, JS Hook HTMLVideoElement.play).
+    - [x] Xử lý chuẩn hóa URL: Tự động loại bỏ link affiliate (`pdude.link`, `tpd.link`) để truy cập thẳng domain gốc.
+    - [x] Tích hợp cơ chế tự động nhấn nút vượt cảnh báo Age Gate / 18+ Warning (`I am 18`, `Agree`, `Enter`).
+    - [x] Bộ lọc luồng video chính xác: Loại bỏ triệt để fonts (`.woff`, `.woff2`, `.ttf`), static assets, hình ảnh preview và trackers.
+    - [x] Đồng bộ bộ lọc font sang mã nguồn Android `HomeFragment.kt`.
+    - [x] Hỗ trợ cấu hình tham số linh hoạt (`--limit`, `--offset`, `--concurrency`, `--timeout`) và xuất báo cáo tự động (JSON, Markdown, Screenshots).
+
+- [x] TASK-022: Kiểm Thử Toàn Diện Top Mạng Xã Hội, Video Toàn Cầu & Khắc Phục Triệt Để Lỗi Tải YouTube Không Play Được:
+    - [x] Viết kịch bản kiểm thử Playwright tự động trên 10 nền tảng mạng xã hội và video lớn nhất thế giới (`test_social_platforms.mjs`).
+    - [x] Kiểm thử thực tế các nền tảng: YouTube, TikTok, Facebook, Instagram, Twitter/X, Reddit, Vimeo, Dailymotion, Pinterest, Bilibili; xuất kết quả ra `web/social_test_results.json` và bộ ảnh chụp `web/screenshots_social/`.
+    - [x] Tìm ra nguyên nhân gốc rễ (Root Cause) lỗi YouTube không phát được: Sniffer bắt nhầm gói tin điều khiển phân đoạn SABR/UMP (`Content-Type: application/vnd.yt-ump`) từ `googlevideo.com`, khi tải về OkHttp nhận 31 bytes văn bản `", sabr.malformed_config"`, lưu thành file `.mp4`, khiến ExoPlayer bị `UnrecognizedInputFormatException`.
+    - [x] Nâng cấp `HomeFragment.kt`: Chặn toàn bộ gói tin rác `sabr=1`, `alr=yes`, `ump=1` từ YouTube; bổ sung bắt luồng mạng cho Twitter (`video.twimg.com`), Reddit (`v.redd.it`), Vimeo, Dailymotion.
+    - [x] Nâng cấp `SnifferEngine.kt`: Tích hợp bộ bóc tách chuyên sâu YouTube (`extractYouTubeVideo`) phân giải luồng progressive MP4 đầy đủ video + audio (720p/360p) và Vimeo Config API (`extractVimeoVideo`).
+    - [x] Nâng cấp `DownloadEngine.kt`: Thêm File Integrity Guardrail tự động kiểm tra và xóa bỏ ngay lập tức các tệp rác < 2048 bytes chứa chuỗi `sabr` hoặc mã lỗi HTML/M3U8.
+    - [x] Build APK thành công (`BUILD SUCCESSFUL in 27s`) và nạp trực tiếp qua Wireless ADB lên Samsung Galaxy A07 (`192.168.1.18:34749`).
+    - [x] Kiểm thử thực tế trên máy thật: Tải video "Me at the zoo" (YouTube: `jNQXAC9IVRw`), tệp đạt 743,099 bytes (chuẩn ISO/IEC 14496-14 atom: `ftyp`, `moov`, `mdat`), mở phát mượt mà trên `AcePlayerActivity` (hình ảnh Jawed tại sở thú San Diego, timeline 00:19/00:19, âm thanh chuẩn).
+
+

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@id/whatsapp_item_parent" android:background="@drawable/bg_round_corner_white" android:layout_width="fill_parent" android:layout_height="@dimen/cm_dp_200"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView android:id="@id/iv_whatsapp_item" android:layout_width="fill_parent" android:layout_height="fill_parent" android:scaleType="centerCrop" />
+    <LinearLayout android:orientation="horizontal" android:id="@id/whatsapp_item_video" android:background="@drawable/bg_000503_60_5dp" android:paddingTop="@dimen/cm_dp_2" android:paddingBottom="@dimen/cm_dp_2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_8" android:paddingStart="@dimen/cm_dp_4" android:paddingEnd="@dimen/cm_dp_4" android:layout_marginStart="@dimen/cm_dp_8">
+        <ImageView android:layout_width="@dimen/cm_dp_24" android:layout_height="@dimen/cm_dp_24" app:srcCompat="@drawable/ic_video" />
+    </LinearLayout>
+    <ImageView android:id="@id/whatsapp_item_download" android:padding="@dimen/cm_dp_8" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:layout_alignParentEnd="true" app:srcCompat="@drawable/ic_download_whatsapp" />
+    <LinearLayout android:gravity="center_vertical" android:id="@id/whatsapp_item_function" android:background="@drawable/bg_000503_60_12dp" android:layout_width="fill_parent" android:layout_height="@dimen/cm_dp_42" android:layout_alignParentBottom="true">
+        <ImageView android:id="@id/whatsapp_item_share" android:layout_width="0.0dip" android:layout_height="fill_parent" android:src="@drawable/ic_share" android:scaleType="centerInside" android:layout_weight="1.0" />
+        <ImageView android:id="@id/whatsapp_item_delete" android:layout_width="0.0dip" android:layout_height="fill_parent" android:src="@drawable/ic_delete" android:scaleType="centerInside" android:layout_weight="1.0" />
+        <ImageView android:id="@id/whatsapp_item_repost" android:layout_width="0.0dip" android:layout_height="fill_parent" android:src="@drawable/ic_repost" android:scaleType="centerInside" android:layout_weight="1.0" app:tint="@color/white" />
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@id/rl_item" android:background="?android:selectableItemBackground" android:layout_width="fill_parent" android:layout_height="wrap_content" android:minHeight="@dimen/cm_dp_84"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView android:id="@id/downloaded" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_marginStart="@dimen/cm_dp_16" android:layout_marginEnd="@dimen/cm_dp_12" app:srcCompat="@drawable/ic_done_all_black_24dp" />
+    <CheckBox android:id="@id/rb_select" android:focusable="false" android:clickable="false" android:layout_width="wrap_content" android:layout_height="wrap_content" android:checked="false" android:button="@drawable/ic_radiobutton_selector" android:layout_centerVertical="true" android:layout_marginStart="@dimen/cm_dp_16" android:layout_marginEnd="@dimen/cm_dp_12" style="@style/Widget.AppCompat.CompoundButton.RadioButton" />
+    <videoplayer.videodownloader.downloader.old.view.DrawerRenameView android:id="@id/drawer_rename" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_marginEnd="@dimen/cm_dp_16" android:layout_toEndOf="@id/rb_select" app:thumbCorner="true" />
+</RelativeLayout>

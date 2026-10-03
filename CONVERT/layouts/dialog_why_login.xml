@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:background="@drawable/bg_dialog_tip" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <ImageView android:id="@id/dialog_why_login_close" android:padding="@dimen/cm_dp_16" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" app:srcCompat="@drawable/ic_dialog_close" />
+        <TextView android:textSize="@dimen/cm_sp_22" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_30" android:text="@string/APKTOOL_DUPLICATE_string_0x7f1101a8" android:layout_centerHorizontal="true" android:fontFamily="@font/lato_black" />
+    </RelativeLayout>
+    <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_20" android:layout_marginStart="@dimen/cm_dp_16" android:layout_marginEnd="@dimen/cm_dp_16">
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/ic_fb_star" />
+        <TextView android:textSize="@dimen/cm_sp_16" android:textColor="@color/sub_title_color" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f1102bb" android:fontFamily="@font/lato_regular" android:layout_marginStart="@dimen/cm_dp_8" android:layout_marginEnd="@dimen/cm_dp_8" />
+    </LinearLayout>
+    <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_20" android:layout_marginStart="@dimen/cm_dp_16" android:layout_marginEnd="@dimen/cm_dp_16">
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/ic_fb_star" />
+        <TextView android:textSize="@dimen/cm_sp_16" android:textColor="@color/sub_title_color" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f11023a" android:fontFamily="@font/lato_regular" android:layout_marginStart="@dimen/cm_dp_8" android:layout_marginEnd="@dimen/cm_dp_8" />
+    </LinearLayout>
+    <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_20" android:layout_marginStart="@dimen/cm_dp_16" android:layout_marginEnd="@dimen/cm_dp_16">
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/ic_fb_star" />
+        <TextView android:textSize="@dimen/cm_sp_16" android:textColor="@color/sub_title_color" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f1101e4" android:fontFamily="@font/lato_regular" android:layout_marginStart="@dimen/cm_dp_8" android:layout_marginEnd="@dimen/cm_dp_8" />
+    </LinearLayout>
+    <TextView android:textSize="@dimen/cm_sp_16" android:textColor="@color/white" android:gravity="center" android:id="@id/dialog_why_login_login" android:background="@drawable/bg_facebook_btn" android:layout_width="fill_parent" android:layout_height="@dimen/cm_dp_50" android:layout_marginTop="@dimen/cm_dp_24" android:layout_marginBottom="@dimen/cm_dp_24" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110238" android:textAllCaps="true" android:fontFamily="@font/lato_black" android:layout_marginStart="@dimen/cm_dp_8" android:layout_marginEnd="@dimen/cm_dp_8" />
+</LinearLayout>

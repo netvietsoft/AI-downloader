@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Downloader</string>
+    <string name="tab_browser">Browser</string>
+    <string name="tab_progress">Voortgang</string>
+    <string name="tab_player">Speler</string>
+    <string name="tab_settings">Instellingen</string>
+    <string name="title_settings">Instellingen</string>
+    <string name="title_language">Taal</string>
+    <string name="title_vault">Privékluis</string>
+    <string name="card_subscription_title">AI Downloader Pro Abonnement</string>
+    <string name="card_subscription_subtitle">Ontgrendel 4K, ultrahoge snelheid &amp; advertentievrij</string>
+    <string name="card_policy_title">Privacybeleid</string>
+    <string name="card_policy_desc">Gegevensbescherming en veiligheidsgaranties</string>
+    <string name="card_tos_title">Servicevoorwaarden</string>
+    <string name="card_tos_desc">Gebruiksvoorwaarden en juridische bepalingen</string>
+    <string name="card_version_title">App-versie</string>
+    <string name="card_version_desc">v2.2.0-pro (Meest recente versie)</string>
+    <string name="btn_upgrade_pro">Nu upgraden</string>
+    <string name="btn_check_update">Controleer op updates</string>
+    <string name="btn_download">Downloaden</string>
+    <string name="btn_cancel">Annuleren</string>
+    <string name="btn_play">Afspelen</string>
+    <string name="btn_pause">Pauzeren</string>
+    <string name="btn_resume">Hervatten</string>
+    <string name="btn_set_default">Als standaard instellen</string>
+    <string name="btn_clear_all">Alles wissen</string>
+    <string name="downloading">Downloaden</string>
+    <string name="downloaded">Gedownload</string>
+    <string name="search_hint">Zoek op Google of voer URL in...</string>
+    <string name="paywall_title">Ontgrendel AI Downloader PRO</string>
+    <string name="paywall_subtitle">Ultrasnel downloaden &amp; geen advertenties</string>
+    <string name="paywall_benefit_1">Volledig reclamevrije ervaring</string>
+    <string name="paywall_benefit_2">5x snellere multi-threaded downloads</string>
+    <string name="paywall_benefit_3">Ondersteuning voor 4K en 8K UHD</string>
+    <string name="paywall_benefit_4">Onbeperkte gecodeerde privékluis</string>
+    <string name="paywall_plan_weekly">Weekabonnement</string>
+    <string name="paywall_plan_yearly">Jaarabonnement (Beste Waarde)</string>
+    <string name="paywall_plan_lifetime">Levenslange Toegang</string>
+    <string name="paywall_btn_subscribe">NU ABONNEREN</string>
+    <string name="paywall_btn_restore">Aankopen Herstellen</string>
+    <string name="msg_update_latest">Je gebruikt al de nieuwste versie!</string>
+    <string name="msg_pro_unlocked">Gefeliciteerd! AI Downloader PRO is succesvol ontgrendeld!</string>
+</resources>

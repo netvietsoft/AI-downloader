@@ -1,0 +1,75 @@
+# Node.js dependencies & runtime
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Playwright & test output artifacts
+.playwright-mcp/
+test_downloaded*
+*.mp4
+*.m3u8
+*.ts
+*.webm
+*.log
+screenshots/
+**/screenshots/
+**/screenshots_social/
+*screen*.png
+*screen*.jpg
+test_*.png
+
+# Security & Credentials (CRITICAL - Rule 12 & Rule 24)
+*.jks
+*.keystore
+*.p12
+*KEYSTORE*
+*keystore*.txt
+keystore.properties
+local.properties
+.env
+.env.*
+!.env.example
+
+# Android & Gradle build artifacts
+.gradle/
+build/
+**/build/
+intermediates/
+**/intermediates/
+*.apk
+*.aab
+*.xapk
+*.dex
+.idea/
+*.iml
+captures/
+.externalNativeBuild/
+.cxx/
+File/
+
+# Archives & Temporary files
+*.zip
+*.tar.gz
+*.rar
+
+# Raw Decompiled sources, test dumps & scratch files (Only app & web are tracked)
+SOURCE/
+web/
+temp_manifest/
+ui*.xml
+Firebase/
+
+# Operating System files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+

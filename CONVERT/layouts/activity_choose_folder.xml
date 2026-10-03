@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@id/folder_root" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:custom="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.Toolbar android:id="@id/toolbar" android:background="?toolbarSettingsBackground" android:layout_width="fill_parent" android:layout_height="?actionBarSize" android:minHeight="?actionBarSize" android:elevation="@dimen/cm_dp_2" custom:title="@string/APKTOOL_DUPLICATE_string_0x7f11034f" />
+    <androidx.recyclerview.widget.RecyclerView android:id="@id/rv_cur_path" android:background="@color/folder_path" android:layout_width="fill_parent" android:layout_height="@dimen/cm_dp_56" android:layout_below="@id/toolbar" />
+    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@id/ll_folder_up" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_12" android:layout_below="@id/rv_cur_path">
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="@dimen/cm_dp_16" custom:srcCompat="@drawable/ic_folder_back" />
+        <TextView android:textSize="@dimen/cm_sp_16" android:textColor="@color/accent_color" android:id="@id/tv_folder_up" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f1101b8" android:layout_marginStart="@dimen/cm_dp_8" android:layout_marginEnd="@dimen/cm_dp_8" />
+    </LinearLayout>
+    <LinearLayout android:orientation="horizontal" android:id="@id/ll_select" android:layout_width="fill_parent" android:layout_height="@dimen/cm_dp_52" android:layout_alignParentBottom="true">
+        <TextView android:textSize="@dimen/cm_sp_16" android:textColor="@color/accent_color" android:gravity="center" android:id="@id/tv_cancel" android:layout_width="0.0dip" android:layout_height="@dimen/cm_dp_52" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110021" android:layout_weight="1.0" android:textAllCaps="true" />
+        <View android:background="@color/divider_light" android:layout_width="@dimen/cm_dp_1" android:layout_height="fill_parent" />
+        <TextView android:textSize="@dimen/cm_sp_16" android:textColor="@color/accent_color" android:gravity="center" android:id="@id/tv_select" android:layout_width="0.0dip" android:layout_height="@dimen/cm_dp_52" android:text="@string/APKTOOL_DUPLICATE_string_0x7f11002e" android:layout_weight="1.0" android:textAllCaps="true" />
+    </LinearLayout>
+    <View android:id="@id/view_divider" android:background="@color/divider_light" android:layout_width="fill_parent" android:layout_height="@dimen/cm_dp_1" android:layout_above="@id/ll_select" />
+    <ListView android:id="@id/lv_folder_list" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginTop="@dimen/cm_dp_12" android:layout_above="@id/view_divider" android:layout_below="@id/ll_folder_up" />
+</RelativeLayout>

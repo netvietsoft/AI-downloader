@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/learn_disclaimer_layout" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginLeft="@dimen/cm_dp_23" android:layout_marginRight="@dimen/cm_dp_23" android:layout_marginHorizontal="@dimen/cm_dp_23">
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/ic_disclaimer" />
+        <TextView android:textSize="@dimen/cm_sp_24" android:textColor="#ff000e08" android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_12" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110153" android:fontFamily="@font/lato_black" />
+        <TextView android:textSize="@dimen/cm_sp_15" android:textColor="#ff828785" android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_20" android:text="@string/APKTOOL_DUPLICATE_string_0x7f11015d" android:lineSpacingMultiplier="1.2" />
+    </LinearLayout>
+    <RelativeLayout android:id="@id/learn_guide_layout" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <videoplayer.videodownloader.downloader.view.MyLottiView android:id="@id/learn_video" android:layout_width="fill_parent" android:layout_height="wrap_content" app:initHeight="880" app:initWidth="720" app:lottie_autoPlay="false" app:lottie_loop="false" app:lottie_rawRes="@raw/guide1" />
+        <TextView android:textSize="@dimen/cm_sp_24" android:textColor="#ff000e08" android:gravity="center_horizontal" android:id="@id/learn_title" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginLeft="@dimen/cm_dp_20" android:layout_marginRight="@dimen/cm_dp_20" android:layout_below="@id/learn_video" android:fontFamily="@font/lato_black" android:layout_marginHorizontal="@dimen/cm_dp_20" />
+    </RelativeLayout>
+</RelativeLayout>

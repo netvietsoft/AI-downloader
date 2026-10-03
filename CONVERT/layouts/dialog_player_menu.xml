@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_gravity="bottom" android:orientation="vertical" android:background="@drawable/bg_e60f0f0f_top_radius" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:gravity="center_vertical" android:layout_width="fill_parent" android:layout_height="@dimen/dp_64">
+        <androidx.appcompat.widget.AppCompatTextView android:textSize="@dimen/sp_16" android:textColor="@color/white" android:gravity="center_vertical" android:layout_width="0.0dip" android:layout_height="fill_parent" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110273" android:layout_weight="1.0" android:fontFamily="@font/lato_bold" android:layout_marginStart="@dimen/dp_20" />
+        <androidx.appcompat.widget.AppCompatImageView android:id="@id/iv_close" android:padding="@dimen/dp_8" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginEnd="@dimen/dp_8" app:srcCompat="@drawable/ic_close" />
+    </LinearLayout>
+    <androidx.core.widget.NestedScrollView android:id="@id/scroll_view" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="@dimen/dp_60" android:layout_marginLeft="@dimen/dp_18" android:layout_marginRight="@dimen/dp_18" android:layout_marginHorizontal="@dimen/dp_18">
+                <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/btn_color_filter" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="80.0">
+                    <androidx.appcompat.widget.AppCompatImageView android:id="@id/btn_color_filter_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/ic_color_filter" />
+                    <CheckedTextView android:textSize="@dimen/sp_10" android:textColor="@color/checked_white_text" android:id="@id/btn_color_filter_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/dp_8" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110103" android:textAlignment="center" />
+                </LinearLayout>
+                <View android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="6.0" />
+                <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/btn_night_mode" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="80.0">
+                    <androidx.appcompat.widget.AppCompatImageView android:id="@id/btn_night_mode_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/ic_night_mode" />
+                    <CheckedTextView android:textSize="@dimen/sp_10" android:textColor="@color/checked_white_text" android:id="@id/btn_night_mode_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/dp_8" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110289" android:textAlignment="center" />
+                </LinearLayout>
+                <View android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="6.0" />
+                <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/btn_equalizer" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="80.0">
+                    <androidx.appcompat.widget.AppCompatImageView android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/ic_equalizer" />
+                    <CheckedTextView android:textSize="@dimen/sp_10" android:textColor="@color/checked_white_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/dp_8" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110185" android:textAlignment="center" />
+                </LinearLayout>
+                <View android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="6.0" />
+                <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/btn_mirror" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="80.0">
+                    <androidx.appcompat.widget.AppCompatImageView android:id="@id/btn_mirror_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/ic_mirror" />
+                    <CheckedTextView android:textSize="@dimen/sp_10" android:textColor="@color/checked_white_text" android:id="@id/btn_mirror_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/dp_8" android:text="@string/APKTOOL_DUPLICATE_string_0x7f1102f4" android:textAlignment="center" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="@dimen/dp_60" android:layout_marginLeft="@dimen/dp_18" android:layout_marginRight="@dimen/dp_18" android:layout_marginHorizontal="@dimen/dp_18">
+                <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/btn_ab_repeat" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="80.0">
+                    <androidx.appcompat.widget.AppCompatImageView android:id="@id/btn_ab_repeat_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/ic_ab_repeat" />
+                    <CheckedTextView android:textSize="@dimen/sp_10" android:textColor="@color/checked_white_text" android:id="@id/btn_ab_repeat_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/dp_8" android:text="@string/APKTOOL_DUPLICATE_string_0x7f11006a" android:textAlignment="center" />
+                </LinearLayout>
+                <View android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="6.0" />
+                <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/btn_timer" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="80.0">
+                    <androidx.appcompat.widget.AppCompatImageView android:id="@id/btn_timer_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/ic_timer" />
+                    <CheckedTextView android:textSize="@dimen/sp_10" android:textColor="@color/checked_white_text" android:id="@id/btn_timer_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/dp_8" android:text="@string/APKTOOL_DUPLICATE_string_0x7f1103a1" android:textAlignment="center" />
+                </LinearLayout>
+                <View android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="6.0" />
+                <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/menu_property" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="80.0">
+                    <androidx.appcompat.widget.AppCompatImageView android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/ic_player_property" />
+                    <CheckedTextView android:textSize="@dimen/sp_10" android:textColor="@color/checked_white_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/dp_8" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110306" android:textAlignment="center" />
+                </LinearLayout>
+                <View android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="6.0" />
+                <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/btn_share" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="80.0">
+                    <androidx.appcompat.widget.AppCompatImageView android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/ic_video_share" />
+                    <CheckedTextView android:textSize="@dimen/sp_10" android:textColor="@color/checked_white_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/dp_8" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110363" android:textAlignment="center" />
+                </LinearLayout>
+            </LinearLayout>
+            <TextView android:textSize="@dimen/sp_14" android:textColor="#99ffffff" android:id="@id/repeat_mode_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/dp_20" android:text="@string/APKTOOL_DUPLICATE_string_0x7f11031d" android:layout_marginStart="@dimen/dp_20" />
+            <LinearLayout android:orientation="horizontal" android:id="@id/repeat_mode_layout" android:layout_width="fill_parent" android:layout_height="@dimen/dp_72" android:layout_marginLeft="@dimen/dp_20" android:layout_marginTop="@dimen/dp_12" android:layout_marginRight="@dimen/dp_20" android:layout_marginHorizontal="@dimen/dp_20">
+                <LinearLayout android:orientation="vertical" android:id="@id/repeat_order" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="64.0">
+                    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center_horizontal" android:id="@id/repeat_order_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/dp_8" app:srcCompat="@drawable/ic_repeat_order" />
+                    <TextView android:textSize="@dimen/sp_10" android:textColor="@color/white" android:gravity="center_horizontal" android:id="@id/repeat_order_text" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginTop="@dimen/dp_8" android:text="@string/APKTOOL_DUPLICATE_string_0x7f11031f" />
+                </LinearLayout>
+                <TextView android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="4.0" />
+                <LinearLayout android:orientation="vertical" android:id="@id/repeat_repeat" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="64.0">
+                    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center_horizontal" android:id="@id/repeat_repeat_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/dp_8" app:srcCompat="@drawable/ic_repeat_repeat" />
+                    <TextView android:textSize="@dimen/sp_10" android:textColor="@color/white" android:gravity="center_horizontal" android:id="@id/repeat_repeat_text" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginTop="8.0dip" android:text="@string/APKTOOL_DUPLICATE_string_0x7f11006e" />
+                </LinearLayout>
+                <TextView android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="4.0" />
+                <LinearLayout android:orientation="vertical" android:id="@id/repeat_shuffle" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="64.0">
+                    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center_horizontal" android:id="@id/repeat_shuffle_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/dp_8" app:srcCompat="@drawable/ic_repeat_shuffle" />
+                    <TextView android:textSize="@dimen/dp_10" android:textColor="@color/white" android:gravity="center_horizontal" android:id="@id/repeat_shuffle_text" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginTop="@dimen/dp_8" android:text="@string/APKTOOL_DUPLICATE_string_0x7f11006f" />
+                </LinearLayout>
+                <TextView android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="4.0" />
+                <LinearLayout android:orientation="vertical" android:id="@id/repeat_loop" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="64.0">
+                    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center_horizontal" android:id="@id/repeat_loop_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/dp_8" app:srcCompat="@drawable/ic_repeat_loop" />
+                    <TextView android:textSize="@dimen/sp_10" android:textColor="@color/white" android:gravity="center_horizontal" android:id="@id/repeat_loop_text" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginTop="8.0dip" android:text="@string/APKTOOL_DUPLICATE_string_0x7f11022a" />
+                </LinearLayout>
+                <TextView android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="4.0" />
+                <LinearLayout android:orientation="vertical" android:id="@id/repeat_not_play_next" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="64.0">
+                    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center_horizontal" android:id="@id/repeat_not_play_next_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/dp_8" app:srcCompat="@drawable/ic_repeat_no_autoplay" />
+                    <TextView android:textSize="@dimen/sp_10" android:textColor="@color/white" android:gravity="center_horizontal" android:id="@id/repeat_not_play_next_text" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginTop="@dimen/dp_8" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110276" />
+                </LinearLayout>
+            </LinearLayout>
+            <RelativeLayout android:id="@id/brightness_rl" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/dp_20" android:layout_marginTop="@dimen/dp_32" android:layout_marginRight="@dimen/dp_20" android:layout_marginHorizontal="@dimen/dp_20">
+                <TextView android:textSize="@dimen/sp_16" android:textColor="@color/white" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f1100e2" android:fontFamily="@font/lato_bold" />
+                <TextView android:textSize="@dimen/sp_14" android:textColor="@color/white" android:gravity="end" android:id="@id/tv_brightness_value" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_alignParentEnd="true" />
+                <TextView android:textSize="@dimen/sp_14" android:id="@id/tv_brightness_100" android:visibility="invisible" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="100" android:layout_alignParentEnd="true" />
+                <androidx.appcompat.widget.AppCompatImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_toStartOf="@id/tv_brightness_100" app:srcCompat="@drawable/ic_set_brightness" />
+            </RelativeLayout>
+            <androidx.appcompat.widget.GradientSeekBar android:id="@id/sb_brightness" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/dp_7" android:layout_marginTop="@dimen/dp_12" android:layout_marginRight="@dimen/dp_7" android:maxHeight="@dimen/dp_3" android:progressDrawable="@drawable/player_progress_horizontal" android:minHeight="@dimen/dp_3" android:thumb="@drawable/seekbar_thumb" android:layout_marginHorizontal="@dimen/dp_7" />
+            <RelativeLayout android:id="@id/volume_rl" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/dp_20" android:layout_marginTop="@dimen/dp_32" android:layout_marginRight="@dimen/dp_20" android:layout_marginHorizontal="@dimen/dp_20" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/sb_brightness">
+                <TextView android:textSize="@dimen/sp_16" android:textColor="@color/white" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f11045f" android:fontFamily="@font/lato_bold" />
+                <TextView android:textSize="@dimen/sp_14" android:textColor="@color/white" android:gravity="end" android:id="@id/tv_volume_value" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_alignParentEnd="true" />
+                <TextView android:textSize="@dimen/sp_14" android:id="@id/tv_volume_100" android:visibility="invisible" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="100" android:layout_alignParentEnd="true" />
+                <androidx.appcompat.widget.AppCompatImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_toStartOf="@id/tv_volume_100" app:srcCompat="@drawable/ic_set_volume" />
+            </RelativeLayout>
+            <androidx.appcompat.widget.GradientSeekBar android:id="@id/sb_volume" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/dp_7" android:layout_marginTop="@dimen/dp_12" android:layout_marginRight="@dimen/dp_7" android:layout_marginBottom="@dimen/dp_48" android:maxHeight="@dimen/dp_3" android:progressDrawable="@drawable/player_progress_horizontal" android:minHeight="@dimen/dp_3" android:thumb="@drawable/seekbar_thumb" android:layout_marginHorizontal="@dimen/dp_7" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

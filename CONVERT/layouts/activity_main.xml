@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@id/main_root" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:orientation="vertical" android:id="@id/main_bottom" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true">
+        <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@id/web_bottom" android:background="#ffeff1f4" android:paddingLeft="@dimen/cm_dp_19" android:paddingRight="@dimen/cm_dp_19" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="@dimen/cm_dp_48" android:paddingHorizontal="@dimen/cm_dp_19">
+            <ImageView android:id="@id/iv_go_back" android:layout_width="0.0dip" android:layout_height="fill_parent" android:scaleType="centerInside" android:layout_weight="1.0" app:srcCompat="@drawable/ic_tab_backward" />
+            <ImageView android:id="@id/iv_go_forward" android:layout_width="0.0dip" android:layout_height="fill_parent" android:scaleType="centerInside" android:layout_weight="1.0" app:srcCompat="@drawable/ic_tab_forward" />
+            <ImageView android:id="@id/iv_new_tab" android:layout_width="0.0dip" android:layout_height="fill_parent" android:scaleType="centerInside" android:layout_weight="1.0" app:srcCompat="@drawable/ic_add_box_black_24dp" app:tint="@color/black" />
+            <ImageView android:id="@id/iv_copy_link" android:layout_width="0.0dip" android:layout_height="fill_parent" android:scaleType="centerInside" android:layout_weight="1.0" app:srcCompat="@drawable/ic_copy_all" app:tint="@color/black" />
+        </LinearLayout>
+        <ScrollView android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <LinearLayout android:gravity="center" android:layout_gravity="center_horizontal" android:orientation="horizontal" android:id="@id/banner_ad_layout" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+        </ScrollView>
+        <videoplayer.videodownloader.downloader.view.bottomnavigationviewex.BottomNavigationViewEx android:id="@id/bottom_nav_view" android:background="#ffffffff" android:layout_width="fill_parent" android:layout_height="wrap_content" app:itemTextAppearanceActive="@style/blackText" app:itemTextAppearanceInactive="@style/boldText" app:itemTextColor="@color/selector_nav_color" app:menu="@menu/menu_navigation" />
+    </LinearLayout>
+    <android.supprot.design.widgit.view.FixedDrawerLayout android:id="@id/drawer_layout" android:fitsSystemWindows="true" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_above="@id/main_bottom">
+        <LinearLayout android:orientation="vertical" android:id="@id/ui_layout" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <include layout="@layout/toolbar_main" />
+            <include layout="@layout/browser_content" />
+        </LinearLayout>
+    </android.supprot.design.widgit.view.FixedDrawerLayout>
+    <RelativeLayout android:id="@id/rl_download_fab" android:focusable="true" android:clickable="true" android:layout_width="@dimen/cm_dp_58" android:layout_height="@dimen/cm_dp_58" android:layout_marginBottom="@dimen/cm_dp_54" android:layout_above="@id/main_bottom" android:layout_alignWithParentIfMissing="true" android:layout_marginEnd="@dimen/cm_dp_32" android:layout_alignParentEnd="true">
+        <ImageView android:id="@id/download_fab" android:layout_width="@dimen/cm_dp_54" android:layout_height="@dimen/cm_dp_54" android:src="@drawable/download_jump" android:layout_alignParentBottom="true" />
+        <ImageView android:id="@id/download_fab_no_found" android:layout_width="@dimen/cm_dp_54" android:layout_height="@dimen/cm_dp_54" android:src="@drawable/download_no_found" android:layout_alignParentBottom="true" />
+        <android.supprot.design.widgit.view.SquareProgressBar android:id="@id/parsing_view" android:background="@drawable/bg_accent_14dp" android:padding="@dimen/cm_dp_12" android:visibility="gone" android:layout_width="@dimen/cm_dp_54" android:layout_height="@dimen/cm_dp_54" android:indeterminate="true" android:layout_alignTop="@id/download_fab_no_found" android:layout_alignParentBottom="true" android:layout_alignStart="@id/download_fab_no_found" android:layout_alignEnd="@id/download_fab_no_found" android:indeterminateTint="@color/white" android:indeterminateTintMode="src_atop" />
+        <TextView android:textSize="@dimen/cm_sp_14" android:textColor="@color/white" android:gravity="center" android:id="@id/tv_videos_count" android:background="@drawable/bg_badge_view" android:visibility="gone" android:layout_width="@dimen/cm_dp_20" android:layout_height="@dimen/cm_dp_20" android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+    <ViewStub android:id="@id/stub_guide" android:layout="@layout/layout_guid" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+</RelativeLayout>

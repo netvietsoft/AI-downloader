@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:orientation="vertical" android:id="@id/tips_root" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout android:id="@id/howto_top" android:layout_width="fill_parent" android:layout_height="@dimen/cm_dp_56">
+        <ImageView android:id="@id/iv_howto_back" android:background="?android:selectableItemBackground" android:layout_width="@dimen/cm_dp_24" android:layout_height="@dimen/cm_dp_24" android:layout_centerVertical="true" android:layout_marginStart="@dimen/cm_dp_16" app:srcCompat="@drawable/ic_arrow_back" />
+        <TextView android:textSize="@dimen/cm_sp_20" android:id="@id/tv_howto_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:fontFamily="@font/lato_black" android:layout_marginStart="@dimen/cm_dp_60" />
+    </RelativeLayout>
+    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@id/howto_bottom" android:layout_width="fill_parent" android:layout_height="@dimen/cm_dp_56" android:layout_marginBottom="@dimen/cm_dp_24" android:layout_alignParentBottom="true" android:layout_marginStart="@dimen/cm_dp_30" android:layout_marginEnd="@dimen/cm_dp_30">
+        <ImageView android:id="@id/howto_previous" android:visibility="gone" android:layout_width="@dimen/cm_dp_46" android:layout_height="@dimen/cm_dp_46" android:scaleType="centerInside" android:layout_marginEnd="@dimen/cm_dp_10" app:srcCompat="@drawable/ic_howto_previous" />
+        <TextView android:textSize="@dimen/cm_sp_20" android:textColor="@color/white" android:gravity="center" android:id="@id/howto_next" android:background="@drawable/bg_whatsapp_btn" android:layout_width="fill_parent" android:layout_height="fill_parent" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110288" android:textAllCaps="true" android:fontFamily="@font/lato_black" />
+    </LinearLayout>
+    <LinearLayout android:gravity="center" android:orientation="horizontal" android:id="@id/howto_dot" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/cm_dp_16" android:layout_above="@id/howto_bottom">
+        <ImageView android:id="@id/howto_dot1" android:background="@drawable/bg_circle_ins" android:layout_width="@dimen/cm_dp_8" android:layout_height="@dimen/cm_dp_8" android:layout_margin="@dimen/cm_dp_6" />
+        <ImageView android:id="@id/howto_dot2" android:background="@drawable/bg_circle_subtitle_50" android:layout_width="@dimen/cm_dp_8" android:layout_height="@dimen/cm_dp_8" android:layout_margin="@dimen/cm_dp_6" />
+        <ImageView android:id="@id/howto_dot3" android:background="@drawable/bg_circle_subtitle_50" android:layout_width="@dimen/cm_dp_8" android:layout_height="@dimen/cm_dp_8" android:layout_margin="@dimen/cm_dp_6" />
+        <ImageView android:id="@id/howto_dot4" android:background="@drawable/bg_circle_subtitle_50" android:layout_width="@dimen/cm_dp_8" android:layout_height="@dimen/cm_dp_8" android:layout_margin="@dimen/cm_dp_6" />
+    </LinearLayout>
+    <videoplayer.videodownloader.downloader.twelve.view.FixedViewPager android:id="@id/howto_viewpager" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_above="@id/howto_dot" android:layout_below="@id/howto_top" />
+</RelativeLayout>

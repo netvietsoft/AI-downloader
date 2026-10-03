@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Downloader</string>
+    <string name="tab_browser">Browser</string>
+    <string name="tab_progress">Avanzamento</string>
+    <string name="tab_player">Player</string>
+    <string name="tab_settings">Impostazioni</string>
+    <string name="title_settings">Impostazioni</string>
+    <string name="title_language">Lingua</string>
+    <string name="title_vault">Cassaforte Privata</string>
+    <string name="card_subscription_title">Abbonamento AI Downloader Pro</string>
+    <string name="card_subscription_subtitle">Sblocca 4K, velocità ultra e zero pubblicità</string>
+    <string name="card_policy_title">Informativa sulla Privacy</string>
+    <string name="card_policy_desc">Impegni di sicurezza e protezione dati</string>
+    <string name="card_tos_title">Termini di Servizio</string>
+    <string name="card_tos_desc">Linee guida d\'uso e condizioni legali</string>
+    <string name="card_version_title">Versione App</string>
+    <string name="card_version_desc">v2.2.0-pro (Ultima versione)</string>
+    <string name="btn_upgrade_pro">Passa a Pro</string>
+    <string name="btn_check_update">Verifica Aggiornamenti</string>
+    <string name="btn_download">Scarica</string>
+    <string name="btn_cancel">Annulla</string>
+    <string name="btn_play">Riproduci</string>
+    <string name="btn_pause">Pausa</string>
+    <string name="btn_resume">Riprendi</string>
+    <string name="btn_set_default">Imposta come predefinito</string>
+    <string name="btn_clear_all">Cancella tutto</string>
+    <string name="downloading">Download in corso</string>
+    <string name="downloaded">Completati</string>
+    <string name="search_hint">Cerca su Google o inserisci URL...</string>
+    <string name="paywall_title">Sblocca AI Downloader PRO</string>
+    <string name="paywall_subtitle">Download ultra veloci e zero pubblicità</string>
+    <string name="paywall_benefit_1">Esperienza al 100% senza pubblicità</string>
+    <string name="paywall_benefit_2">Download turbo multi-thread 5X</string>
+    <string name="paywall_benefit_3">Supporto risoluzione 4K e 8K</string>
+    <string name="paywall_benefit_4">Cassaforte crittografata illimitata</string>
+    <string name="paywall_plan_weekly">Piano Settimanale</string>
+    <string name="paywall_plan_yearly">Piano Annuale (Miglior Valore)</string>
+    <string name="paywall_plan_lifetime">Accesso a Vita</string>
+    <string name="paywall_btn_subscribe">ISCRIVITI ORA</string>
+    <string name="paywall_btn_restore">Ripristina Acquisti</string>
+    <string name="msg_update_latest">Stai già utilizzando l\'ultima versione!</string>
+    <string name="msg_pro_unlocked">Congratulazioni! AI Downloader PRO è stato sbloccato!</string>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:orientation="vertical" android:id="@id/layout_root" android:background="@color/transparent_color" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:orientation="vertical" android:background="@drawable/bg_bottom_popup_white" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true">
+        <ImageView android:layout_gravity="end" android:id="@id/iv_task_close" android:visibility="invisible" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_10" android:layout_marginEnd="@dimen/cm_dp_10" app:srcCompat="@drawable/common_ic_close" app:tint="#ff474b50" />
+        <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_6" android:layout_marginBottom="@dimen/cm_dp_15" android:layout_marginStart="@dimen/cm_dp_19" android:layout_marginEnd="@dimen/cm_dp_10">
+            <ImageView android:layout_width="@dimen/cm_dp_22" android:layout_height="@dimen/cm_dp_22" app:srcCompat="@drawable/ic_selected_flag_24dp" />
+            <TextView android:textSize="@dimen/cm_sp_18" android:textColor="#ff000e08" android:layout_width="0.0dip" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f11015c" android:layout_weight="1.0" android:fontFamily="@font/lato_bold" android:layout_marginStart="@dimen/cm_dp_9" />
+            <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@id/task_view" android:paddingLeft="@dimen/cm_dp_6" android:paddingTop="@dimen/cm_dp_4" android:paddingRight="@dimen/cm_dp_6" android:paddingBottom="@dimen/cm_dp_4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingHorizontal="@dimen/cm_dp_6" android:paddingVertical="@dimen/cm_dp_4">
+                <TextView android:textSize="@dimen/cm_sp_14" android:textColor="@color/accent_color" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110458" android:fontFamily="@font/lato_bold" />
+                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/ic_guide_go" />
+            </LinearLayout>
+        </LinearLayout>
+        <TextView android:textSize="@dimen/cm_sp_14" android:textColor="#ff000e08" android:gravity="center_vertical" android:id="@id/tv_task_name" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/cm_dp_20" android:layout_marginTop="@dimen/cm_dp_13" android:layout_marginRight="@dimen/cm_dp_20" android:fontFamily="@font/lato_bold" android:layout_marginHorizontal="@dimen/cm_dp_20" />
+        <LinearLayout android:gravity="center" android:orientation="horizontal" android:id="@id/ad_layout" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_14" />
+        <videoplayer.videodownloader.downloader.view.MyLottiView android:id="@id/task_ad_loading" android:layout_width="fill_parent" android:layout_height="wrap_content" app:initHeight="285" app:initWidth="338" app:lottie_autoPlay="true" app:lottie_loop="true" app:lottie_rawRes="@raw/ad_loading_native" />
+    </LinearLayout>
+</RelativeLayout>

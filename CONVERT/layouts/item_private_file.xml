@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:background="@drawable/bg_video_item" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout android:id="@id/item_layout" android:background="?android:selectableItemBackground" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <RelativeLayout android:id="@id/icon_layout" android:background="@color/colorSecondaryDark" android:layout_width="@dimen/cm_dp_108" android:layout_height="@dimen/cm_dp_72" android:layout_margin="@dimen/cm_dp_12" android:layout_centerVertical="true" android:layout_alignParentStart="true">
+            <ImageView android:id="@id/flag" android:focusable="false" android:clickable="false" android:layout_width="@dimen/cm_dp_36" android:layout_height="@dimen/cm_dp_36" android:layout_centerInParent="true" app:tint="#ffffffff" />
+            <ImageView android:id="@id/thumb" android:focusable="false" android:clickable="false" android:layout_width="fill_parent" android:layout_height="fill_parent" android:scaleType="centerCrop" />
+            <TextView android:textSize="@dimen/cm_sp_12" android:textColor="@color/white" android:gravity="center" android:id="@id/duration" android:background="#88000000" android:paddingTop="@dimen/cm_dp_2" android:paddingBottom="@dimen/cm_dp_2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="@dimen/cm_dp_40" android:layout_alignParentBottom="true" android:paddingStart="@dimen/cm_dp_4" android:paddingEnd="@dimen/cm_dp_4" android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+        <TextView android:id="@id/have_view" android:background="@drawable/bg_new" android:layout_width="@dimen/cm_dp_8" android:layout_height="@dimen/cm_dp_8" android:layout_marginTop="-2.0dip" android:layout_alignTop="@id/icon_layout" android:layout_marginStart="-2.0dip" android:layout_alignStart="@id/icon_layout" />
+        <RelativeLayout android:id="@id/action_layout" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignTop="@id/icon_layout" android:layout_marginEnd="@dimen/cm_dp_8" android:layout_alignParentEnd="true">
+            <CheckBox android:id="@id/checkbox" android:padding="@dimen/cm_dp_4" android:focusable="false" android:visibility="gone" android:clickable="false" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" style="?checkboxStyle" />
+            <ImageView android:id="@id/action_more" android:padding="@dimen/cm_dp_4" android:focusable="false" android:clickable="false" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" app:srcCompat="@drawable/ic_more_vert_black_24dp" app:tint="@color/tab_un_select" style="?checkboxStyle" />
+        </RelativeLayout>
+        <TextView android:textSize="@dimen/cm_sp_14" android:textStyle="bold" android:textColor="@color/white" android:gravity="start" android:id="@id/file_name" android:layout_width="fill_parent" android:layout_height="wrap_content" android:maxLines="2" android:layout_alignTop="@id/icon_layout" android:fontFamily="sans-serif-medium" android:layout_marginEnd="@dimen/cm_dp_12" android:layout_toStartOf="@id/action_layout" android:layout_toEndOf="@id/icon_layout" />
+        <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignBottom="@id/icon_layout" android:layout_toEndOf="@id/icon_layout">
+            <ProgressBar android:id="@id/progress" android:layout_width="0.0dip" android:layout_height="@dimen/cm_dp_4" android:max="100" android:progressDrawable="@drawable/private_download_progressbar" android:layout_weight="1.0" style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
+            <RelativeLayout android:id="@id/ly_tv_progress" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="@dimen/cm_dp_4" android:layout_marginEnd="@dimen/cm_dp_12">
+                <TextView android:textSize="@dimen/cm_sp_12" android:textColor="@color/sub_title_color" android:id="@id/tv_progress" android:layout_width="wrap_content" android:layout_height="wrap_content" android:includeFontPadding="false" />
+                <TextView android:textSize="@dimen/cm_sp_12" android:textColor="@color/sub_title_color" android:id="@id/tv_progress_invisible" android:visibility="invisible" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="100%" android:includeFontPadding="false" />
+            </RelativeLayout>
+            <ImageView android:id="@id/label" android:focusable="false" android:clickable="false" android:layout_width="@dimen/cm_dp_16" android:layout_height="@dimen/cm_dp_16" app:tint="@color/tab_un_select" />
+            <RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="@dimen/cm_dp_4" android:layout_marginEnd="@dimen/cm_dp_12">
+                <TextView android:textSize="@dimen/cm_sp_12" android:textColor="@color/sub_title_color" android:id="@id/size" android:layout_width="wrap_content" android:layout_height="wrap_content" android:includeFontPadding="false" android:fontFamily="@font/lato_bold" />
+                <TextView android:textSize="@dimen/cm_sp_12" android:textColor="@color/sub_title_color" android:id="@id/size_invisible" android:layout_width="wrap_content" android:layout_height="wrap_content" android:includeFontPadding="false" android:fontFamily="@font/lato_bold" />
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

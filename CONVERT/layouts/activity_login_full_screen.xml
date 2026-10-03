@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@id/login_root" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:orientation="vertical" android:id="@id/ll_url" android:background="@color/white" android:paddingTop="@dimen/cm_dp_8" android:paddingBottom="@dimen/cm_dp_8" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:paddingStart="@dimen/cm_dp_10" android:paddingEnd="@dimen/cm_dp_10">
+        <LinearLayout android:gravity="center_vertical" android:background="@drawable/bg_round_corner_white" android:layout_width="fill_parent" android:layout_height="wrap_content" android:minHeight="@dimen/cm_dp_36">
+            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="@dimen/cm_dp_12" android:layout_marginEnd="@dimen/cm_dp_8" app:srcCompat="@drawable/ic_lock_login" />
+            <EditText android:textSize="@dimen/cm_sp_14" android:textColor="@color/black" android:id="@id/tv_url" android:background="@null" android:focusable="false" android:layout_width="fill_parent" android:layout_height="wrap_content" android:singleLine="true" android:textCursorDrawable="@drawable/cursor_edittext" android:layout_marginEnd="@dimen/cm_dp_6" />
+        </LinearLayout>
+    </LinearLayout>
+    <WebView android:id="@id/webview" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_below="@id/ll_url" />
+</RelativeLayout>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:orientation="vertical" android:id="@id/layout_root" android:background="@color/drawer_top_color" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:orientation="vertical" android:id="@id/bottom_layout" android:background="#ffffffff" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true">
+        <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/layout_close" android:padding="@dimen/cm_dp_10" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1.0">
+                <ImageView android:layout_width="@dimen/cm_dp_32" android:layout_height="@dimen/cm_dp_32" android:src="@drawable/ic_download_close" />
+                <TextView android:textSize="@dimen/cm_sp_12" android:textColor="#ff595f5c" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f1100ff" android:fontFamily="@font/lato_regular" />
+            </LinearLayout>
+            <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/layout_yes" android:padding="@dimen/cm_dp_10" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1.0">
+                <ImageView android:layout_width="@dimen/cm_dp_32" android:layout_height="@dimen/cm_dp_32" android:src="@drawable/ic_download_downloader" />
+                <TextView android:textSize="@dimen/cm_sp_12" android:textColor="#ff595f5c" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110035" android:fontFamily="@font/lato_regular" />
+            </LinearLayout>
+        </LinearLayout>
+        <ScrollView android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <LinearLayout android:gravity="center" android:orientation="horizontal" android:id="@id/native_ad_layout" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+        </ScrollView>
+    </LinearLayout>
+    <TextView android:textSize="@dimen/cm_sp_26" android:textColor="@color/toolbar_title_color" android:background="@drawable/bg_bottom_popup_white" android:paddingTop="@dimen/cm_dp_30" android:paddingBottom="@dimen/cm_dp_17" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f11028e" android:includeFontPadding="false" android:layout_above="@id/bottom_layout" android:fontFamily="@font/lato_bold" android:paddingStart="@dimen/cm_dp_20" android:paddingEnd="@dimen/cm_dp_20" />
+</RelativeLayout>

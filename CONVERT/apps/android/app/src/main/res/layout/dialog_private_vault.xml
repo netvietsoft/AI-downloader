@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet_dark"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- Top Dialog Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔒"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv_vault_dialog_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="@string/private_vault_title"
+            android:textColor="#FFFFFF"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/btn_close_vault_dialog"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Close"
+            android:src="@drawable/ic_small_close"
+            app:tint="#94A3B8" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="14dp"
+        android:background="#1E293B" />
+
+    <!-- SECTION 1: PIN AUTHENTICATION STATE -->
+    <LinearLayout
+        android:id="@+id/layout_vault_auth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <!-- Emerald Shield Icon Badge -->
+        <FrameLayout
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_circle_3315ad71">
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_lock"
+                app:tint="#10B981" />
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="@string/private_vault_subtitle"
+            android:textColor="#94A3B8"
+            android:textSize="12sp" />
+
+        <!-- PIN Input Box -->
+        <EditText
+            android:id="@+id/et_vault_pin"
+            android:layout_width="200dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_card_dark"
+            android:gravity="center"
+            android:hint="••••"
+            android:inputType="numberPassword"
+            android:letterSpacing="0.4"
+            android:maxLength="6"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#64748B"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <!-- Error Message -->
+        <TextView
+            android:id="@+id/tv_vault_pin_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/dialog_pin_incorrect"
+            android:textColor="#F43F5E"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <!-- Action Buttons (Cancel / Unlock) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_vault_cancel"
+                android:layout_width="0dp"
+                android:layout_height="46dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_pill_btn_outline"
+                android:text="@string/btn_cancel"
+                android:textColor="#94A3B8"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:backgroundTint="@null" />
+
+            <Button
+                android:id="@+id/btn_vault_unlock"
+                android:layout_width="0dp"
+                android:layout_height="46dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_pill_btn"
+                android:text="@string/private_vault_unlock_btn"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:backgroundTint="@null" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- SECTION 2: UNLOCKED VAULT CONTENT STATE -->
+    <LinearLayout
+        android:id="@+id/layout_vault_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <!-- Status Pill -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_vault_unlocked_status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/vault_status_unlocked"
+                android:textColor="#10B981"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_vault_items_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_pill_btn_outline"
+                android:paddingStart="8dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="2dp"
+                android:text="0 video"
+                android:textColor="#94A3B8"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Scrollable Vault Video List -->
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:maxHeight="360dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/container_vault_items"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <!-- Empty State -->
+                <TextView
+                    android:id="@+id/tv_empty_vault_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:gravity="center"
+                    android:lineSpacingExtra="4dp"
+                    android:text="@string/vault_empty_detail"
+                    android:textColor="#64748B"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- Relock Button -->
+        <Button
+            android:id="@+id/btn_vault_relock"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_card_dark"
+            android:text="@string/vault_relock"
+            android:textColor="#94A3B8"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:backgroundTint="@null" />
+    </LinearLayout>
+
+</LinearLayout>

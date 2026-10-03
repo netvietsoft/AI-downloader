@@ -1,0 +1,22 @@
+{
+  "name": "nextai-downloader-backend",
+  "version": "2.1.0",
+  "description": "NextAI Video Downloader Dynamic Sniffing Rules, Config & CMS Backend",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "test": "node dist/test/backend_test.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.0",
+    "typescript": "^5.4.5"
+  }
+}

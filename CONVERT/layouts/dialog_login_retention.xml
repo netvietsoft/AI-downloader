@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout android:background="@drawable/bg_round_corner_primary" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginStart="@dimen/cm_dp_12" android:layout_marginEnd="@dimen/cm_dp_12">
+        <ImageView android:id="@id/dialog_why_login_close" android:paddingTop="@dimen/cm_dp_16" android:paddingBottom="@dimen/cm_dp_10" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:paddingStart="@dimen/cm_dp_16" android:paddingEnd="@dimen/cm_dp_16" android:layout_alignParentEnd="true" app:srcCompat="@drawable/ic_dialog_close" />
+        <TextView android:textSize="@dimen/cm_sp_22" android:gravity="center_horizontal" android:id="@id/retention_title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f1101a8" android:includeFontPadding="false" android:layout_below="@id/dialog_why_login_close" android:layout_centerHorizontal="true" android:fontFamily="@font/lato_black" android:layout_marginStart="@dimen/cm_dp_16" android:layout_marginEnd="@dimen/cm_dp_16" />
+        <LinearLayout android:id="@id/layout_bottom_login" android:background="@drawable/bg_bottom_corner" android:paddingBottom="@dimen/cm_dp_24" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:paddingStart="@dimen/cm_dp_8" android:paddingEnd="@dimen/cm_dp_8">
+            <TextView android:textSize="@dimen/cm_sp_16" android:textColor="@color/white" android:gravity="center" android:id="@id/btn_login" android:background="@drawable/bg_instagram_btn_20dp" android:paddingTop="@dimen/cm_dp_2" android:layout_width="fill_parent" android:layout_height="@dimen/cm_dp_50" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110238" android:includeFontPadding="false" android:textAllCaps="true" android:fontFamily="@font/lato_black" />
+        </LinearLayout>
+        <ScrollView android:id="@id/scroll" android:background="@color/white" android:scrollbars="none" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_15" android:layout_above="@id/layout_bottom_login" android:layout_below="@id/retention_title">
+            <androidx.appcompat.widget.LinearLayoutCompat android:orientation="vertical" android:background="@color/colorPrimary" android:paddingTop="@dimen/cm_dp_15" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginStart="@dimen/cm_dp_16" android:layout_marginEnd="@dimen/cm_dp_16">
+                    <ImageView android:layout_width="@dimen/cm_dp_24" android:layout_height="@dimen/cm_dp_24" android:src="@drawable/ic_ins_star" />
+                    <TextView android:textSize="@dimen/cm_sp_16" android:textColor="@color/sub_title_color" android:id="@id/retention_desc_0" android:layout_width="fill_parent" android:layout_height="wrap_content" android:fontFamily="@font/lato_regular" android:layout_marginStart="@dimen/cm_dp_8" />
+                </LinearLayout>
+                <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_20" android:layout_marginStart="@dimen/cm_dp_16" android:layout_marginEnd="@dimen/cm_dp_16">
+                    <ImageView android:layout_width="@dimen/cm_dp_24" android:layout_height="@dimen/cm_dp_24" android:src="@drawable/ic_ins_star" />
+                    <TextView android:textSize="@dimen/cm_sp_16" android:textColor="@color/sub_title_color" android:id="@id/retention_desc_1" android:layout_width="fill_parent" android:layout_height="wrap_content" android:fontFamily="@font/lato_regular" android:layout_marginStart="@dimen/cm_dp_8" />
+                </LinearLayout>
+                <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_20" android:layout_marginStart="@dimen/cm_dp_16" android:layout_marginEnd="@dimen/cm_dp_16">
+                    <ImageView android:layout_width="@dimen/cm_dp_24" android:layout_height="@dimen/cm_dp_24" android:src="@drawable/ic_ins_star" />
+                    <TextView android:textSize="@dimen/cm_sp_16" android:textColor="@color/sub_title_color" android:id="@id/retention_desc_2" android:layout_width="fill_parent" android:layout_height="wrap_content" android:fontFamily="@font/lato_regular" android:layout_marginStart="@dimen/cm_dp_8" />
+                </LinearLayout>
+                <LinearLayout android:orientation="vertical" android:background="@drawable/bg_round_corner_white" android:paddingTop="@dimen/cm_dp_20" android:paddingBottom="30.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_20" android:paddingStart="@dimen/cm_dp_20" android:paddingEnd="@dimen/cm_dp_20">
+                    <TextView android:textSize="@dimen/cm_sp_14" android:textColor="@color/sub_title_color" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110058" android:textAllCaps="true" android:fontFamily="@font/lato_black" />
+                    <TextView android:textSize="@dimen/cm_sp_16" android:textColor="@color/sub_title_color" android:id="@id/retention_desc_3" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_16" android:fontFamily="@font/lato_regular" />
+                </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </ScrollView>
+    </RelativeLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -1,0 +1,13 @@
+﻿project_id: "nextai-videodownloader-reconstruction"
+name: "NextAI Video Downloader & Media Player"
+organization: "nextaitechnology"
+package_id: "com.nextaitechnology.antidetect"
+version: "2.1.0"
+standard: "Development_Workspace_Standard_V2.1_Design_Gated"
+status: "RECONSTRUCTION_IN_PROGRESS"
+target_directory: "D:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/CONVERT"
+source_directory: "D:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/SOURCE"
+design_prototype: "D:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/SOURCE/Redesign/UI/index.html"
+governance:
+  chairman: "USER (Full Authority Delegated)"
+  ceo: "AI Agent Orchestrator"

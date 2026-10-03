@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="bottom" android:id="@id/feedback_add_photo" android:layout_width="wrap_content" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.AppCompatImageView android:background="@drawable/bg_f0f2f5_10dp" android:layout_width="@dimen/cm_dp_60" android:layout_height="@dimen/cm_dp_60" android:layout_marginTop="@dimen/cm_dp_6" android:scaleType="centerInside" app:srcCompat="@drawable/ic_action_plus" app:tint="#ff151722" />
+</LinearLayout>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:orientation="vertical" android:id="@id/bookmark_root" android:background="@color/main_page_color" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.Toolbar android:id="@id/toolbar" android:layout_width="fill_parent" android:layout_height="?actionBarSize" app:contentInsetStartWithNavigation="0.0dip" app:theme="@style/ToolbarTheme" app:title="@string/APKTOOL_DUPLICATE_string_0x7f110020" app:titleMarginStart="0.0dip" />
+    <ListView android:id="@id/list_view" android:scrollbars="none" android:layout_width="fill_parent" android:layout_height="fill_parent" android:listSelector="@android:color/transparent" android:divider="@null" android:layout_below="@id/toolbar" />
+    <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/empty_layout" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true">
+        <TextView android:textSize="@dimen/cm_sp_16" android:textColor="@color/title_color" android:gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_8" android:text="@string/APKTOOL_DUPLICATE_string_0x7f11023f" />
+    </LinearLayout>
+</RelativeLayout>

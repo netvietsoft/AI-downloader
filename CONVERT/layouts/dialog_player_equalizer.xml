@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_gravity="bottom" android:orientation="vertical" android:background="@drawable/bg_e60f0f0f_top_radius" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:gravity="center_vertical" android:layout_width="fill_parent" android:layout_height="@dimen/dp_64">
+        <androidx.appcompat.widget.AppCompatImageView android:id="@id/iv_back" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dp_20" app:srcCompat="@drawable/ic_back" />
+        <androidx.appcompat.widget.AppCompatTextView android:textSize="@dimen/sp_16" android:textColor="@color/white" android:layout_width="0.0dip" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110185" android:layout_weight="1.0" android:fontFamily="@font/lato_bold" android:layout_marginStart="@dimen/dp_4" />
+        <androidx.appcompat.widget.AppCompatTextView android:textSize="@dimen/sp_16" android:textColor="@color/white" android:id="@id/tv_state" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f1102b7" android:textAllCaps="true" android:fontFamily="@font/lato_bold" />
+        <androidx.appcompat.widget.SwitchCompat android:id="@id/sw_eq_enable" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dp_8" android:layout_marginEnd="@dimen/dp_16" />
+    </LinearLayout>
+    <androidx.core.widget.NestedScrollView android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <FrameLayout android:id="@id/fragment_container" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

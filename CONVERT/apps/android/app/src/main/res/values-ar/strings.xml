@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Downloader تنزيل الفيديو</string>
+    <string name="tab_browser">المتصفح</string>
+    <string name="tab_progress">التقدم</string>
+    <string name="tab_player">المشغل</string>
+    <string name="tab_settings">الإعدادات</string>
+    <string name="title_settings">الإعدادات</string>
+    <string name="title_language">اللغة</string>
+    <string name="title_vault">الخزنة الخاصة</string>
+    <string name="card_subscription_title">اشتراك AI Downloader Pro</string>
+    <string name="card_subscription_subtitle">افتح 4K، سرعة فائقة وبدون إعلانات</string>
+    <string name="card_policy_title">سياسة الخصوصية</string>
+    <string name="card_policy_desc">التزامات الأمان وحماية البيانات</string>
+    <string name="card_tos_title">شروط الخدمة</string>
+    <string name="card_tos_desc">إرشادات الاستخدام والشروط القانونية</string>
+    <string name="card_version_title">إصدار التطبيق</string>
+    <string name="card_version_desc">v2.2.0-pro (أحدث إصدار)</string>
+    <string name="btn_upgrade_pro">الترقية الآن</string>
+    <string name="btn_check_update">التحقق من التحديثات</string>
+    <string name="btn_download">تنزيل</string>
+    <string name="btn_cancel">إلغاء</string>
+    <string name="btn_play">تشغيل</string>
+    <string name="btn_pause">إيقاف مؤقت</string>
+    <string name="btn_resume">استئناف</string>
+    <string name="btn_set_default">تعيين كافتراضي</string>
+    <string name="btn_clear_all">مسح الكل</string>
+    <string name="downloading">جارٍ التنزيل</string>
+    <string name="downloaded">تم التنزيل</string>
+    <string name="search_hint">ابحث في Google أو أدخل الرابط...</string>
+    <string name="paywall_title">افتح AI Downloader PRO</string>
+    <string name="paywall_subtitle">تنزيل فائق السرعة وخالٍ من الإعلانات</string>
+    <string name="paywall_benefit_1">تجربة خالية تماماً من الإعلانات</string>
+    <string name="paywall_benefit_2">تنزيل توربو فائق السرعة 5X</string>
+    <string name="paywall_benefit_3">دعم دقة 4K و 8K فائقة الوضوح</string>
+    <string name="paywall_benefit_4">خزنة مشفرة غير محدودة</string>
+    <string name="paywall_plan_weekly">الخطة الأسبوعية</string>
+    <string name="paywall_plan_yearly">الخطة السنوية (الأفضل قيمة)</string>
+    <string name="paywall_plan_lifetime">مدى الحياة</string>
+    <string name="paywall_btn_subscribe">اشترك الآن</string>
+    <string name="paywall_btn_restore">استعادة المشتريات</string>
+    <string name="msg_update_latest">أنت تستخدم بالفعل أحدث إصدار!</string>
+    <string name="msg_pro_unlocked">تهانينا! تم تفعيل AI Downloader PRO بنجاح!</string>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:orientation="horizontal" android:id="@id/item_layout" android:background="?android:selectableItemBackground" android:layout_width="fill_parent" android:layout_height="wrap_content" android:minHeight="@dimen/cm_dp_48"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBox android:theme="@style/feedback_checkbox_style" android:id="@id/check" android:focusable="false" android:clickable="false" android:layout_width="wrap_content" android:layout_height="wrap_content" android:button="@drawable/selector_check_box_icon" android:layout_centerVertical="true" android:layout_marginStart="@dimen/cm_dp_12" />
+    <TextView android:textSize="@dimen/cm_sp_16" android:textStyle="bold" android:textColor="?feedbacktextColor" android:id="@id/title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_marginStart="@dimen/cm_dp_6" android:layout_marginEnd="@dimen/cm_dp_18" android:layout_toEndOf="@id/check" />
+</RelativeLayout>

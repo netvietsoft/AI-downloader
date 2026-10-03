@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center_horizontal" android:orientation="vertical" android:id="@id/start_page_instagram" android:background="?android:selectableItemBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:id="@id/iv_website_icon" android:layout_width="@dimen/cm_dp_44" android:layout_height="@dimen/cm_dp_44" />
+    <TextView android:textSize="@dimen/cm_sp_12" android:textColor="#ff000e08" android:id="@id/tv_website_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_6" android:fontFamily="@font/lato_bold" />
+</LinearLayout>

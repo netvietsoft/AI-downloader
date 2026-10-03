@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Downloader</string>
+    <string name="tab_browser">Trình duyệt</string>
+    <string name="tab_progress">Tiến trình</string>
+    <string name="tab_player">Trình phát</string>
+    <string name="tab_settings">Cài đặt</string>
+    <string name="title_settings">Cài đặt</string>
+    <string name="title_language">Ngôn ngữ</string>
+    <string name="title_select_language">🌐 Chọn Ngôn Ngữ</string>
+    <string name="title_vault">Private Vault</string>
+    <string name="card_subscription_title">Gói Đăng Ký AI Downloader Pro</string>
+    <string name="card_subscription_subtitle">Mở khóa tải 4K, siêu tốc độ &amp; không quảng cáo</string>
+    <string name="card_policy_title">Chính sách bảo mật</string>
+    <string name="card_policy_desc">Cam kết bảo mật &amp; quyền riêng tư</string>
+    <string name="card_tos_title">Điều khoản dịch vụ</string>
+    <string name="card_tos_desc">Quy định sử dụng &amp; trách nhiệm pháp lý</string>
+    <string name="card_version_title">Phiên bản ứng dụng</string>
+    <string name="card_version_desc">v1.0 (Bản mới nhất)</string>
+    <string name="btn_upgrade_pro">Nâng cấp ngay</string>
+    <string name="btn_check_update">Kiểm tra cập nhật</string>
+    <string name="btn_download">Tải xuống</string>
+    <string name="btn_cancel">Hủy</string>
+    <string name="btn_play">Phát</string>
+    <string name="btn_pause">Tạm dừng</string>
+    <string name="btn_resume">Tiếp tục</string>
+    <string name="btn_delete">Xóa</string>
+    <string name="btn_close">Đóng</string>
+    <string name="btn_ok">Đã hiểu</string>
+    <string name="btn_search">TÌM KIẾM</string>
+    <string name="btn_set_default">Đặt làm mặc định</string>
+    <string name="btn_clear_all">Xóa tất cả</string>
+    <string name="downloading">Đang tải</string>
+    <string name="downloaded">Đã tải xong</string>
+    <string name="search_hint">Tìm kiếm Google hoặc nhập URL...</string>
+    <string name="quick_access">LỐI TẮT TRUY CẬP</string>
+    <string name="home_downloader_title">Trình tải video đa năng</string>
+    <string name="home_downloader_desc">Dán liên kết video bất kỳ để tự động nhận diện và tải về máy.</string>
+    <string name="toast_clipboard_empty">Bộ nhớ tạm không có liên kết hợp lệ. Vui lòng sao chép link trước.</string>
+    <string name="btn_paste_download">DÁN TỪ BỘ NHỚ TẠM &amp; TẢI VỀ</string>
+    <string name="home_guide_title">💡 Hướng dẫn tải video 3 bước</string>
+    <string name="home_guide_body">1. Mở trang web có video hoặc dán liên kết trực tiếp.\n2. Phát video, nút Tải xuống màu xanh sẽ xuất hiện.\n3. Bấm nút Tải xuống để chọn chất lượng &amp; tải về máy.</string>
+    <string name="home_feedback_title">💬 Góp ý &amp; phản hồi tính năng</string>
+    
+    <!-- Tab Manager -->
+    <string name="tab_manager_title">📑 Quản lý Thẻ Duyệt Web</string>
+    <string name="tab_manager_msg">Hiện đang mở: 1 thẻ duyệt web chính.\n\n• Trang chủ: about:blank\n\nAI Downloader hỗ trợ mở đồng thời nhiều thẻ ẩn danh không lưu cookie hay lịch sử.</string>
+    <string name="btn_open_new_tab">+ Mở thẻ mới</string>
+    
+    <!-- Paywall -->
+    <string name="paywall_badge_vip">👑 AI DOWNLOADER PRO VIP</string>
+    <string name="paywall_title">Mở khóa AI Downloader PRO</string>
+    <string name="paywall_subtitle">Tải video tốc độ cực đại &amp; không quảng cáo</string>
+    <string name="paywall_benefit_1">Trải nghiệm hoàn toàn không quảng cáo</string>
+    <string name="paywall_benefit_2">Tăng tốc tải đa luồng 5X siêu nhanh</string>
+    <string name="paywall_benefit_3">Hỗ trợ độ phân giải 4K &amp; 8K siêu nét</string>
+    <string name="paywall_benefit_4">Két sắt mã hóa AES-256 không giới hạn</string>
+    <string name="paywall_plan_weekly">Gói Tuần</string>
+    <string name="paywall_plan_yearly">Gói Năm (Tiết kiệm 70%)</string>
+    <string name="paywall_plan_lifetime">Trọn Đời (Thanh toán 1 lần)</string>
+    <string name="paywall_btn_subscribe">NÂNG CẤP PRO NGAY</string>
+    <string name="paywall_btn_restore">Khôi phục gói mua</string>
+    <string name="msg_update_latest">Bạn đang sử dụng phiên bản mới nhất!</string>
+    <string name="msg_pro_unlocked">Chúc mừng! Bạn đã mở khóa gói AI Downloader PRO thành công!</string>
+    <string name="paywall_privileges_title">ĐẶC QUYỀN AI DOWNLOADER PRO</string>
+    <string name="paywall_choose_plan">CHỌN GÓI CỦA BẠN</string>
+    <string name="paywall_best_value">TIẾT KIỆM NHẤT</string>
+    <string name="paywall_legal_text">Khi đăng ký, bạn đồng ý với Điều khoản Dịch vụ &amp; Chính sách Bảo mật của chúng tôi. Hủy bất cứ lúc nào qua Google Play.</string>
+    <string name="paywall_monetized_notice">🔒 Bạn đã dùng hết 1 lượt tải video miễn phí từ danh sách website này. Vui lòng đăng ký AI Downloader PRO để tiếp tục tải không giới hạn!</string>
+    
+    <!-- Video Detection & Download Modal -->
+    <string name="video_detected">Đã phát hiện video</string>
+    <string name="btn_play_now">Xem ngay</string>
+    <string name="btn_download_to_device">Download</string>
+    <string name="quality_1080p">1080p Full HD</string>
+    <string name="quality_720p">720p HD</string>
+    <string name="quality_480p">480p SD</string>
+    <string name="quality_audio">Chỉ âm thanh (MP3)</string>
+    <string name="trial_badge">Dùng thử (1 lượt miễn phí)</string>
+    
+    <!-- Private Vault -->
+    <string name="private_vault_title">Két Video Riêng Tư</string>
+    <string name="private_vault_subtitle">Mã hóa chuẩn AES-256-GCM. Video lưu trong Két sẽ được ẩn hoàn toàn khỏi danh sách phát và thư viện ngoài.</string>
+    <string name="private_vault_pin_hint">Nhập mã PIN 4 số (Mặc định: 1234)</string>
+    <string name="private_vault_unlock_btn">Mở khóa Két</string>
+    <string name="private_vault_empty">Chưa có video nào trong Két riêng tư.</string>
+    <string name="private_vault_add_success">Đã chuyển video vào Két riêng tư</string>
+    <string name="private_vault_restore_success">Đã đưa video trở lại danh sách công khai</string>
+    <string name="menu_move_to_vault">Đưa vào Private Vault</string>
+    <string name="menu_restore_from_vault">Đưa ra khỏi Private Vault</string>
+    <string name="menu_delete_from_list">Xóa khỏi danh sách phát</string>
+    <string name="menu_delete_permanently">Xóa vĩnh viễn tệp video khỏi máy</string>
+    <string name="dialog_delete_title">Xác nhận xóa tệp</string>
+    <string name="dialog_delete_confirm">Bạn có chắc chắn muốn xóa vĩnh viễn tệp video này khỏi máy?</string>
+    <string name="dialog_pin_incorrect">Mã PIN không đúng!</string>
+    <string name="dialog_pin_success">Mở khóa Két thành công!</string>
+    <string name="vault_locked_title">Két Video Riêng Tư (AES-256)</string>
+    <string name="vault_unlocked_badge">%1$d video bảo mật</string>
+    <string name="vault_relock">Khóa lại</string>
+    <string name="vault_status_unlocked">🛡️ Đã mở khóa • AES-256</string>
+    <string name="vault_empty_detail">Chưa có video nào trong Két riêng tư.\nBấm biểu tượng dấu 3 chấm (⋮) trên video trong Thư viện để đưa vào Két.</string>
+    <string name="vault_item_security">🔒 Mã hóa AES-256</string>
+    
+    <!-- Player & Folders -->
+    <string name="all_videos">Tất cả Video</string>
+    <string name="videos_found_format">%1$d video offline trên máy</string>
+    <string name="video_folders">THƯ MỤC VIDEO</string>
+    <string name="folder_downloads">Tải xuống</string>
+    <string name="folder_camera">Máy ảnh</string>
+    <string name="folder_movies">Phim</string>
+    <string name="downloaded_videos_title">VIDEO ĐÃ TẢI (OFFLINE)</string>
+    <string name="empty_player_downloads">Chưa có video nào tải về máy. Hãy duyệt web để tải ngay!</string>
+    <string name="dialog_empty_downloads_title">📥 Thư Mục Downloads Trống</string>
+    <string name="dialog_empty_downloads_msg">Chưa có video nào được tải về máy.\n\nHãy vào tab Trang chủ / Trình duyệt để tìm kiếm và bấm nút Tải xuống.</string>
+    <string name="btn_go_to_browser">Vào Trình duyệt</string>
+    
+    <!-- Progress & Stability -->
+    <string name="tab_downloading">Đang tải</string>
+    <string name="tab_downloaded">Đã tải xong</string>
+    <string name="banner_stability_desc">Tăng cường độ ổn định khi tải ngầm</string>
+    <string name="empty_downloading">Không có tiến trình tải nào đang chạy</string>
+    <string name="empty_downloaded">Chưa có video nào trong danh sách đã tải</string>
+    <string name="dialog_stability_title">⚡ Tối ưu hóa tải nền (Samsung A07)</string>
+    <string name="dialog_stability_msg">Để tải các tệp video dung lượng lớn không bị ngắt quãng khi tắt màn hình, hãy cấp quyền không giới hạn pin cho ứng dụng AI Downloader.</string>
+    
+    <!-- Status & Toasts -->
+    <string name="toast_video_ready">⚡ Luồng video HD đã sẵn sàng tải về!</string>
+    <string name="toast_live_stream_not_found">Chưa tìm thấy luồng phát trực tiếp!</string>
+    <string name="toast_trial_download_started">🎁 Đang tải video dùng thử miễn phí (1/1). Từ video tiếp theo sẽ cần nâng cấp gói AI Downloader PRO!</string>
+    <string name="toast_added_to_queue">Đã thêm vào hàng đợi tải xuống!</string>
+    <string name="toast_link_detected">Đã nhận diện liên kết: %1$s</string>
+    <string name="toast_extracting_video">⚡ Đang bóc tách luồng video %1$s...</string>
+    <string name="toast_paused_task">Đã tạm dừng tải: %1$s</string>
+    <string name="toast_resumed_task">Tiếp tục tải: %1$s</string>
+    <string name="toast_removed_from_list">Đã xóa khỏi danh sách: %1$s</string>
+    <string name="toast_file_deleted">Đã xóa tệp video: %1$s</string>
+    <string name="toast_file_not_found">Tệp video không còn tồn tại trên bộ nhớ!</string>
+    <string name="toast_lang_changed">Đã đổi ngôn ngữ sang %1$s!</string>
+    <string name="status_ready_to_play">Sẵn sàng phát</string>
+    <string name="status_completed_100">Hoàn tất 100%</string>
+    <string name="status_paused">Đã tạm dừng</string>
+    <string name="status_connecting">Đang kết nối...</string>
+    <string name="status_failed">Lỗi tải: %1$s</string>
+    <string name="error_video_corrupted">Tệp video này bị lỗi định dạng hoặc không hoàn chỉnh!</string>
+    <string name="error_playback">Lỗi phát video: %1$s</string>
+    <string name="error_stream_cannot_load">Không thể tải luồng video này</string>
+    <string name="error_decoder_hardware_limit">Độ phân giải video này (%1$s) vượt quá giới hạn giải mã phần cứng của máy. Bạn có muốn mở bằng trình phát ngoài (VLC / MX Player) không?</string>
+    <string name="btn_open_external">Mở trình phát ngoài</string>
+    <string name="toast_audio_boost_on">⚡ Đã kích hoạt 200% Audio Boost!</string>
+    <string name="toast_audio_boost_off">Chế độ âm thanh chuẩn 100%</string>
+    <string name="online_video_stream">Luồng Video Trực Tuyến</string>
+    <string name="folder_empty_count">%1$s: 0 video</string>
+    
+    <!-- Policy & TOS -->
+    <string name="policy_content">Chính Sách Bảo Mật AI Downloader:\n\n1. Cam Kết Quyền Riêng Tư:\nAI Downloader tuyệt đối không thu thập, lưu trữ hoặc bán thông tin cá nhân, lịch sử duyệt web hay video tải về của người dùng.\n\n2. Mã Hóa Két Sắt (Private Vault):\nTất cả video được chuyển vào Vault được mã hóa chuẩn quân đội AES-256-GCM cục bộ trực tiếp trên bộ nhớ thiết bị. Khóa giải mã chỉ tồn tại trên máy của bạn.\n\n3. Phân Tích &amp; Quảng Cáo:\nỨng dụng sử dụng Google Firebase Analytics và Google AdMob nhằm tối ưu hóa hiệu năng ứng dụng theo tiêu chuẩn của Google Play. Tài khoản PRO được miễn hoàn toàn quảng cáo.</string>
+    <string name="tos_content">Điều Khoản Dịch Vụ (Terms of Service):\n\n1. Mục Đích Sử Dụng:\nAI Downloader là công cụ hỗ trợ người dùng tải và lưu trữ nội dung cho mục đích xem ngoại tuyến cá nhân hợp pháp.\n\n2. Bản Quyền &amp; Tác Quyền:\nNgười dùng chịu trách nhiệm tôn trọng quyền sở hữu trí tuệ của tác giả nội dung. AI Downloader không khuyến khích việc phân phối lại nội dung có bản quyền mà không có sự cho phép.\n\n3. Giới Hạn Trách Nhiệm:\nỨng dụng cung cấp \"nguyên trạng\" (As-is) với cơ chế giải mã luồng video trực tiếp trên thiết bị (Client-side Sniffing).</string>
+
+    <!-- Gallery Download Quota & Export -->
+    <string name="menu_download_to_gallery">Tải về Bộ sưu tập</string>
+    <string name="toast_gallery_limit_reached">Đã hết 10 lượt tải miễn phí về bộ sưu tập! Vui lòng nâng cấp VIP để tải không giới hạn.</string>
+    <string name="toast_gallery_saved_quota">Đã lưu vào Bộ sưu tập! (Còn %1$d/10 lượt miễn phí)</string>
+    <string name="toast_gallery_saved_vip">Đã lưu vào Bộ sưu tập! (VIP Không giới hạn)</string>
+    <string name="toast_gallery_save_error">Không thể lưu video vào Bộ sưu tập!</string>
+    <string name="paywall_gallery_notice">Bạn đã dùng hết 10 lượt tải miễn phí về Bộ sưu tập. Nâng cấp PRO để lưu không giới hạn video vào thư viện máy &amp; mở khóa tốc độ 4K!</string>
+
+    <!-- Tab Management -->
+    <string name="btn_close_all_tabs">Đóng tất cả</string>
+    <string name="tab_manager_open_tabs">Thẻ đang mở (%1$d)</string>
+    <string name="btn_new_tab">+ Thẻ mới</string>
+    <string name="toast_all_tabs_closed">Đã đóng tất cả thẻ và giải phóng bộ nhớ!</string>
+    <string name="toast_tab_closed">Đã đóng thẻ</string>
+    <string name="tab_active_badge">ĐANG MỞ</string>
+</resources>

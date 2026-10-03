@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Quy tắc Full Backup Content cho Android 11 trở xuống (API < 31)
+    Bắt buộc thuộc tính domain theo chuẩn Google Android Lint
+-->
+<full-backup-content>
+    <exclude domain="file" path=".vault" />
+    <exclude domain="database" path="vault.db" />
+    <exclude domain="sharedpref" path="nextai_secure_vault_prefs.xml" />
+    <exclude domain="sharedpref" path="nextai_settings.xml" />
+    <exclude domain="sharedpref" path="vault_prefs.xml" />
+</full-backup-content>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView android:id="@id/card_view" android:layout_width="fill_parent" android:layout_height="fill_parent" app:cardBackgroundColor="@color/white" app:cardCornerRadius="@dimen/cm_dp_12" app:cardElevation="0.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <ImageView android:id="@id/ivUserPost" android:layout_width="fill_parent" android:layout_height="fill_parent" android:scaleType="centerCrop" />
+        <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@id/group_type" android:background="@drawable/bg_000503_60_5dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_8" android:paddingStart="@dimen/cm_dp_2" android:paddingEnd="@dimen/cm_dp_2" android:layout_marginStart="@dimen/cm_dp_8" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent">
+            <ImageView android:id="@id/iv_type" android:layout_width="@dimen/cm_dp_23" android:layout_height="@dimen/cm_dp_23" app:srcCompat="@drawable/ic_video" />
+            <TextView android:textSize="@dimen/cm_sp_12" android:textColor="@color/white" android:layout_gravity="center_vertical" android:id="@id/tv_type" android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="@string/APKTOOL_DUPLICATE_string_0x7f110331" android:layout_marginEnd="@dimen/cm_dp_6" />
+        </LinearLayout>
+        <androidx.cardview.widget.CardView android:id="@id/card_view_user_portrait" android:layout_width="@dimen/cm_dp_26" android:layout_height="@dimen/cm_dp_26" android:layout_marginTop="@dimen/cm_dp_8" android:layout_marginEnd="@dimen/cm_dp_8" app:cardBackgroundColor="@color/sub_title_color" app:cardCornerRadius="@dimen/cm_dp_15" app:cardElevation="0.0dip" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent">
+            <ImageView android:id="@id/ivUserPortrait" android:layout_width="fill_parent" android:layout_height="fill_parent" android:scaleType="centerCrop" />
+        </androidx.cardview.widget.CardView>
+        <LinearLayout android:orientation="horizontal" android:id="@id/group_action" android:background="@drawable/bg_000503_60_5dp" android:layout_width="fill_parent" android:layout_height="@dimen/cm_dp_40" android:paddingStart="@dimen/cm_dp_4" android:paddingEnd="@dimen/cm_dp_4" app:layout_constraintBottom_toBottomOf="parent">
+            <LinearLayout android:gravity="center" android:id="@id/item_share_layout" android:background="?android:selectableItemBackground" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="1.0">
+                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/ic_set_share" />
+            </LinearLayout>
+            <LinearLayout android:gravity="center" android:id="@id/item_delete_layout" android:background="?android:selectableItemBackground" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="1.0">
+                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/ic_delete" />
+            </LinearLayout>
+            <LinearLayout android:gravity="center" android:id="@id/item_more_layout" android:background="?android:selectableItemBackground" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="1.0">
+                <ImageView android:id="@id/iv_more" android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/ic_history_more" />
+            </LinearLayout>
+        </LinearLayout>
+        <ImageView android:id="@id/iv_story_download" android:visibility="gone" android:layout_width="@dimen/cm_dp_40" android:layout_height="@dimen/cm_dp_40" android:layout_marginBottom="@dimen/cm_dp_8" android:layout_marginEnd="@dimen/cm_dp_8" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:srcCompat="@drawable/ic_ins_download" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:id="@id/splash_root" android:background="@drawable/bg_background" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <View android:layout_width="fill_parent" android:layout_height="0.0dip" android:layout_weight="2.0" />
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <videoplayer.videodownloader.downloader.view.MyLottiView android:id="@id/splash_icon" android:layout_width="fill_parent" android:layout_height="wrap_content" app:initHeight="720" app:initWidth="720" app:lottie_autoPlay="true" app:lottie_loop="false" app:lottie_rawRes="@raw/splash" />
+        <TextView android:textSize="@dimen/cm_sp_22" android:textColor="@color/title_color" android:gravity="center" android:id="@id/splash_name" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/cm_dp_60" android:layout_marginRight="@dimen/cm_dp_60" android:layout_marginBottom="@dimen/cm_dp_72" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110066" android:layout_alignBottom="@id/splash_icon" android:alpha="0.0" android:fontFamily="@font/lato_black" android:layout_marginHorizontal="@dimen/cm_dp_60" />
+    </RelativeLayout>
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="0.0dip" android:layout_weight="5.0">
+        <com.airbnb.lottie.LottieAnimationView android:id="@id/splash_progress_bar" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/cm_dp_36" android:layout_alignParentBottom="true" android:layout_marginStart="@dimen/cm_dp_86" android:layout_marginEnd="@dimen/cm_dp_86" app:lottie_autoPlay="true" app:lottie_loop="true" app:lottie_rawRes="@raw/splash_progress" />
+    </RelativeLayout>
+</LinearLayout>

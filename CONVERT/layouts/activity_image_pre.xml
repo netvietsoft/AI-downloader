@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:orientation="vertical" android:id="@id/img_root" android:background="#ff000000" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.github.chrisbanes.photoview.PhotoView android:id="@id/iv_zoom" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    <RelativeLayout android:orientation="horizontal" android:id="@id/watermark_view" android:background="#55000000" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true">
+        <ImageView android:id="@id/watermark_icon" android:layout_width="@dimen/cm_dp_12" android:layout_height="@dimen/cm_dp_12" android:layout_marginStart="@dimen/cm_dp_4" />
+        <TextView android:textSize="@dimen/cm_sp_14" android:textColor="#ccffffff" android:id="@id/watermark_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_4" android:layout_marginBottom="@dimen/cm_dp_4" android:layout_marginStart="@dimen/cm_dp_8" android:layout_marginEnd="@dimen/cm_dp_8" android:layout_toEndOf="@id/watermark_icon" />
+    </RelativeLayout>
+    <androidx.appcompat.widget.Toolbar android:id="@id/toolbar" android:background="#b3000000" android:layout_width="fill_parent" android:layout_height="wrap_content" android:minHeight="?actionBarSize" android:layout_alignParentTop="true" app:theme="@style/ToolbarThemeLight" />
+    <LinearLayout android:orientation="horizontal" android:id="@id/action_layout" android:background="#b3000000" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/cm_dp_12" android:layout_alignParentBottom="true">
+        <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/share_layout" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="1.0">
+            <ImageView android:layout_width="@dimen/cm_dp_28" android:layout_height="@dimen/cm_dp_28" app:srcCompat="@drawable/ic_share" />
+            <TextView android:textSize="@dimen/cm_sp_12" android:textColor="@color/white" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_1" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110363" />
+        </LinearLayout>
+        <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/setting_layout" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="1.0">
+            <ImageView android:layout_width="@dimen/cm_dp_28" android:layout_height="@dimen/cm_dp_28" app:srcCompat="@drawable/ic_home_setting" app:tint="@color/white" />
+            <TextView android:textSize="@dimen/cm_sp_12" android:textColor="@color/white" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_1" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110138" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

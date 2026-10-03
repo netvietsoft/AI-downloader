@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@id/folder_root" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:gravity="center" android:orientation="horizontal" android:id="@id/ad_layout" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" />
+    <RelativeLayout android:id="@id/player_folder_top" android:layout_width="fill_parent" android:layout_height="@dimen/cm_dp_56">
+        <ImageView android:id="@id/iv_playr_folder_back" android:background="?android:selectableItemBackground" android:layout_width="@dimen/cm_dp_24" android:layout_height="@dimen/cm_dp_24" android:layout_centerVertical="true" android:layout_marginStart="@dimen/cm_dp_16" app:srcCompat="@drawable/ic_arrow_back" />
+        <TextView android:textSize="@dimen/cm_sp_20" android:id="@id/tv_playr_folder_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:fontFamily="@font/lato_black" android:layout_marginStart="@dimen/cm_dp_60" />
+    </RelativeLayout>
+    <FrameLayout android:id="@id/history_fragment" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginBottom="@dimen/cm_dp_6" android:layout_above="@id/ad_layout" android:layout_below="@id/player_folder_top" />
+</RelativeLayout>

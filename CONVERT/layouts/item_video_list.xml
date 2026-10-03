@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:background="@drawable/bg_item_video" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout android:background="?android:selectableItemBackground" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <RelativeLayout android:id="@id/icon_layout" android:background="@drawable/video_thumb_background" android:layout_width="@dimen/cm_dp_80" android:layout_height="@dimen/cm_dp_68" android:layout_margin="@dimen/cm_dp_10" android:layout_centerVertical="true">
+            <ImageView android:id="@id/iv_thumb" android:layout_width="fill_parent" android:layout_height="fill_parent" android:scaleType="centerCrop" />
+            <TextView android:textSize="@dimen/cm_sp_10" android:textColor="@color/white" android:id="@id/tv_duration" android:background="@drawable/bg_video_duration" android:paddingTop="@dimen/cm_dp_2" android:paddingBottom="@dimen/cm_dp_2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:paddingStart="@dimen/cm_dp_4" android:paddingEnd="@dimen/cm_dp_4" android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+        <LinearLayout android:id="@id/action_layout" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_55" android:layout_marginEnd="@dimen/cm_dp_10" android:layout_alignParentEnd="true">
+            <ImageView android:id="@id/iv_action_more" android:focusable="false" android:clickable="false" android:layout_width="@dimen/cm_dp_21" android:layout_height="@dimen/cm_dp_21" app:srcCompat="@drawable/ic_more_vert_black_24dp" app:tint="@color/sub_title_color" style="?checkboxStyle" />
+        </LinearLayout>
+        <TextView android:textSize="@dimen/cm_sp_14" android:textColor="@color/title_color" android:ellipsize="end" android:id="@id/tv_file_name" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_12" android:maxLines="2" android:layout_marginEnd="@dimen/cm_dp_10" android:layout_toEndOf="@id/icon_layout" />
+        <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@id/file_size_layout" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_54" android:layout_toEndOf="@id/icon_layout">
+            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/ic_video" app:tint="@color/sub_title_color" />
+            <TextView android:textSize="@dimen/cm_sp_13" android:textColor="@color/sub_title_color" android:id="@id/tv_size" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:includeFontPadding="false" android:layout_marginStart="@dimen/cm_dp_2" android:layout_marginEnd="@dimen/cm_dp_2" />
+        </LinearLayout>
+    </RelativeLayout>
+</FrameLayout>

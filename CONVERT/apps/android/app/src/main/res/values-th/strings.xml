@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Downloader ตัวดาวน์โหลด</string>
+    <string name="tab_browser">เบราว์เซอร์</string>
+    <string name="tab_progress">ความคืบหน้า</string>
+    <string name="tab_player">เครื่องเล่น</string>
+    <string name="tab_settings">การตั้งค่า</string>
+    <string name="title_settings">การตั้งค่า</string>
+    <string name="title_language">ภาษา</string>
+    <string name="title_vault">ตู้นิรภัยส่วนตัว</string>
+    <string name="card_subscription_title">การสมัครสมาชิก AI Downloader Pro</string>
+    <string name="card_subscription_subtitle">ปลดล็อก 4K ความเร็วสูง และไร้โฆษณา</string>
+    <string name="card_policy_title">นโยบายความเป็นส่วนตัว</string>
+    <string name="card_policy_desc">การปกป้องข้อมูลและความเป็นส่วนตัว</string>
+    <string name="card_tos_title">ข้อกำหนดในการให้บริการ</string>
+    <string name="card_tos_desc">เงื่อนไขการใช้งานและข้อกำหนดทางกฎหมาย</string>
+    <string name="card_version_title">เวอร์ชันแอป</string>
+    <string name="card_version_desc">v2.2.0-pro (เวอร์ชันล่าสุด)</string>
+    <string name="btn_upgrade_pro">อัปเกรดเลย</string>
+    <string name="btn_check_update">ตรวจสอบการอัปเดต</string>
+    <string name="btn_download">ดาวน์โหลด</string>
+    <string name="btn_cancel">ยกเลิก</string>
+    <string name="btn_play">เล่น</string>
+    <string name="btn_pause">หยุดชั่วคราว</string>
+    <string name="btn_resume">เล่นต่อ</string>
+    <string name="btn_set_default">ตั้งเป็นค่าเริ่มต้น</string>
+    <string name="btn_clear_all">ล้างทั้งหมด</string>
+    <string name="downloading">กำลังดาวน์โหลด</string>
+    <string name="downloaded">เสร็จสิ้น</string>
+    <string name="search_hint">ค้นหาใน Google หรือป้อน URL...</string>
+    <string name="paywall_title">ปลดล็อก AI Downloader PRO</string>
+    <string name="paywall_subtitle">ดาวน์โหลดความเร็วสูงสุดและไม่มีโฆษณา</string>
+    <string name="paywall_benefit_1">ประสบการณ์ไร้โฆษณา 100%</string>
+    <string name="paywall_benefit_2">ความเร็วเทอร์โบหลายเธรด 5 เท่า</string>
+    <string name="paywall_benefit_3">รองรับความละเอียด 4K และ 8K UHD</string>
+    <string name="paywall_benefit_4">ตู้นิรภัยส่วนตัวเข้ารหัสไม่จำกัด</string>
+    <string name="paywall_plan_weekly">แผนรายสัปดาห์</string>
+    <string name="paywall_plan_yearly">แผนรายปี (คุ้มค่าที่สุด)</string>
+    <string name="paywall_plan_lifetime">เข้าถึงได้ตลอดชีพ</string>
+    <string name="paywall_btn_subscribe">สมัครสมาชิกทันที</string>
+    <string name="paywall_btn_restore">กู้คืนการซื้อ</string>
+    <string name="msg_update_latest">คุณกำลังใช้เวอร์ชันล่าสุดแล้ว!</string>
+    <string name="msg_pro_unlocked">ยินดีด้วย! คุณได้ปลดล็อก AI Downloader PRO สำเร็จแล้ว!</string>
+</resources>

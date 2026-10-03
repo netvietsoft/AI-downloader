@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@id/select_root" android:background="@color/dark_theme_bg_color" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.appcompat.widget.Toolbar android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" android:id="@id/toolbar" android:background="?colorPrimaryDark" android:layout_width="fill_parent" android:layout_height="wrap_content" android:minHeight="?actionBarSize" android:elevation="@dimen/cm_dp_4" />
+    <ListView android:id="@id/list_view" android:scrollbars="none" android:layout_width="fill_parent" android:layout_height="fill_parent" android:listSelector="@android:color/transparent" android:divider="@android:color/transparent" android:dividerHeight="@dimen/cm_dp_6" android:layout_below="@id/toolbar" />
+    <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/empty_layout" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true">
+        <ImageView android:id="@id/tv_empty" android:layout_width="@dimen/cm_dp_134" android:layout_height="@dimen/cm_dp_92" />
+        <TextView android:textSize="@dimen/cm_sp_16" android:textColor="#a0ffffff" android:gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_8" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110182" />
+    </LinearLayout>
+</RelativeLayout>

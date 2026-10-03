@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout android:id="@id/layout_item" android:layout_width="wrap_content" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <View android:id="@id/view_bg_avatar" android:background="@drawable/ic_ring" android:layout_width="@dimen/cm_dp_48" android:layout_height="@dimen/cm_dp_48" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+    <androidx.cardview.widget.CardView android:layout_width="@dimen/cm_dp_40" android:layout_height="@dimen/cm_dp_40" app:cardBackgroundColor="@color/sub_title_color" app:cardCornerRadius="@dimen/cm_dp_20" app:cardElevation="0.0dip" app:layout_constraintBottom_toBottomOf="@id/view_bg_avatar" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/view_bg_avatar">
+        <ImageView android:id="@id/iv_user_avatar" android:layout_width="fill_parent" android:layout_height="fill_parent" android:scaleType="centerCrop" />
+    </androidx.cardview.widget.CardView>
+    <TextView android:textSize="@dimen/cm_sp_12" android:ellipsize="end" android:id="@id/tv_user_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_4" android:maxWidth="@dimen/cm_dp_58" android:lines="1" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/view_bg_avatar" />
+    <ImageView android:id="@id/iv_selected" android:visibility="gone" android:layout_width="@dimen/cm_dp_16" android:layout_height="@dimen/cm_dp_16" android:src="@drawable/ic_arrow_down" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/tv_user_name" />
+</androidx.constraintlayout.widget.ConstraintLayout>

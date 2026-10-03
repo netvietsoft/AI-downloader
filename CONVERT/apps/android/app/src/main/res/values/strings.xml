@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Downloader</string>
+    <string name="tab_browser">Home</string>
+    <string name="tab_progress">Progress</string>
+    <string name="tab_player">Player</string>
+    <string name="tab_settings">Settings</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_language">Language</string>
+    <string name="title_select_language">🌐 Select Language</string>
+    <string name="title_vault">Private Vault</string>
+    <string name="card_subscription_title">AI Downloader Pro Subscription</string>
+    <string name="card_subscription_subtitle">Unlock 4K, ultra speed &amp; zero ads</string>
+    <string name="card_policy_title">Privacy Policy</string>
+    <string name="card_policy_desc">Security commitments &amp; data protection</string>
+    <string name="card_tos_title">Terms of Service</string>
+    <string name="card_tos_desc">Usage guidelines &amp; legal terms</string>
+    <string name="card_version_title">App Version</string>
+    <string name="card_version_desc">v1.0 (Latest build)</string>
+    <string name="btn_upgrade_pro">Upgrade Now</string>
+    <string name="btn_check_update">Check Updates</string>
+    <string name="btn_download">Download</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_play">Play</string>
+    <string name="btn_pause">Pause</string>
+    <string name="btn_resume">Resume</string>
+    <string name="btn_delete">Delete</string>
+    <string name="btn_close">Close</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_search">SEARCH</string>
+    <string name="btn_set_default">Set as Default</string>
+    <string name="btn_clear_all">Clear All</string>
+    <string name="downloading">Downloading</string>
+    <string name="downloaded">Downloaded</string>
+    <string name="search_hint">Search Google or enter URL...</string>
+    <string name="quick_access">QUICK ACCESS</string>
+    <string name="home_downloader_title">Quick Video Downloader</string>
+    <string name="home_downloader_desc">Paste any video URL to automatically detect and download to your device.</string>
+    <string name="toast_clipboard_empty">Clipboard does not contain a valid video link.</string>
+    <string name="btn_paste_download">PASTE FROM CLIPBOARD &amp; DOWNLOAD</string>
+    <string name="home_guide_title">💡 How to download in 3 steps</string>
+    <string name="home_guide_body">1. Browse any video site or paste direct link.\n2. Play the video, the green Download button appears.\n3. Tap Download button to pick quality &amp; download.</string>
+    <string name="home_feedback_title">💬 Feedback or suggestion</string>
+    
+    <!-- Tab Manager -->
+    <string name="tab_manager_title">📑 Tab Manager</string>
+    <string name="tab_manager_msg">Currently active: 1 main browsing tab.\n\n• Home: about:blank\n\nAI Downloader supports opening private tabs without saving browsing history or cookies.</string>
+    <string name="btn_open_new_tab">+ New Tab</string>
+    
+    <!-- Paywall -->
+    <string name="paywall_badge_vip">👑 AI DOWNLOADER PRO VIP</string>
+    <string name="paywall_title">Unlock AI Downloader PRO</string>
+    <string name="paywall_subtitle">Ultra-fast downloads &amp; zero ads</string>
+    <string name="paywall_benefit_1">Zero Ads Experience</string>
+    <string name="paywall_benefit_2">5x Multi-threaded Turbo Speed</string>
+    <string name="paywall_benefit_3">4K &amp; 8K UHD Resolution Support</string>
+    <string name="paywall_benefit_4">Unlimited Encrypted Private Vault</string>
+    <string name="paywall_plan_weekly">Weekly Plan</string>
+    <string name="paywall_plan_yearly">Yearly Plan (Best Value)</string>
+    <string name="paywall_plan_lifetime">Lifetime Access</string>
+    <string name="paywall_btn_subscribe">SUBSCRIBE NOW</string>
+    <string name="paywall_btn_restore">Restore Purchases</string>
+    <string name="msg_update_latest">You are already using the latest version!</string>
+    <string name="msg_pro_unlocked">Congratulations! AI Downloader PRO has been unlocked!</string>
+    <string name="paywall_privileges_title">PRO VIP PRIVILEGES</string>
+    <string name="paywall_choose_plan">CHOOSE YOUR PLAN</string>
+    <string name="paywall_best_value">BEST VALUE</string>
+    <string name="paywall_legal_text">By subscribing you agree to our Terms of Service &amp; Privacy Policy. Cancel anytime via Google Play Subscriptions.</string>
+    <string name="paywall_monetized_notice">🔒 You have used your 1 free download from this website list. Please upgrade to AI Downloader PRO for unlimited downloads!</string>
+    
+    <!-- Video Detection & Download Modal -->
+    <string name="video_detected">Video Detected</string>
+    <string name="btn_play_now">Watch Now</string>
+    <string name="btn_download_to_device">Download</string>
+    <string name="quality_1080p">1080p Full HD</string>
+    <string name="quality_720p">720p HD</string>
+    <string name="quality_480p">480p SD</string>
+    <string name="quality_audio">Audio Only (MP3)</string>
+    <string name="trial_badge">Trial (1 Free Download)</string>
+    
+    <!-- Private Vault -->
+    <string name="private_vault_title">Private Vault</string>
+    <string name="private_vault_subtitle">Encrypted with AES-256-GCM. Videos here are hidden from the public player and gallery.</string>
+    <string name="private_vault_pin_hint">Enter 4-digit PIN (Default: 1234)</string>
+    <string name="private_vault_unlock_btn">Unlock Vault</string>
+    <string name="private_vault_empty">No private videos in vault yet.</string>
+    <string name="private_vault_add_success">Moved to Private Vault</string>
+    <string name="private_vault_restore_success">Restored to public playlist</string>
+    <string name="menu_move_to_vault">Move to Private Vault</string>
+    <string name="menu_restore_from_vault">Remove from Private Vault</string>
+    <string name="menu_delete_from_list">Remove from playlist</string>
+    <string name="menu_delete_permanently">Delete video file permanently</string>
+    <string name="dialog_delete_title">Confirm Deletion</string>
+    <string name="dialog_delete_confirm">Are you sure you want to permanently delete this video file from device?</string>
+    <string name="dialog_pin_incorrect">Incorrect PIN code!</string>
+    <string name="dialog_pin_success">Vault unlocked successfully!</string>
+    <string name="vault_locked_title">Private Vault (AES-256)</string>
+    <string name="vault_unlocked_badge">%1$d secured videos</string>
+    <string name="vault_relock">Lock Vault</string>
+    <string name="vault_status_unlocked">🛡️ Unlocked • AES-256</string>
+    <string name="vault_empty_detail">No private videos in vault yet.\nTap the 3-dots menu (⋮) on any video in your Library to move it here.</string>
+    <string name="vault_item_security">🔒 AES-256</string>
+    
+    <!-- Player & Folders -->
+    <string name="all_videos">All Videos</string>
+    <string name="videos_found_format">%1$d offline videos on device</string>
+    <string name="video_folders">VIDEO FOLDERS</string>
+    <string name="folder_downloads">Downloads</string>
+    <string name="folder_camera">Camera</string>
+    <string name="folder_movies">Movies</string>
+    <string name="downloaded_videos_title">DOWNLOADED VIDEOS (OFFLINE)</string>
+    <string name="empty_player_downloads">No videos downloaded yet. Browse the web to download now!</string>
+    <string name="dialog_empty_downloads_title">📥 Downloads Folder Empty</string>
+    <string name="dialog_empty_downloads_msg">No videos have been downloaded to your device yet.\n\nGo to the Home/Browser tab to search and tap the Download button.</string>
+    <string name="btn_go_to_browser">Go to Browser</string>
+    
+    <!-- Progress & Stability -->
+    <string name="tab_downloading">Downloading</string>
+    <string name="tab_downloaded">Downloaded</string>
+    <string name="banner_stability_desc">Improve download stability in background</string>
+    <string name="empty_downloading">No active downloads running</string>
+    <string name="empty_downloaded">No completed videos in download history</string>
+    <string name="dialog_stability_title">⚡ Background Download Optimization</string>
+    <string name="dialog_stability_msg">To ensure large video downloads continue uninterrupted when the screen is turned off, please allow unrestricted battery usage for AI Downloader.</string>
+    
+    <!-- Status & Toasts -->
+    <string name="toast_video_ready">⚡ HD Video stream ready to download!</string>
+    <string name="toast_live_stream_not_found">No live playable stream found yet!</string>
+    <string name="toast_trial_download_started">🎁 Downloading free trial video (1/1). Subsequent downloads will require AI Downloader PRO!</string>
+    <string name="toast_added_to_queue">Added to download queue!</string>
+    <string name="toast_link_detected">Recognized URL: %1$s</string>
+    <string name="toast_extracting_video">⚡ Extracting video stream from %1$s...</string>
+    <string name="toast_paused_task">Paused download: %1$s</string>
+    <string name="toast_resumed_task">Resumed download: %1$s</string>
+    <string name="toast_removed_from_list">Removed from playlist: %1$s</string>
+    <string name="toast_file_deleted">Deleted video file: %1$s</string>
+    <string name="toast_file_not_found">Video file no longer exists on device storage!</string>
+    <string name="toast_lang_changed">Language changed to %1$s!</string>
+    <string name="status_ready_to_play">Ready to play</string>
+    <string name="status_completed_100">Completed 100%</string>
+    <string name="status_paused">Paused</string>
+    <string name="status_connecting">Connecting...</string>
+    <string name="status_failed">Failed: %1$s</string>
+    <string name="error_video_corrupted">This video file is corrupted or incomplete!</string>
+    <string name="error_playback">Playback error: %1$s</string>
+    <string name="error_stream_cannot_load">Cannot load this video stream</string>
+    <string name="error_decoder_hardware_limit">Video resolution (%1$s) exceeds device hardware decoding limit. Open with external player (VLC / MX Player)?</string>
+    <string name="btn_open_external">Open External Player</string>
+    <string name="toast_audio_boost_on">⚡ 200% Audio Boost Activated!</string>
+    <string name="toast_audio_boost_off">Standard 100% Audio Mode</string>
+    <string name="online_video_stream">Online Video Stream</string>
+    <string name="folder_empty_count">%1$s: 0 videos</string>
+    
+    <!-- Policy & TOS -->
+    <string name="policy_content">AI Downloader Privacy Policy:\n\n1. Privacy Commitment:\nAI Downloader does not collect, store, or sell personal information, browsing history, or user downloads.\n\n2. Private Vault Encryption:\nAll videos moved to the Vault are locally encrypted with military-grade AES-256-GCM directly on device storage. Decryption keys exist only on your device.\n\n3. Analytics &amp; Ads:\nThe app uses Google Firebase Analytics and Google AdMob to optimize performance following Google Play standards. PRO subscribers enjoy a completely ad-free experience.</string>
+    <string name="tos_content">Terms of Service (TOS):\n\n1. Purpose of Use:\nAI Downloader is a tool to help users download and store content for legitimate personal offline viewing.\n\n2. Copyright &amp; Intellectual Property:\nUsers are responsible for respecting the copyright and intellectual property of content owners. AI Downloader does not encourage redistributing copyrighted material without authorization.\n\n3. Disclaimer:\nThe application is provided \"As-is\" utilizing client-side video stream decoding.</string>
+
+    <!-- Gallery Download Quota & Export -->
+    <string name="menu_download_to_gallery">Download to Gallery</string>
+    <string name="toast_gallery_limit_reached">Free limit reached (10/10). Please subscribe to PRO for unlimited downloads to your Gallery!</string>
+    <string name="toast_gallery_saved_quota">Saved to Gallery! (%1$d of 10 free downloads left)</string>
+    <string name="toast_gallery_saved_vip">Saved to Gallery! (VIP Unlimited)</string>
+    <string name="toast_gallery_save_error">Unable to save video to Gallery!</string>
+    <string name="paywall_gallery_notice">You have reached the free limit of 10 Gallery downloads. Upgrade to PRO to save unlimited videos directly to your device Gallery &amp; unlock 4K Ultra Speed!</string>
+
+    <!-- Tab Management -->
+    <string name="btn_close_all_tabs">Close All</string>
+    <string name="tab_manager_open_tabs">Open Tabs (%1$d)</string>
+    <string name="btn_new_tab">+ New Tab</string>
+    <string name="toast_all_tabs_closed">Closed all tabs and freed memory!</string>
+    <string name="toast_tab_closed">Tab closed</string>
+    <string name="tab_active_badge">ACTIVE</string>
+</resources>

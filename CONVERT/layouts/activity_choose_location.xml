@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:id="@id/location_root" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:custom="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.Toolbar android:id="@id/toolbar" android:layout_width="fill_parent" android:layout_height="?actionBarSize" android:minHeight="?actionBarSize" android:elevation="@dimen/cm_dp_2" custom:title="@string/APKTOOL_DUPLICATE_string_0x7f11034f" />
+    <RelativeLayout android:id="@id/rl_phone" android:background="?android:selectableItemBackground" android:layout_width="fill_parent" android:layout_height="@dimen/cm_dp_68">
+        <ImageView android:id="@id/iv_phone" android:layout_width="@dimen/cm_dp_24" android:layout_height="@dimen/cm_dp_24" android:layout_centerVertical="true" android:layout_marginStart="@dimen/cm_dp_16" android:layout_marginEnd="@dimen/cm_dp_16" custom:srcCompat="@drawable/ic_phone_light_blue_24dp" />
+        <LinearLayout android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_toEndOf="@id/iv_phone">
+            <TextView android:textSize="@dimen/cm_sp_16" android:textColor="@color/title_color" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f1102df" />
+            <TextView android:textSize="@dimen/cm_sp_12" android:textColor="@color/sub_title_color" android:id="@id/tv_phone_space" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_2" />
+        </LinearLayout>
+        <ImageView android:layout_width="@dimen/cm_dp_24" android:layout_height="@dimen/cm_dp_24" android:layout_centerVertical="true" android:layout_marginStart="@dimen/cm_dp_16" android:layout_marginEnd="@dimen/cm_dp_16" android:layout_alignParentEnd="true" custom:srcCompat="@drawable/ic_off_black_24dp" />
+    </RelativeLayout>
+    <RelativeLayout android:id="@id/rl_sdcard" android:background="?android:selectableItemBackground" android:layout_width="fill_parent" android:layout_height="@dimen/cm_dp_68">
+        <ImageView android:id="@id/iv_sdcard" android:layout_width="@dimen/cm_dp_24" android:layout_height="@dimen/cm_dp_24" android:layout_centerVertical="true" android:layout_marginStart="@dimen/cm_dp_16" android:layout_marginEnd="@dimen/cm_dp_16" custom:srcCompat="@drawable/ic_sdcard_blue_24dp" />
+        <LinearLayout android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_toEndOf="@id/iv_sdcard">
+            <TextView android:textSize="@dimen/cm_sp_16" android:textColor="@color/title_color" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110343" />
+            <TextView android:textSize="@dimen/cm_sp_12" android:textColor="@color/sub_title_color" android:id="@id/tv_sdcard_space" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_2" />
+        </LinearLayout>
+        <ImageView android:layout_width="@dimen/cm_dp_24" android:layout_height="@dimen/cm_dp_24" android:layout_centerVertical="true" android:layout_marginStart="@dimen/cm_dp_16" android:layout_marginEnd="@dimen/cm_dp_16" android:layout_alignParentEnd="true" custom:srcCompat="@drawable/ic_off_black_24dp" />
+    </RelativeLayout>
+</LinearLayout>

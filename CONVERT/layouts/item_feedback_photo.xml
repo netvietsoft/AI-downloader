@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingEnd="@dimen/cm_dp_8"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView android:id="@id/cv_feedback_img" android:background="@android:color/transparent" android:layout_width="@dimen/cm_dp_60" android:layout_height="@dimen/cm_dp_60" android:layout_marginTop="@dimen/cm_dp_6" android:layout_marginEnd="@dimen/cm_dp_6" app:cardBackgroundColor="@android:color/transparent" app:cardCornerRadius="@dimen/cm_dp_12" app:cardElevation="0.0dip" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent">
+        <androidx.appcompat.widget.AppCompatImageView android:id="@id/iv_feedback_img" android:layout_width="fill_parent" android:layout_height="fill_parent" android:scaleType="centerCrop" />
+    </androidx.cardview.widget.CardView>
+    <androidx.appcompat.widget.AppCompatImageView android:layout_width="@dimen/cm_dp_60" android:layout_height="@dimen/cm_dp_60" app:layout_constraintBottom_toBottomOf="@id/cv_feedback_img" app:layout_constraintEnd_toEndOf="@id/cv_feedback_img" app:layout_constraintStart_toStartOf="@id/cv_feedback_img" app:layout_constraintTop_toTopOf="@id/cv_feedback_img" app:srcCompat="@drawable/bg_stroke_d6dae0" />
+    <androidx.appcompat.widget.AppCompatImageView android:id="@id/iv_delete_img" android:layout_width="@dimen/cm_dp_24" android:layout_height="@dimen/cm_dp_24" android:scaleType="fitXY" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" app:srcCompat="@drawable/ic_photo_delete" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Downloader Pobieranie</string>
+    <string name="tab_browser">Przeglądarka</string>
+    <string name="tab_progress">Postęp</string>
+    <string name="tab_player">Odtwarzacz</string>
+    <string name="tab_settings">Ustawienia</string>
+    <string name="title_settings">Ustawienia</string>
+    <string name="title_language">Język</string>
+    <string name="title_vault">Prywatny Sejf</string>
+    <string name="card_subscription_title">Subskrypcja AI Downloader Pro</string>
+    <string name="card_subscription_subtitle">Odblokuj 4K, ultra prędkość i brak reklam</string>
+    <string name="card_policy_title">Polityka Prywatności</string>
+    <string name="card_policy_desc">Ochrona danych i bezpieczeństwo</string>
+    <string name="card_tos_title">Warunki Usługi</string>
+    <string name="card_tos_desc">Zasady użytkowania i warunki prawne</string>
+    <string name="card_version_title">Wersja Aplikacji</string>
+    <string name="card_version_desc">v2.2.0-pro (Najnowsza)</string>
+    <string name="btn_upgrade_pro">Uaktualnij Teraz</string>
+    <string name="btn_check_update">Sprawdź Aktualizacje</string>
+    <string name="btn_download">Pobierz</string>
+    <string name="btn_cancel">Anuluj</string>
+    <string name="btn_play">Odtwórz</string>
+    <string name="btn_pause">Wstrzymaj</string>
+    <string name="btn_resume">Wznów</string>
+    <string name="btn_set_default">Ustaw jako domyślne</string>
+    <string name="btn_clear_all">Wyczyść wszystko</string>
+    <string name="downloading">Pobieranie</string>
+    <string name="downloaded">Pobrane</string>
+    <string name="search_hint">Szukaj w Google lub wpisz adres URL...</string>
+    <string name="paywall_title">Odblokuj AI Downloader PRO</string>
+    <string name="paywall_subtitle">Ultraszybkie pobieranie bez reklam</string>
+    <string name="paywall_benefit_1">Całkowity brak reklam</string>
+    <string name="paywall_benefit_2">5x szybsze pobieranie wielowątkowe</string>
+    <string name="paywall_benefit_3">Obsługa rozdzielczości 4K i 8K</string>
+    <string name="paywall_benefit_4">Nielimitowany szyfrowany sejf</string>
+    <string name="paywall_plan_weekly">Plan Tygodniowy</string>
+    <string name="paywall_plan_yearly">Plan Roczny (Najlepsza oferta)</string>
+    <string name="paywall_plan_lifetime">Dostęp Dożywotni</string>
+    <string name="paywall_btn_subscribe">SUBSKRYBUJ TERAZ</string>
+    <string name="paywall_btn_restore">Przywróć Zakupy</string>
+    <string name="msg_update_latest">Używasz już najnowszej wersji!</string>
+    <string name="msg_pro_unlocked">Gratulacje! AI Downloader PRO zostało odblokowane!</string>
+</resources>

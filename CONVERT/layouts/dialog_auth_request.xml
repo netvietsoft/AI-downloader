@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:padding="@dimen/dialog_padding" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:ellipsize="end" android:id="@id/auth_request_realm_textview" android:layout_width="fill_parent" android:layout_height="wrap_content" android:maxLines="3" />
+    <EditText android:id="@id/auth_request_username_edittext" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="@string/APKTOOL_DUPLICATE_string_0x7f1101d6" android:maxLines="1" />
+    <EditText android:id="@id/auth_request_password_edittext" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="@string/APKTOOL_DUPLICATE_string_0x7f1101d3" android:maxLines="1" android:inputType="textPassword" />
+</LinearLayout>

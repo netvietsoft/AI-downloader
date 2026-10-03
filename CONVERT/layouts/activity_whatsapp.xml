@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:orientation="vertical" android:id="@id/wa_root" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.Toolbar android:id="@id/whatsapp_toolbar" android:layout_width="fill_parent" android:layout_height="?actionBarSize" app:layout_scrollFlags="scroll|enterAlways" app:navigationIcon="@drawable/ic_arrow_back" app:title="@string/APKTOOL_DUPLICATE_string_0x7f11046a" />
+    <LinearLayout android:gravity="center" android:orientation="horizontal" android:id="@id/ad_layout" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" />
+    <HorizontalScrollView android:id="@id/whatsapp_items" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_below="@id/whatsapp_toolbar">
+        <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="@dimen/cm_dp_42">
+            <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/whatsapp_images" android:background="?android:selectableItemBackground" android:layout_width="wrap_content" android:layout_height="fill_parent" android:paddingStart="@dimen/cm_dp_16" android:paddingEnd="@dimen/cm_dp_16">
+                <TextView android:textSize="@dimen/cm_sp_20" android:layout_gravity="center_horizontal" android:id="@id/tv_whatsapp_images" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f11038b" android:fontFamily="@font/lato_black" />
+                <View android:layout_gravity="center_horizontal" android:id="@id/whatsapp_images_select" android:background="@drawable/bg_whatsapp_select" android:layout_width="@dimen/cm_dp_30" android:layout_height="@dimen/cm_dp_4" android:layout_marginTop="@dimen/cm_dp_4" />
+            </LinearLayout>
+            <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/whatsapp_videos" android:background="?android:selectableItemBackground" android:layout_width="wrap_content" android:layout_height="fill_parent" android:paddingStart="@dimen/cm_dp_16" android:paddingEnd="@dimen/cm_dp_16">
+                <TextView android:textSize="@dimen/cm_sp_16" android:layout_gravity="center_horizontal" android:id="@id/tv_whatsapp_videos" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f11038d" android:fontFamily="@font/lato_black" />
+                <View android:layout_gravity="center_horizontal" android:id="@id/whatsapp_videos_select" android:background="@drawable/bg_whatsapp_select" android:visibility="gone" android:layout_width="@dimen/cm_dp_30" android:layout_height="@dimen/cm_dp_4" android:layout_marginTop="@dimen/cm_dp_4" />
+            </LinearLayout>
+            <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/whatsapp_saved" android:background="?android:selectableItemBackground" android:layout_width="wrap_content" android:layout_height="fill_parent" android:paddingStart="@dimen/cm_dp_16" android:paddingEnd="@dimen/cm_dp_16">
+                <TextView android:textSize="@dimen/cm_sp_16" android:layout_gravity="center_horizontal" android:id="@id/tv_whatsapp_saved" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f11038c" android:fontFamily="@font/lato_black" />
+                <View android:layout_gravity="center_horizontal" android:id="@id/whatsapp_saved_select" android:background="@drawable/bg_whatsapp_select" android:visibility="gone" android:layout_width="@dimen/cm_dp_30" android:layout_height="@dimen/cm_dp_4" android:layout_marginTop="@dimen/cm_dp_4" />
+            </LinearLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
+    <videoplayer.videodownloader.downloader.twelve.view.FixedViewPager android:id="@id/whatsapp_viewpager" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginTop="@dimen/cm_dp_8" android:layout_marginBottom="@dimen/cm_dp_8" android:layout_above="@id/ad_layout" android:layout_below="@id/whatsapp_items" />
+</RelativeLayout>

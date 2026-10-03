@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.textfield.TextInputLayout android:id="@id/textInputLayout" android:paddingTop="@dimen/cm_dp_16" android:layout_width="fill_parent" android:layout_height="wrap_content" android:paddingStart="@dimen/cm_dp_16" android:paddingEnd="@dimen/cm_dp_16"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.google.android.material.textfield.TextInputEditText android:textSize="@dimen/cm_sp_16" android:id="@id/file_name" android:layout_width="fill_parent" android:layout_height="wrap_content" android:selectAllOnFocus="true" android:inputType="text" android:imeOptions="actionGo" />
+</com.google.android.material.textfield.TextInputLayout>

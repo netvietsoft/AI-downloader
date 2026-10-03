@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:background="@android:color/black" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.XVideoView android:id="@id/video_view" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    <ImageView android:layout_gravity="center" android:id="@id/audio_bg" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/ic_audio_white_108dp" />
+    <RelativeLayout android:orientation="vertical" android:id="@id/app_video_box" android:fitsSystemWindows="true" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <TextView android:textColor="#ffffffff" android:gravity="bottom|center" android:id="@id/subtitle_text" android:padding="@dimen/cm_dp_5" android:clickable="false" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/cm_dp_20" android:shadowColor="#ff000000" android:shadowDx="5.0" android:shadowDy="5.0" android:shadowRadius="10.0" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true" android:layout_marginStart="@dimen/cm_dp_10" android:layout_marginEnd="@dimen/cm_dp_10" />
+        <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/app_video_replay" android:background="#33000000" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <TextView android:textSize="@dimen/cm_sp_14" android:textColor="@android:color/white" android:id="@id/app_video_status_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f1101eb" />
+            <ImageView android:id="@id/app_video_replay_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_8" android:src="@drawable/player_circle_outline_white_twelve" android:layout_centerHorizontal="true" />
+        </LinearLayout>
+        <include layout="@layout/player_topbar" />
+        <include android:layout_width="fill_parent" android:layout_height="@dimen/cm_dp_158" android:layout_alignParentBottom="true" layout="@layout/player_controlbar" />
+        <include layout="@layout/player_touch_gestures" />
+        <androidx.appcompat.widget.AppCompatImageView android:id="@id/app_video_locked" android:background="@drawable/bg_common_btn_light" android:padding="@dimen/cm_dp_5" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/cm_dp_13" android:layout_alignParentBottom="true" android:layout_marginStart="@dimen/cm_dp_6" android:layout_alignParentStart="true" app:srcCompat="@drawable/ic_player_locked_twelve" />
+        <ImageView android:id="@id/play_icon" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_8" android:src="@drawable/player_center_play_twelve" android:layout_centerInParent="true" />
+        <androidx.coordinatorlayout.widget.CoordinatorLayout android:id="@id/coordinatorLayout" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    </RelativeLayout>
+    <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/app_video_loading" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <ProgressBar android:layout_width="@dimen/cm_dp_50" android:layout_height="@dimen/cm_dp_50" android:indeterminateOnly="true" android:indeterminateBehavior="repeat" />
+        <TextView android:textColor="#ffffffff" android:gravity="center" android:id="@id/app_video_speed" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_4" android:shadowColor="#ff000000" android:shadowDx="5.0" android:shadowDy="5.0" android:shadowRadius="10.0" />
+    </LinearLayout>
+    <TextView android:textColor="#ffffffff" android:layout_gravity="center" android:id="@id/center_toast" android:clickable="false" android:layout_width="wrap_content" android:layout_height="wrap_content" android:shadowColor="#ff000000" android:shadowDx="1.0" android:shadowDy="1.0" android:shadowRadius="1.0" />
+</FrameLayout>

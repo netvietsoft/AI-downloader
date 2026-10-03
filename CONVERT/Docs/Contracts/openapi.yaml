@@ -1,0 +1,141 @@
+﻿openapi: 3.0.3
+info:
+  title: NextAI Video Downloader & Media Player API
+  version: 2.1.0
+  description: >
+    OpenAPI Contract for Dynamic Sniffing Rules, Remote Config, Social Shortcuts,
+    and Link Telemetry between Android Client and NextAI Backend Server.
+servers:
+  - url: http://localhost:8090
+    description: Local Development & CMS Gateway
+
+paths:
+  /api/v1/config/rules:
+    get:
+      summary: Lấy danh sách quy tắc bóc tách video động thời gian thực
+      description: Returns dynamic regex patterns, user-agents, and injection scripts.
+      responses:
+        "200":
+          description: Danh sách rules khả dụng
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  version:
+                    type: string
+                    example: 2.1.0
+                  rules:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SnifferRule"
+
+  /api/v1/config/shortcuts:
+    get:
+      summary: Lấy danh mục phím tắt mạng xã hội (Facebook, TikTok, IG, etc.)
+      responses:
+        "200":
+          description: Danh sách phím tắt mạng xã hội
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  shortcuts:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SocialShortcut"
+
+  /api/v1/sniffer/extract:
+    post:
+      summary: Kiểm thử bóc tách trực tiếp một URL đa phương tiện
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - url
+              properties:
+                url:
+                  type: string
+                  example: https://v16-webapp-prime.tiktokcdn.com/video/tos/...
+      responses:
+        "200":
+          description: Kết quả phân tích luồng
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /api/v1/telemetry/report-link:
+    post:
+      summary: Khách hàng gửi báo cáo link hỏng / bóc tách thất bại
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - sourceUrl
+              properties:
+                sourceUrl:
+                  type: string
+                userAgent:
+                  type: string
+                errorMessage:
+                  type: string
+      responses:
+        "200":
+          description: Đã tiếp nhận báo cáo
+
+components:
+  schemas:
+    SnifferRule:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        domainPattern:
+          type: string
+        videoUrlPatterns:
+          type: array
+          items:
+            type: string
+        audioUrlPatterns:
+          type: array
+          items:
+            type: string
+        headersRequired:
+          type: object
+        priority:
+          type: integer
+        enabled:
+          type: boolean
+
+    SocialShortcut:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        url:
+          type: string
+        icon:
+          type: string
+        badge:
+          type: string
+        category:
+          type: string
+        enabled:
+          type: boolean

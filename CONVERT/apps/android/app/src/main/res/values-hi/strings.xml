@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Downloader डाउनलोडर</string>
+    <string name="tab_browser">ब्राउज़र</string>
+    <string name="tab_progress">प्रगति</string>
+    <string name="tab_player">प्लेयर</string>
+    <string name="tab_settings">सेटिंग्स</string>
+    <string name="title_settings">सेटिंग्स</string>
+    <string name="title_language">भाषा चुनें</string>
+    <string name="title_vault">निजी तिजोरी</string>
+    <string name="card_subscription_title">AI Downloader Pro सदस्यता</string>
+    <string name="card_subscription_subtitle">4K, सुपर गति और विज्ञापन मुक्त अनुभव</string>
+    <string name="card_policy_title">गोपनीयता नीति</string>
+    <string name="card_policy_desc">सुरक्षा प्रतिबद्धता और डेटा संरक्षण</string>
+    <string name="card_tos_title">सेवा की शर्तें</string>
+    <string name="card_tos_desc">उपयोग दिशानिर्देश और कानूनी शर्तें</string>
+    <string name="card_version_title">ऐप संस्करण</string>
+    <string name="card_version_desc">v2.2.0-pro (नवीनतम संस्करण)</string>
+    <string name="btn_upgrade_pro">अपग्रेड करें</string>
+    <string name="btn_check_update">अपडेट जांचें</string>
+    <string name="btn_download">डाउनलोड</string>
+    <string name="btn_cancel">रद्द करें</string>
+    <string name="btn_play">चलाएं</string>
+    <string name="btn_pause">रोकें</string>
+    <string name="btn_resume">फिर से शुरू करें</string>
+    <string name="btn_set_default">डिफ़ॉल्ट सेट करें</string>
+    <string name="btn_clear_all">सब साफ़ करें</string>
+    <string name="downloading">डाउनलोड हो रहा है</string>
+    <string name="downloaded">डाउनलोड पूरा हुआ</string>
+    <string name="search_hint">गूगल में खोजें या URL दर्ज करें...</string>
+    <string name="paywall_title">AI Downloader PRO अनलॉक करें</string>
+    <string name="paywall_subtitle">अत्यधिक तेज डाउनलोड और शून्य विज्ञापन</string>
+    <string name="paywall_benefit_1">पूरी तरह से विज्ञापन-मुक्त</string>
+    <string name="paywall_benefit_2">5 गुना तेज मल्टी-थ्रेडेड डाउनलोड</string>
+    <string name="paywall_benefit_3">4K और 8K अल्ट्रा एचडी सपोर्ट</string>
+    <string name="paywall_benefit_4">असीमित एन्क्रिप्टेड निजी वॉल्ट</string>
+    <string name="paywall_plan_weekly">साप्ताहिक योजना</string>
+    <string name="paywall_plan_yearly">वार्षिक योजना (सर्वोत्तम मूल्य)</string>
+    <string name="paywall_plan_lifetime">आजीवन सदस्यता</string>
+    <string name="paywall_btn_subscribe">अभी सदस्यता लें</string>
+    <string name="paywall_btn_restore">खरीद पुनर्स्थापित करें</string>
+    <string name="msg_update_latest">आप पहले से ही नवीनतम संस्करण का उपयोग कर रहे हैं!</string>
+    <string name="msg_pro_unlocked">बधाई हो! AI Downloader PRO सफलतापूर्वक अनलॉक हो गया है!</string>
+</resources>

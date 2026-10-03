@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Downloader ダウンローダー</string>
+    <string name="tab_browser">ブラウザ</string>
+    <string name="tab_progress">進行状況</string>
+    <string name="tab_player">プレーヤー</string>
+    <string name="tab_settings">設定</string>
+    <string name="title_settings">設定</string>
+    <string name="title_language">言語設定</string>
+    <string name="title_vault">プライベート保管庫</string>
+    <string name="card_subscription_title">AI Downloader Pro サブスクリプション</string>
+    <string name="card_subscription_subtitle">4K保存、超高速ダウンロード＆広告非表示</string>
+    <string name="card_policy_title">プライバシーポリシー</string>
+    <string name="card_policy_desc">セキュリティと個人情報保護方針</string>
+    <string name="card_tos_title">利用規約</string>
+    <string name="card_tos_desc">サービス利用規定および免責事項</string>
+    <string name="card_version_title">アプリバージョン</string>
+    <string name="card_version_desc">v2.2.0-pro (最新ビルド)</string>
+    <string name="btn_upgrade_pro">今すぐアップグレード</string>
+    <string name="btn_check_update">更新を確認</string>
+    <string name="btn_download">ダウンロード</string>
+    <string name="btn_cancel">キャンセル</string>
+    <string name="btn_play">再生</string>
+    <string name="btn_pause">一時停止</string>
+    <string name="btn_resume">再開</string>
+    <string name="btn_set_default">デフォルトに設定</string>
+    <string name="btn_clear_all">すべて消去</string>
+    <string name="downloading">ダウンロード中</string>
+    <string name="downloaded">完了済み</string>
+    <string name="search_hint">Googleで検索またはURLを入力...</string>
+    <string name="paywall_title">AI Downloader PRO を解除</string>
+    <string name="paywall_subtitle">超高速ダウンロード＆完全広告なし</string>
+    <string name="paywall_benefit_1">広告なしの快適な体験</string>
+    <string name="paywall_benefit_2">5倍速マルチスレッドターボダウンロード</string>
+    <string name="paywall_benefit_3">4Kおよび8K超高画質動画に対応</string>
+    <string name="paywall_benefit_4">無制限のAES暗号化プライベート金庫</string>
+    <string name="paywall_plan_weekly">週間プラン</string>
+    <string name="paywall_plan_yearly">年間プラン (お得)</string>
+    <string name="paywall_plan_lifetime">永久ライセンス</string>
+    <string name="paywall_btn_subscribe">今すぐ登録</string>
+    <string name="paywall_btn_restore">購入の復元</string>
+    <string name="msg_update_latest">最新バージョンを使用しています！</string>
+    <string name="msg_pro_unlocked">おめでとうございます！AI Downloader PRO が有効になりました！</string>
+</resources>

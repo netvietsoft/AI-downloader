@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Downloader Загрузчик</string>
+    <string name="tab_browser">Браузер</string>
+    <string name="tab_progress">Загрузки</string>
+    <string name="tab_player">Плеер</string>
+    <string name="tab_settings">Настройки</string>
+    <string name="title_settings">Настройки</string>
+    <string name="title_language">Язык</string>
+    <string name="title_vault">Сейф</string>
+    <string name="card_subscription_title">Подписка AI Downloader Pro</string>
+    <string name="card_subscription_subtitle">4K, максимальная скорость и без рекламы</string>
+    <string name="card_policy_title">Политика конфиденциальности</string>
+    <string name="card_policy_desc">Безопасность и защита персональных данных</string>
+    <string name="card_tos_title">Условия использования</string>
+    <string name="card_tos_desc">Правила сервиса и правовые нормы</string>
+    <string name="card_version_title">Версия приложения</string>
+    <string name="card_version_desc">v2.2.0-pro (Последняя версия)</string>
+    <string name="btn_upgrade_pro">Обновить до Pro</string>
+    <string name="btn_check_update">Проверить обновления</string>
+    <string name="btn_download">Скачать</string>
+    <string name="btn_cancel">Отмена</string>
+    <string name="btn_play">Воспроизвести</string>
+    <string name="btn_pause">Пауза</string>
+    <string name="btn_resume">Продолжить</string>
+    <string name="btn_set_default">По умолчанию</string>
+    <string name="btn_clear_all">Очистить всё</string>
+    <string name="downloading">Загрузка</string>
+    <string name="downloaded">Завершено</string>
+    <string name="search_hint">Поиск в Google или ввод URL...</string>
+    <string name="paywall_title">Разблокируйте AI Downloader PRO</string>
+    <string name="paywall_subtitle">Сверхскоростная загрузка без рекламы</string>
+    <string name="paywall_benefit_1">Полное отсутствие рекламы</string>
+    <string name="paywall_benefit_2">5-кратное турбо-ускорение загрузки</string>
+    <string name="paywall_benefit_3">Поддержка разрешения 4K и 8K UHD</string>
+    <string name="paywall_benefit_4">Неограниченный зашифрованный сейф</string>
+    <string name="paywall_plan_weekly">Недельный план</string>
+    <string name="paywall_plan_yearly">Годовой план (Выгодно)</string>
+    <string name="paywall_plan_lifetime">Навсегда</string>
+    <string name="paywall_btn_subscribe">ПОДПИСАТЬСЯ СЕЙЧАС</string>
+    <string name="paywall_btn_restore">Восстановить покупки</string>
+    <string name="msg_update_latest">У вас установлена последняя версия!</string>
+    <string name="msg_pro_unlocked">Поздравляем! AI Downloader PRO успешно разблокирован!</string>
+</resources>

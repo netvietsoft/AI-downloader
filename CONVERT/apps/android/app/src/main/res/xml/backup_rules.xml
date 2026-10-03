@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Quy tắc Sao lưu Dữ liệu An toàn (Data Extraction & Backup Rules)
+    Ngăn chặn việc sao lưu và trích xuất dữ liệu Két Sắt (.vault) qua ADB Backup
+    @package com.nextaitechnology.antidetect
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <!-- Cấm sao lưu thư mục két sắt nhạy cảm lên Cloud Backup -->
+        <exclude domain="file" path=".vault" />
+        <exclude domain="database" path="vault.db" />
+        <exclude domain="sharedpref" path="vault_prefs.xml" />
+        <exclude domain="sharedpref" path="nextai_secure_vault_prefs.xml" />
+        <exclude domain="sharedpref" path="nextai_settings.xml" />
+    </cloud-backup>
+    <device-transfer>
+        <!-- Cấm trích xuất két sắt qua cáp USB / ADB backup -->
+        <exclude domain="file" path=".vault" />
+        <exclude domain="database" path="vault.db" />
+        <exclude domain="sharedpref" path="vault_prefs.xml" />
+        <exclude domain="sharedpref" path="nextai_secure_vault_prefs.xml" />
+        <exclude domain="sharedpref" path="nextai_settings.xml" />
+    </device-transfer>
+</data-extraction-rules>

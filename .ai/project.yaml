@@ -1,0 +1,19 @@
+project_name: "AI-Video-Downloader"
+workspace_profile: "PRODUCT"
+version: "2.1.2"
+created_at: "2026-10-03T16:40:00Z"
+architecture:
+  android:
+    path: "CONVERT/apps/android"
+    language: "Kotlin"
+    build_system: "Gradle"
+    target_sdk: 36
+  web:
+    path: "WWW"
+    runtime: "Node.js"
+    framework: "Express"
+    port: 3070
+    domain: "snaptik2.com"
+deploy:
+  server_path: "/home/netviet/projects-deploy/ai-dowloader"
+  branch: "web"

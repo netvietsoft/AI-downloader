@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@id/folder_root" android:background="@color/main_page_color" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.Toolbar android:id="@id/toolbar" android:layout_width="fill_parent" android:layout_height="?actionBarSize" app:contentInsetStartWithNavigation="0.0dip" app:theme="@style/ToolbarTheme" app:title="@string/APKTOOL_DUPLICATE_string_0x7f110467" app:titleMarginStart="0.0dip" />
+    <LinearLayout android:gravity="center" android:orientation="horizontal" android:id="@id/ad_layout" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" />
+    <FrameLayout android:id="@id/fragment_container" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_above="@id/ad_layout" android:layout_below="@id/toolbar" />
+</RelativeLayout>

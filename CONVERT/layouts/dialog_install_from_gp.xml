@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center_horizontal" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView android:layout_gravity="end" android:id="@id/dialog_install_gp_close" android:padding="@dimen/cm_dp_16" android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/ic_dialog_close" />
+    <TextView android:textSize="@dimen/cm_sp_22" android:gravity="center" android:id="@id/dialog_install_gp_title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/APKTOOL_DUPLICATE_string_0x7f110204" android:fontFamily="@font/lato_black" android:layout_marginStart="@dimen/cm_dp_34" android:layout_marginEnd="@dimen/cm_dp_34" />
+    <ImageView android:id="@id/dialog_install_gp_image" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/cm_dp_24" android:layout_marginStart="@dimen/cm_dp_34" android:layout_marginEnd="@dimen/cm_dp_34" />
+    <TextView android:textSize="@dimen/cm_sp_16" android:textColor="@color/white" android:gravity="center" android:id="@id/dialog_install_gp_install" android:layout_width="fill_parent" android:layout_height="@dimen/cm_dp_50" android:layout_marginTop="@dimen/cm_dp_36" android:layout_marginBottom="@dimen/cm_dp_24" android:text="@string/APKTOOL_DUPLICATE_string_0x7f1101c8" android:layout_marginStart="@dimen/cm_dp_13" android:layout_marginEnd="@dimen/cm_dp_13" />
+</LinearLayout>
