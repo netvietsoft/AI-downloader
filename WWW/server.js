@@ -7,7 +7,7 @@ const db = require('./database');
 const snifferService = require('./snifferService');
 
 const app = express();
-const PORT = process.env.PORT || 3070;
+const PORT = process.env.PORT || 3080;
 
 // Phục vụ frontend tĩnh (hỗ trợ cả khi chạy độc lập hoặc trong WWW)
 const publicDir = fs.existsSync(path.join(__dirname, 'public')) 
