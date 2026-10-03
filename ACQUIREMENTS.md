@@ -19,3 +19,13 @@ Tài liệu chưng cất kinh nghiệm, nguyên tắc và giải pháp kỹ thu�
 - **Bối cảnh:** Repository chứa cả mã nguồn Android App (`CONVERT/apps/android`) và Web Platform (`WWW/`), nhưng server production chỉ cần mã nguồn Web để chạy `npm install` và `pm2 start`.
 - **Giải pháp tối ưu:** Sử dụng nhánh riêng `web` được trích xuất từ thư mục `WWW/`. Thư mục gốc của nhánh `web` chứa toàn bộ code cần thiết cho server.
 - **Lợi ích:** Lệnh clone trên server gọn nhẹ, không tải code Android thừa, tiết kiệm tài nguyên và không làm lộ cấu trúc nội bộ dự án.
+
+---
+
+## [ACQ-003] Tương Thích Express 5 Routing (No Raw Wildcards)
+- **Bối cảnh:** Khi ứng dụng nâng cấp lên hoặc sử dụng `express ^5.x.x`, thư viện phân tích route `path-to-regexp` được nâng cấp từ v0.1.x lên v6+/v7+.
+- **Nguyên tắc kỹ thuật:**
+  1. Tuyệt đối không dùng `app.get('*', ...)` vì sẽ gây ra ngoại lệ nghiêm trọng `PathError: Missing parameter name`.
+  2. Với các tác vụ fallback SPA hoặc static routing, sử dụng middleware `app.use((req, res, next) => ...)` có kiểm tra `req.method === 'GET'` và `!req.url.startsWith('/api/')`.
+- **Lợi ích:** Đảm bảo server không bị crash vô điều kiện khi khởi động và tương thích hoàn toàn với hệ sinh thái Express hiện đại.
+

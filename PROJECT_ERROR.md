@@ -29,5 +29,37 @@ Tài liệu ghi nhận các lỗi đã gặp trong dự án, nguyên nhân gốc
 - **Ngày phát hiện:** 2026-10-03
 - **Triệu chứng:** `app.js` đặt cứng `BACKEND_URL = 'http://localhost:5101'`, khi deploy lên server domain `snaptik2.com` cổng 3070 sẽ bị lỗi mạng CORS hoặc không gọi được backend.
 - **Root Cause:** Cấu hình môi trường dev cục bộ hardcode URL.
-- **Giải pháp:** Chuyển `BACKEND_URL = ''` (đường dẫn tương đối) và hợp nhất Express server phục vụ cả static frontend và `/api/*` trên cùng cổng 3070.
+- **Giải pháp:** Chuyển `BACKEND_URL = ''` (đường dẫn tương đối) và hợp nhất Express server phục vụ cả static frontend và `/api/*` trên cùng cổng.
 - **Ngăn ngừa:** Không bao giờ hardcode host/port trong mã nguồn client-side.
+
+---
+
+## [ERR-004] Xung đột cổng triển khai (Port Conflict) trên VPS
+- **Mức độ:** MEDIUM
+- **Ngày phát hiện:** 2026-10-03
+- **Triệu chứng:** Cổng `3070` đã bị chiếm dụng bởi dịch vụ khác trên server, dẫn đến trả về lỗi 404 (File not found) hoặc tranh chấp tài nguyên.
+- **Root Cause:** Cấu hình cổng mặc định trùng với tiến trình khác đang chạy trên hệ thống.
+- **Giải pháp:** Kiểm tra danh sách cổng đang lắng nghe bằng `sudo ss -tulpn`, chuyển dịch vụ sang cổng khả dụng `3080` và cập nhật đồng bộ các file `.env.example`, `ecosystem.config.js`, `nginx-snaptik2.conf`, `server.js`.
+- **Ngăn ngừa:** Luôn scan cổng trước khi quyết định cổng deploy.
+
+---
+
+## [ERR-005] Express 5 Crash Do Cú Pháp Wildcard Routing 'app.get(*)'
+- **Mức độ:** HIGH
+- **Ngày phát hiện:** 2026-10-03
+- **Triệu chứng:** PM2 restart liên tục bị crash loop (`↺: 15`), lệnh `curl http://localhost:3080/api/health` trả về `curl: (7) Connection refused`.
+- **Root Cause:** Ứng dụng dùng `express ^5.2.1`. Trong Express 5 (sử dụng thư viện `path-to-regexp` v6/v7), cú pháp route wildcard `app.get('*', ...)` không còn được hỗ trợ và sẽ ném lỗi `PathError: Missing parameter name at index 1: *`.
+- **Giải pháp:** Chuyển toàn bộ SPA fallback handler sang Express middleware chuẩn:
+  ```javascript
+  app.use((req, res, next) => {
+      if (req.method !== 'GET') return next();
+      if (req.url.startsWith('/api/')) return next();
+      if (fs.existsSync(publicDir)) {
+          const indexPath = path.join(publicDir, 'index.html');
+          if (fs.existsSync(indexPath)) return res.sendFile(indexPath);
+      }
+      next();
+  });
+  ```
+- **Ngăn ngừa:** Luôn chạy thử `node server.js` kiểm chứng runtime khi nâng cấp hoặc khởi chạy Express 5; tránh dùng ký tự wildcard thô `*` trong routing pattern.
+
