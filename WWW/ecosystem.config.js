@@ -10,7 +10,7 @@ module.exports = {
     max_memory_restart: '1G',
     env: {
       NODE_ENV: 'production',
-      PORT: process.env.PORT || 3080,
+      PORT: 3080,
       DOMAIN: 'snaptik2.com'
     }
   }]

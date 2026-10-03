@@ -7,7 +7,7 @@ const db = require('./database');
 const snifferService = require('./snifferService');
 
 const app = express();
-const PORT = process.env.PORT || 3070;
+const PORT = 3080;
 
 // Phục vụ frontend tĩnh (hỗ trợ cả khi chạy độc lập hoặc trong WWW)
 const publicDir = fs.existsSync(path.join(__dirname, 'public')) 
@@ -450,12 +450,17 @@ app.use((req, res, next) => {
 
 
 // Khởi chạy server
-app.listen(PORT, () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`=======================================================`);
     console.log(`🚀 AI Downloader Backend API Server is RUNNING!`);
-    console.log(`📡 URL: http://localhost:${PORT}`);
-    console.log(`📊 Health Check: http://localhost:${PORT}/api/health`);
-    console.log(`👥 Admin Users: http://localhost:${PORT}/api/admin/users`);
-    console.log(`💰 Revenue Analytics: http://localhost:${PORT}/api/admin/revenue`);
+    console.log(`📡 URL: http://0.0.0.0:${PORT}`);
+    console.log(`📊 Health Check: http://127.0.0.1:${PORT}/api/health`);
+    console.log(`👥 Admin Users: http://127.0.0.1:${PORT}/api/admin/users`);
+    console.log(`💰 Revenue Analytics: http://127.0.0.1:${PORT}/api/admin/revenue`);
     console.log(`=======================================================`);
 });
+
+server.on('error', (err) => {
+    console.error('❌ Server listen error:', err);
+});
+
