@@ -435,8 +435,9 @@ app.get('/api/extension/download-package', (req, res) => {
     res.download(zipPath, 'AI_Video_Downloader_Extension.zip');
 });
 
-// SPA fallback về index.html cho các route giao diện
-app.get('*', (req, res, next) => {
+// SPA fallback về index.html cho các route giao diện (Tương thích Express 5)
+app.use((req, res, next) => {
+    if (req.method !== 'GET') return next();
     if (req.url.startsWith('/api/')) return next();
     if (fs.existsSync(publicDir)) {
         const indexPath = path.join(publicDir, 'index.html');
@@ -446,6 +447,7 @@ app.get('*', (req, res, next) => {
     }
     next();
 });
+
 
 // Khởi chạy server
 app.listen(PORT, () => {
