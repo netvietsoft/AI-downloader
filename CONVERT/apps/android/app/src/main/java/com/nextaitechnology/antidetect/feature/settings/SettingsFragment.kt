@@ -4,6 +4,8 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.app.AlertDialog
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -21,23 +23,21 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import android.content.Intent
-import android.net.Uri
 import com.nextaitechnology.antidetect.BuildConfig
 import com.nextaitechnology.antidetect.R
+import com.nextaitechnology.antidetect.core.analytics.FirebaseAnalyticsManager
 import com.nextaitechnology.antidetect.core.i18n.LanguageItem
 import com.nextaitechnology.antidetect.core.i18n.LocaleHelper
 import com.nextaitechnology.antidetect.feature.ad.AdMobManager
-import com.nextaitechnology.antidetect.core.analytics.FirebaseAnalyticsManager
 
 /**
  * Tab Cài Đặt (SettingsFragment)
  * Quản lý 5 Card trung tâm:
- * 1. Subscription => Payment Wall (Mở màn hình VIP Pro Paywall)
+ * 1. Subscription => Payment Wall (Mở màn hình VIP Pro Paywall hoặc chi tiết gói Active)
  * 2. Language => Bộ chuyển đổi 50 ngôn ngữ toàn cầu tức thì
  * 3. Policy => Chính sách bảo vệ dữ liệu người dùng
  * 4. TOS => Điều khoản dịch vụ NextAI
- * 5. Version => Phiên bản v2.2.0-pro kèm nút kiểm tra cập nhật
+ * 5. Version => Phiên bản ứng dụng kèm nút kiểm tra cập nhật
  * + AdMob Banner Container ở chân trang
  *
  * @author NextAI Technology Core Team
@@ -82,7 +82,9 @@ class SettingsFragment : Fragment() {
         super.onResume()
         updateUiState()
         // Nạp AdMob banner nếu chưa phải bản Pro
-        AdMobManager.loadBanner(requireActivity(), adContainer)
+        if (!settingsRepository.isProUser) {
+            AdMobManager.loadBanner(requireActivity(), adContainer)
+        }
     }
 
     private fun updateUiState() {
@@ -108,13 +110,20 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setupCards(rootView: View) {
-        // Card 1: Subscription => Payment Wall
-        val openPaywallAction = View.OnClickListener {
-            FirebaseAnalyticsManager.logSettingsActionClicked("open_paywall", "subscription_card")
-            PaymentWallActivity.start(requireContext())
+        // Card 1: Subscription => Payment Wall (nếu chưa Pro) hoặc hiển thị chi tiết gói (nếu đã Pro)
+        val subscriptionAction = View.OnClickListener {
+            if (settingsRepository.isProUser) {
+                FirebaseAnalyticsManager.logSettingsActionClicked("view_subscription_details", settingsRepository.subscriptionPlan)
+                showActiveSubscriptionDetailsDialog()
+            } else {
+                FirebaseAnalyticsManager.logSettingsActionClicked("open_paywall", "subscription_card")
+                PaymentWallActivity.start(requireContext())
+            }
         }
-        rootView.findViewById<View>(R.id.card_subscription_container)?.setOnClickListener(openPaywallAction)
-        rootView.findViewById<View>(R.id.card_subscription)?.setOnClickListener(openPaywallAction)
+        rootView.findViewById<View>(R.id.card_subscription_container)?.setOnClickListener(subscriptionAction)
+        rootView.findViewById<View>(R.id.card_subscription)?.setOnClickListener(subscriptionAction)
+        tvSubBtnStatus.setOnClickListener(subscriptionAction)
+        tvProBadgeTop.setOnClickListener(subscriptionAction)
 
         // Card 2: Language Picker
         rootView.findViewById<LinearLayout>(R.id.card_language).setOnClickListener {
@@ -122,13 +131,13 @@ class SettingsFragment : Fragment() {
             showLanguagePickerDialog()
         }
 
-        // Card 3: Privacy Policy (Mở trực tiếp link hoặc hiện dialog nếu lỗi)
+        // Card 3: Privacy Policy (Mở trực tiếp link)
         rootView.findViewById<LinearLayout>(R.id.card_policy).setOnClickListener {
             FirebaseAnalyticsManager.logSettingsActionClicked("view_privacy_policy", URL_PRIVACY_POLICY)
             openWebUrl(URL_PRIVACY_POLICY)
         }
 
-        // Card 4: Terms of Service (TOS) (Mở trực tiếp link hoặc hiện dialog nếu lỗi)
+        // Card 4: Terms of Service (TOS) (Mở trực tiếp link)
         rootView.findViewById<LinearLayout>(R.id.card_tos).setOnClickListener {
             FirebaseAnalyticsManager.logSettingsActionClicked("view_tos", URL_TERMS_OF_USE)
             openWebUrl(URL_TERMS_OF_USE)
@@ -143,6 +152,34 @@ class SettingsFragment : Fragment() {
             FirebaseAnalyticsManager.logSettingsActionClicked("check_update_button", "v${BuildConfig.VERSION_NAME}")
             checkUpdate()
         }
+    }
+
+    /**
+     * Hiển thị chi tiết gói cước đang hoạt động và cho phép quản lý trên Google Play
+     */
+    private fun showActiveSubscriptionDetailsDialog() {
+        val planName = when (settingsRepository.subscriptionPlan.lowercase()) {
+            "weekly" -> getString(R.string.paywall_plan_weekly)
+            "lifetime" -> getString(R.string.paywall_plan_lifetime)
+            else -> getString(R.string.paywall_plan_yearly)
+        }
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("👑 " + getString(R.string.card_subscription_title))
+            .setMessage(
+                "Trạng thái: Đang hoạt động (ACTIVE)\n" +
+                "Gói hiện tại: $planName\n\n" +
+                "Quyền lợi VIP của bạn:\n" +
+                "• " + getString(R.string.paywall_benefit_1) + "\n" +
+                "• " + getString(R.string.paywall_benefit_2) + "\n" +
+                "• " + getString(R.string.paywall_benefit_3) + "\n" +
+                "• " + getString(R.string.paywall_benefit_4)
+            )
+            .setPositiveButton("Quản lý trên Google Play") { _, _ ->
+                openWebUrl("https://play.google.com/store/account/subscriptions")
+            }
+            .setNegativeButton(getString(R.string.btn_ok), null)
+            .show()
     }
 
     /**
@@ -249,29 +286,8 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    private fun showPolicyDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle(getString(R.string.card_policy_title))
-            .setMessage(getString(R.string.policy_content) + "\n\n🔗 " + URL_PRIVACY_POLICY)
-            .setPositiveButton("🌐 " + getString(R.string.btn_ok)) { _, _ ->
-                openWebUrl(URL_PRIVACY_POLICY)
-            }
-            .setNegativeButton(getString(R.string.btn_close), null)
-            .show()
-    }
-
-    private fun showTosDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle(getString(R.string.card_tos_title))
-            .setMessage(getString(R.string.tos_content) + "\n\n🔗 " + URL_TERMS_OF_USE)
-            .setPositiveButton("🌐 " + getString(R.string.btn_ok)) { _, _ ->
-                openWebUrl(URL_TERMS_OF_USE)
-            }
-            .setNegativeButton(getString(R.string.btn_close), null)
-            .show()
-    }
-
     private fun checkUpdate() {
+        Toast.makeText(requireContext(), "🔍 Đang kiểm tra phiên bản mới nhất...", Toast.LENGTH_SHORT).show()
         AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.card_version_title))
             .setMessage(getString(R.string.msg_update_latest) + "\n\n" + "Version: v${BuildConfig.VERSION_NAME} (Build ${BuildConfig.VERSION_CODE})")

@@ -13,8 +13,8 @@ android {
         applicationId = "com.ai.video.downloader.videodownloader"
         minSdk = 26
         targetSdk = 36
-        versionCode = 6
-        versionName = "1.0"
+        versionCode = 10
+        versionName = "1.0.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -85,6 +85,9 @@ dependencies {
 
     // Google Mobile Ads (AdMob)
     implementation("com.google.android.gms:play-services-ads:23.0.0")
+
+    // Google Play Billing (IAP & Subscriptions) - Minimum v8.0.0 required by Google Play
+    implementation("com.android.billingclient:billing:8.0.0")
 
     // Firebase (Analytics, Crashlytics, Messaging via BoM)
     implementation(platform("com.google.firebase:firebase-bom:33.1.0"))

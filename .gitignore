@@ -24,6 +24,7 @@ screenshots/
 *screen*.png
 *screen*.jpg
 test_*.png
+*_launch.png
 
 # Security & Credentials (CRITICAL - Rule 12 & Rule 24)
 *.jks

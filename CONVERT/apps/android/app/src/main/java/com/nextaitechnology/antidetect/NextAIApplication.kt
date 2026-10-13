@@ -78,6 +78,9 @@ class NextAIApplication : Application() {
         // Khởi tạo mạng quảng cáo Google AdMob
         AdMobManager.initialize(this)
 
+        // Khởi tạo Google Play Billing Manager và đồng bộ trạng thái thuê bao
+        com.nextaitechnology.antidetect.core.billing.BillingManager.getInstance(this)
+
         // Khởi tạo danh sách 1822+ Monetized Domains từ Bao_cao_web_video.csv
         com.nextaitechnology.antidetect.core.network.MonetizedDomainRegistry.init(this)
 

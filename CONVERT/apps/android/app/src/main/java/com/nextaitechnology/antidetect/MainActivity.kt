@@ -115,19 +115,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupWindowInsets() {
         val rootMain = findViewById<View>(R.id.root_main) ?: return
-        val topBar = findViewById<View>(R.id.layout_top_bar)
         androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(rootMain) { _, windowInsets ->
             val insets = windowInsets.getInsets(
                 androidx.core.view.WindowInsetsCompat.Type.systemBars() or
                 androidx.core.view.WindowInsetsCompat.Type.displayCutout()
             )
 
-            // Top Bar: Tránh đè lên Status Bar và tai thỏ / camera nốt ruồi
-            topBar?.setPadding(
-                topBar.paddingLeft,
+            // Căn lề Status Bar và tai thỏ / camera nốt ruồi toàn cục
+            rootMain.setPadding(
+                insets.left,
                 insets.top,
-                topBar.paddingRight,
-                topBar.paddingBottom
+                insets.right,
+                0
             )
 
             // Bottom Navigation: Tránh bị che bởi 3 phím điều hướng ảo hoặc thanh cử chỉ
@@ -136,14 +135,6 @@ class MainActivity : AppCompatActivity() {
                 bottomNavigation.paddingTop,
                 bottomNavigation.paddingRight,
                 insets.bottom
-            )
-
-            // Căn lề trái/phải nếu màn hình có phần khuyết cạnh
-            rootMain.setPadding(
-                insets.left,
-                0,
-                insets.right,
-                0
             )
 
             windowInsets
@@ -237,6 +228,9 @@ class MainActivity : AppCompatActivity() {
         }
         transaction.commit()
         activeFragment = targetFragment
+
+        // Chỉ hiển thị Top Bar trình duyệt trên HomeFragment; ẩn trên Settings/Player/Progress để tránh nhân đôi header
+        findViewById<View>(R.id.layout_top_bar)?.visibility = if (targetFragment == homeFragment) View.VISIBLE else View.GONE
 
         val isVideoReady = !detectedVideoUrl.isNullOrEmpty() || detectedVideoInfo != null
         if (targetFragment == homeFragment && isVideoReady) {

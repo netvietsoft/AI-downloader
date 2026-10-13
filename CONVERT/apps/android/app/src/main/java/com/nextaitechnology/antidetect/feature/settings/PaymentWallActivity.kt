@@ -1,32 +1,32 @@
 package com.nextaitechnology.antidetect.feature.settings
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ValueAnimator
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Button
-import android.widget.FrameLayout
+import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.nextaitechnology.antidetect.R
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.ValueAnimator
-import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
-
+import com.nextaitechnology.antidetect.core.analytics.FirebaseAnalyticsManager
+import com.nextaitechnology.antidetect.core.billing.BillingManager
 import com.nextaitechnology.antidetect.core.i18n.CurrencyFormatter
 import com.nextaitechnology.antidetect.core.i18n.LocaleHelper
-import com.nextaitechnology.antidetect.core.analytics.FirebaseAnalyticsManager
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
  * Màn hình Thanh Toán & Nâng Cấp Gói Cước (Payment Wall / Subscription Activity)
- * Displays VIP Pro features, subscription pricing, and handles purchase activation.
+ * Displays VIP Pro features, subscription pricing, and handles Google Play purchase activation.
  *
  * @author NextAI Technology Core Team
  */
@@ -37,6 +37,7 @@ class PaymentWallActivity : AppCompatActivity() {
     }
 
     private lateinit var settingsRepository: SettingsRepository
+    private lateinit var billingManager: BillingManager
     private var selectedPlan: String = "yearly"
     private var sheenAnimator: ValueAnimator? = null
     private var cardSheenAnimator: ValueAnimator? = null
@@ -58,14 +59,18 @@ class PaymentWallActivity : AppCompatActivity() {
         }
 
         settingsRepository = SettingsRepository(this)
+        billingManager = BillingManager.getInstance(this)
 
-        val pricing = CurrencyFormatter.getPricingForLanguage(settingsRepository.languageCode)
-        findViewById<TextView>(R.id.tv_price_weekly)?.text = pricing.weeklyPrice
-        findViewById<TextView>(R.id.tv_subtext_weekly)?.text = pricing.weeklySubtext
-        findViewById<TextView>(R.id.tv_price_yearly)?.text = pricing.yearlyPrice
-        findViewById<TextView>(R.id.tv_subtext_yearly)?.text = pricing.yearlySubtext
-        findViewById<TextView>(R.id.tv_price_lifetime)?.text = pricing.lifetimePrice
-        findViewById<TextView>(R.id.tv_subtext_lifetime)?.text = pricing.lifetimeSubtext
+        refreshPricing()
+
+        // Lắng nghe cập nhật giá và tiền tệ thực tế từ Google Play Billing
+        lifecycleScope.launch {
+            billingManager.productDetailsMap.collectLatest {
+                runOnUiThread {
+                    refreshPricing()
+                }
+            }
+        }
 
         val reason = intent.getStringExtra("EXTRA_REASON")
         if (reason == "monetized_limit_reached") {
@@ -81,6 +86,18 @@ class PaymentWallActivity : AppCompatActivity() {
         startSheenAnimation()
     }
 
+    override fun onResume() {
+        super.onResume()
+        refreshPricing()
+        try {
+            billingManager.queryAvailableProducts {
+                runOnUiThread { refreshPricing() }
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("PaymentWallActivity", "Error querying billing products in onResume", e)
+        }
+    }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
@@ -90,6 +107,16 @@ class PaymentWallActivity : AppCompatActivity() {
         } else if (reason == "gallery_limit_reached") {
             findViewById<TextView>(R.id.tv_paywall_subtitle)?.text = getString(R.string.paywall_gallery_notice)
         }
+    }
+
+    private fun refreshPricing() {
+        val pricing = CurrencyFormatter.getPricing(this, settingsRepository.languageCode)
+        findViewById<TextView>(R.id.tv_price_weekly)?.text = pricing.weeklyPrice
+        findViewById<TextView>(R.id.tv_subtext_weekly)?.text = pricing.weeklySubtext
+        findViewById<TextView>(R.id.tv_price_yearly)?.text = pricing.yearlyPrice
+        findViewById<TextView>(R.id.tv_subtext_yearly)?.text = pricing.yearlySubtext
+        findViewById<TextView>(R.id.tv_price_lifetime)?.text = pricing.lifetimePrice
+        findViewById<TextView>(R.id.tv_subtext_lifetime)?.text = pricing.lifetimeSubtext
     }
 
     private fun setupPlanSelection() {
@@ -115,7 +142,7 @@ class PaymentWallActivity : AppCompatActivity() {
             containerYearly.setBackgroundResource(if (plan == "yearly") R.drawable.bg_plan_selected else R.drawable.bg_plan_unselected)
             containerLifetime.setBackgroundResource(if (plan == "lifetime") R.drawable.bg_plan_selected else R.drawable.bg_plan_unselected)
 
-            val pricing = CurrencyFormatter.getPricingForLanguage(settingsRepository.languageCode)
+            val pricing = CurrencyFormatter.getPricing(this, settingsRepository.languageCode)
             val price = when (plan) {
                 "weekly" -> pricing.weeklyPrice
                 "lifetime" -> pricing.lifetimePrice
@@ -129,14 +156,17 @@ class PaymentWallActivity : AppCompatActivity() {
         val clickWeekly = View.OnClickListener { selectPlan("weekly") }
         containerWeekly.setOnClickListener(clickWeekly)
         cardWeekly.setOnClickListener(clickWeekly)
+        rbWeekly.setOnClickListener(clickWeekly)
 
         val clickYearly = View.OnClickListener { selectPlan("yearly") }
         containerYearly.setOnClickListener(clickYearly)
         cardYearly.setOnClickListener(clickYearly)
+        rbYearly.setOnClickListener(clickYearly)
 
         val clickLifetime = View.OnClickListener { selectPlan("lifetime") }
         containerLifetime.setOnClickListener(clickLifetime)
         cardLifetime.setOnClickListener(clickLifetime)
+        rbLifetime.setOnClickListener(clickLifetime)
 
         // Khởi chạy vệt sáng trượt chéo cho plan mặc định (yearly)
         selectPlan(selectedPlan)
@@ -248,7 +278,13 @@ class PaymentWallActivity : AppCompatActivity() {
     }
 
     private fun handleSubscribe() {
-        val pricing = CurrencyFormatter.getPricingForLanguage(settingsRepository.languageCode)
+        val sku = when (selectedPlan) {
+            "weekly" -> BillingManager.SKU_WEEKLY
+            "lifetime" -> BillingManager.SKU_LIFETIME
+            else -> BillingManager.SKU_YEARLY
+        }
+
+        val pricing = CurrencyFormatter.getPricing(this, settingsRepository.languageCode)
         val price = when (selectedPlan) {
             "weekly" -> pricing.weeklyPrice
             "lifetime" -> pricing.lifetimePrice
@@ -257,20 +293,61 @@ class PaymentWallActivity : AppCompatActivity() {
         FirebaseAnalyticsManager.logPaywallCtaClicked(selectedPlan, price)
         FirebaseAnalyticsManager.logPremiumFeatureUsed("vip_pro_subscription")
 
-        settingsRepository.isProUser = true
-        settingsRepository.subscriptionPlan = selectedPlan
-        Toast.makeText(this, getString(R.string.msg_pro_unlocked), Toast.LENGTH_LONG).show()
-        setResult(RESULT_OK)
-        finish()
+        val btnSubscribe = findViewById<TextView>(R.id.btn_paywall_subscribe)
+        val originalText = btnSubscribe?.text?.toString() ?: getString(R.string.paywall_btn_subscribe)
+        btnSubscribe?.text = "⏳ " + getString(R.string.btn_upgrade_pro) + "..."
+        btnSubscribe?.isEnabled = false
+
+        billingManager.launchBillingFlow(this, sku) { success, errorMsg ->
+            runOnUiThread {
+                btnSubscribe?.text = originalText
+                btnSubscribe?.isEnabled = true
+
+                if (success) {
+                    Toast.makeText(this, "🎉 " + getString(R.string.msg_pro_unlocked), Toast.LENGTH_LONG).show()
+                    setResult(RESULT_OK)
+                    finish()
+                } else if (!errorMsg.isNullOrBlank() &&
+                    !errorMsg.contains("hủy", ignoreCase = true) &&
+                    !errorMsg.contains("cancel", ignoreCase = true)
+                ) {
+                    AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.card_subscription_title))
+                        .setMessage(errorMsg)
+                        .setPositiveButton(getString(R.string.btn_ok), null)
+                        .show()
+                }
+            }
+        }
     }
 
     private fun handleRestore() {
         FirebaseAnalyticsManager.logPaywallRestoreClicked()
-        settingsRepository.isProUser = true
-        settingsRepository.subscriptionPlan = "yearly"
-        Toast.makeText(this, "✅ " + getString(R.string.msg_pro_unlocked), Toast.LENGTH_SHORT).show()
-        setResult(RESULT_OK)
-        finish()
+
+        val progressDialog = AlertDialog.Builder(this)
+            .setTitle(getString(R.string.paywall_btn_restore))
+            .setMessage("Đang kết nối Google Play để kiểm tra gói cước...")
+            .setCancelable(false)
+            .create()
+        progressDialog.show()
+
+        billingManager.restorePurchases { success, message ->
+            runOnUiThread {
+                if (progressDialog.isShowing) {
+                    progressDialog.dismiss()
+                }
+                AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.paywall_btn_restore))
+                    .setMessage(message)
+                    .setPositiveButton(getString(R.string.btn_ok)) { _, _ ->
+                        if (success) {
+                            setResult(RESULT_OK)
+                            finish()
+                        }
+                    }
+                    .show()
+            }
+        }
     }
 
     private fun openWebUrl(url: String) {
@@ -292,7 +369,7 @@ class PaymentWallActivity : AppCompatActivity() {
             .setNeutralButton(getString(R.string.card_policy_title)) { _, _ ->
                 openWebUrl(URL_PRIVACY_POLICY)
             }
-            .setNegativeButton("OK", null)
+            .setNegativeButton(getString(R.string.btn_ok), null)
             .show()
     }
 

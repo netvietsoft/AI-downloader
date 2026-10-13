@@ -62,3 +62,7 @@
 # 10. AndroidX Security Crypto (EncryptedSharedPreferences)
 -keep class androidx.security.crypto.** { *; }
 -dontwarn androidx.security.crypto.**
+
+# 11. Google Play Billing Client
+-keep class com.android.billingclient.** { *; }
+-dontwarn com.android.billingclient.**

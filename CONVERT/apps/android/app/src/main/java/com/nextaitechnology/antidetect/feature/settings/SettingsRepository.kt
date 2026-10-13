@@ -176,7 +176,11 @@ class SettingsRepository(context: Context) {
         set(value) = standardPrefs.edit().putString(KEY_SEARCH_ENGINE, value).apply()
 
     var languageCode: String
-        get() = standardPrefs.getString(KEY_LANGUAGE_CODE, "vi") ?: "vi"
+        get() {
+            val sysLang = java.util.Locale.getDefault().language.lowercase().ifEmpty { "en" }
+            val fallback = if (com.nextaitechnology.antidetect.core.i18n.LocaleHelper.SUPPORTED_LANGUAGES.any { it.code == sysLang }) sysLang else "en"
+            return standardPrefs.getString(KEY_LANGUAGE_CODE, fallback) ?: fallback
+        }
         set(value) = standardPrefs.edit().putString(KEY_LANGUAGE_CODE, value).apply()
 
     var downloadPath: String

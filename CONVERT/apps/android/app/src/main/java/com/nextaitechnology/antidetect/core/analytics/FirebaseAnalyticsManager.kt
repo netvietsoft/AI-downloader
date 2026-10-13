@@ -244,6 +244,14 @@ object FirebaseAnalyticsManager {
         logEvent("paywall_restore_clicked")
     }
 
+    fun logSubscriptionPurchased(planId: String, gateway: String = "google_play_billing") {
+        val bundle = Bundle().apply {
+            putString("plan_id", planId)
+            putString("gateway", gateway)
+        }
+        logEvent("subscription_purchased", bundle)
+    }
+
     fun logPremiumFeatureUsed(featureName: String) {
         val bundle = Bundle().apply {
             putString("feature_name", featureName)
@@ -256,11 +264,11 @@ object FirebaseAnalyticsManager {
     // =========================================================================
 
     fun logFirstOpen() {
-        logEvent("first_open")
+        logEvent("custom_first_open")
     }
 
     fun logSessionStart() {
-        logEvent("session_start")
+        logEvent("custom_session_start")
     }
 
     fun logAppUpdate(previousVersion: Int, currentVersion: Int) {
@@ -268,7 +276,7 @@ object FirebaseAnalyticsManager {
             putInt("previous_version", previousVersion)
             putInt("current_version", currentVersion)
         }
-        logEvent("app_update", bundle)
+        logEvent("custom_app_update", bundle)
     }
 
     fun logOsUpdate(previousSdk: Int, currentSdk: Int) {
@@ -276,18 +284,18 @@ object FirebaseAnalyticsManager {
             putInt("previous_sdk", previousSdk)
             putInt("current_sdk", currentSdk)
         }
-        logEvent("os_update", bundle)
+        logEvent("custom_os_update", bundle)
     }
 
     fun logAppClearData(dataType: String = "browser_cache_and_history") {
         val bundle = Bundle().apply {
             putString("data_type", dataType)
         }
-        logEvent("app_clear_data", bundle)
+        logEvent("custom_app_clear_data", bundle)
     }
 
     fun logAppRemove() {
-        logEvent("app_remove")
+        logEvent("custom_app_remove")
     }
 
     fun logSettingsActionClicked(settingKey: String, newValue: String) {
@@ -310,7 +318,7 @@ object FirebaseAnalyticsManager {
             putString("exception_class", throwable.javaClass.simpleName)
             putString("exception_message", throwable.message ?: "No message")
         }
-        logEvent("app_exception", bundle)
+        logEvent("app_error_event", bundle)
         Log.e(TAG, "🚨 [Crashlytics / App Exception] [$contextTag]: ${throwable.message}", throwable)
     }
 }
