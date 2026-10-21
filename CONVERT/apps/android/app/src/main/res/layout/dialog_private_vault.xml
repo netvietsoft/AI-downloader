@@ -186,6 +186,40 @@
                 android:textSize="11sp" />
         </LinearLayout>
 
+        <!-- Quick Action Buttons: Add Demo Video / Import Local Video -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_vault_add_sample"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/bg_pill_btn"
+                android:text="@string/btn_vault_add_demo"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:backgroundTint="@null" />
+
+            <Button
+                android:id="@+id/btn_vault_import_file"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/bg_pill_btn_outline"
+                android:text="@string/btn_vault_import"
+                android:textColor="#10B981"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:backgroundTint="@null" />
+        </LinearLayout>
+
         <!-- Scrollable Vault Video List -->
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"

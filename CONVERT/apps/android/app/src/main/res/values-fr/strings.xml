@@ -9,7 +9,7 @@
     <string name="title_language">Langue</string>
     <string name="title_vault">Coffre-fort Privé</string>
     <string name="card_subscription_title">Abonnement AI Downloader Pro</string>
-    <string name="card_subscription_subtitle">Débloquez la 4K, vitesse ultra et sans pub</string>
+    <string name="card_subscription_subtitle">Débloquez la HD, vitesse ultra et sans pub</string>
     <string name="card_policy_title">Politique de Confidentialité</string>
     <string name="card_policy_desc">Engagements de sécurité et protection des données</string>
     <string name="card_tos_title">Conditions d\'Utilisation</string>
@@ -32,7 +32,7 @@
     <string name="paywall_subtitle">Téléchargements ultra-rapides et sans pub</string>
     <string name="paywall_benefit_1">Expérience 100% sans publicité</string>
     <string name="paywall_benefit_2">Vitesse turbo multithread 5X</string>
-    <string name="paywall_benefit_3">Support résolution 4K et 8K</string>
+    <string name="paywall_benefit_3">High Definition HD Resolution Support</string>
     <string name="paywall_benefit_4">Coffre-fort privé crypté illimité</string>
     <string name="paywall_plan_weekly">Plan Hebdomadaire</string>
     <string name="paywall_plan_yearly">Plan Annuel (Meilleure Offre)</string>

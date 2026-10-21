@@ -9,7 +9,7 @@
     <string name="title_language">Bahasa</string>
     <string name="title_vault">Brankas Pribadi</string>
     <string name="card_subscription_title">Langganan AI Downloader Pro</string>
-    <string name="card_subscription_subtitle">Buka unduhan 4K, kecepatan turbo &amp; tanpa iklan</string>
+    <string name="card_subscription_subtitle">Buka unduhan HD, kecepatan turbo &amp; tanpa iklan</string>
     <string name="card_policy_title">Kebijakan Privasi</string>
     <string name="card_policy_desc">Komitmen keamanan &amp; privasi data</string>
     <string name="card_tos_title">Ketentuan Layanan</string>
@@ -32,7 +32,7 @@
     <string name="paywall_subtitle">Unduh ultra-cepat &amp; tanpa iklan</string>
     <string name="paywall_benefit_1">Bebas dari segala iklan</string>
     <string name="paywall_benefit_2">Kecepatan unduh multi-thread 5X</string>
-    <string name="paywall_benefit_3">Dukungan resolusi 4K &amp; 8K</string>
+    <string name="paywall_benefit_3">High Definition HD Resolution Support</string>
     <string name="paywall_benefit_4">Brankas pribadi terenkripsi tanpa batas</string>
     <string name="paywall_plan_weekly">Paket Mingguan</string>
     <string name="paywall_plan_yearly">Paket Tahunan (Paling Hemat)</string>

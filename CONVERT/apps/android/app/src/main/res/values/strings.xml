@@ -10,7 +10,7 @@
     <string name="title_select_language">🌐 Select Language</string>
     <string name="title_vault">Private Vault</string>
     <string name="card_subscription_title">AI Downloader Pro Subscription</string>
-    <string name="card_subscription_subtitle">Unlock 4K, ultra speed &amp; zero ads</string>
+    <string name="card_subscription_subtitle">Unlock HD, ultra speed &amp; zero ads</string>
     <string name="card_policy_title">Privacy Policy</string>
     <string name="card_policy_desc">Security commitments &amp; data protection</string>
     <string name="card_tos_title">Terms of Service</string>
@@ -53,7 +53,7 @@
     <string name="paywall_subtitle">Ultra-fast downloads &amp; zero ads</string>
     <string name="paywall_benefit_1">Zero Ads Experience</string>
     <string name="paywall_benefit_2">5x Multi-threaded Turbo Speed</string>
-    <string name="paywall_benefit_3">4K &amp; 8K UHD Resolution Support</string>
+    <string name="paywall_benefit_3">High Definition HD Resolution Support</string>
     <string name="paywall_benefit_4">Unlimited Encrypted Private Vault</string>
     <string name="paywall_plan_weekly">Weekly Plan</string>
     <string name="paywall_plan_yearly">Yearly Plan (Best Value)</string>
@@ -100,6 +100,11 @@
     <string name="vault_status_unlocked">🛡️ Unlocked • AES-256</string>
     <string name="vault_empty_detail">No private videos in vault yet.\nTap the 3-dots menu (⋮) on any video in your Library to move it here.</string>
     <string name="vault_item_security">🔒 AES-256</string>
+    <string name="btn_vault_add_demo">+ Add Demo Video</string>
+    <string name="btn_vault_import">+ Import Video</string>
+    <string name="toast_adding_demo_vault">Adding protected demo video to vault...</string>
+    <string name="toast_demo_vault_ready">Demo video added and encrypted in vault!</string>
+    <string name="toast_imported_to_vault">Imported %1$s to Private Vault!</string>
     
     <!-- Player & Folders -->
     <string name="all_videos">All Videos</string>
@@ -161,7 +166,7 @@
     <string name="toast_gallery_saved_quota">Saved to Gallery! (%1$d of 10 free downloads left)</string>
     <string name="toast_gallery_saved_vip">Saved to Gallery! (VIP Unlimited)</string>
     <string name="toast_gallery_save_error">Unable to save video to Gallery!</string>
-    <string name="paywall_gallery_notice">You have reached the free limit of 10 Gallery downloads. Upgrade to PRO to save unlimited videos directly to your device Gallery &amp; unlock 4K Ultra Speed!</string>
+    <string name="paywall_gallery_notice">You have reached the free limit of 10 Gallery downloads. Upgrade to PRO to save unlimited videos directly to your device Gallery &amp; unlock Ultra Fast Speed!</string>
 
     <!-- Tab Management -->
     <string name="btn_close_all_tabs">Close All</string>

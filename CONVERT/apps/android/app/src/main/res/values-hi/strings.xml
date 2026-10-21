@@ -9,7 +9,7 @@
     <string name="title_language">भाषा चुनें</string>
     <string name="title_vault">निजी तिजोरी</string>
     <string name="card_subscription_title">AI Downloader Pro सदस्यता</string>
-    <string name="card_subscription_subtitle">4K, सुपर गति और विज्ञापन मुक्त अनुभव</string>
+    <string name="card_subscription_subtitle">HD, सुपर गति और विज्ञापन मुक्त अनुभव</string>
     <string name="card_policy_title">गोपनीयता नीति</string>
     <string name="card_policy_desc">सुरक्षा प्रतिबद्धता और डेटा संरक्षण</string>
     <string name="card_tos_title">सेवा की शर्तें</string>
@@ -32,7 +32,7 @@
     <string name="paywall_subtitle">अत्यधिक तेज डाउनलोड और शून्य विज्ञापन</string>
     <string name="paywall_benefit_1">पूरी तरह से विज्ञापन-मुक्त</string>
     <string name="paywall_benefit_2">5 गुना तेज मल्टी-थ्रेडेड डाउनलोड</string>
-    <string name="paywall_benefit_3">4K और 8K अल्ट्रा एचडी सपोर्ट</string>
+    <string name="paywall_benefit_3">High Definition HD Resolution Support</string>
     <string name="paywall_benefit_4">असीमित एन्क्रिप्टेड निजी वॉल्ट</string>
     <string name="paywall_plan_weekly">साप्ताहिक योजना</string>
     <string name="paywall_plan_yearly">वार्षिक योजना (सर्वोत्तम मूल्य)</string>

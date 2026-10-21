@@ -9,7 +9,7 @@
     <string name="title_language">Language</string>
     <string name="title_vault">Private Vault</string>
     <string name="card_subscription_title">AI Downloader Pro Subscription</string>
-    <string name="card_subscription_subtitle">Unlock 4K, ultra speed &amp; zero ads</string>
+    <string name="card_subscription_subtitle">Unlock HD, ultra speed &amp; zero ads</string>
     <string name="card_policy_title">Privacy Policy</string>
     <string name="card_policy_desc">Security commitments &amp; data protection</string>
     <string name="card_tos_title">Terms of Service</string>
@@ -32,7 +32,7 @@
     <string name="paywall_subtitle">Ultra-fast downloads &amp; zero ads</string>
     <string name="paywall_benefit_1">Zero Ads Experience</string>
     <string name="paywall_benefit_2">5x Multi-threaded Turbo Speed</string>
-    <string name="paywall_benefit_3">4K &amp; 8K UHD Resolution Support</string>
+    <string name="paywall_benefit_3">High Definition HD Resolution Support</string>
     <string name="paywall_benefit_4">Unlimited Encrypted Private Vault</string>
     <string name="paywall_plan_weekly">Weekly Plan</string>
     <string name="paywall_plan_yearly">Yearly Plan (Best Value)</string>

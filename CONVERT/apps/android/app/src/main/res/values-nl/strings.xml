@@ -9,7 +9,7 @@
     <string name="title_language">Taal</string>
     <string name="title_vault">Privékluis</string>
     <string name="card_subscription_title">AI Downloader Pro Abonnement</string>
-    <string name="card_subscription_subtitle">Ontgrendel 4K, ultrahoge snelheid &amp; advertentievrij</string>
+    <string name="card_subscription_subtitle">Ontgrendel HD, ultrahoge snelheid &amp; advertentievrij</string>
     <string name="card_policy_title">Privacybeleid</string>
     <string name="card_policy_desc">Gegevensbescherming en veiligheidsgaranties</string>
     <string name="card_tos_title">Servicevoorwaarden</string>
@@ -32,7 +32,7 @@
     <string name="paywall_subtitle">Ultrasnel downloaden &amp; geen advertenties</string>
     <string name="paywall_benefit_1">Volledig reclamevrije ervaring</string>
     <string name="paywall_benefit_2">5x snellere multi-threaded downloads</string>
-    <string name="paywall_benefit_3">Ondersteuning voor 4K en 8K UHD</string>
+    <string name="paywall_benefit_3">High Definition HD Resolution Support</string>
     <string name="paywall_benefit_4">Onbeperkte gecodeerde privékluis</string>
     <string name="paywall_plan_weekly">Weekabonnement</string>
     <string name="paywall_plan_yearly">Jaarabonnement (Beste Waarde)</string>

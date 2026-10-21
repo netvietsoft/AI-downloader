@@ -10,7 +10,7 @@
     <string name="title_select_language">🌐 Chọn Ngôn Ngữ</string>
     <string name="title_vault">Private Vault</string>
     <string name="card_subscription_title">Gói Đăng Ký AI Downloader Pro</string>
-    <string name="card_subscription_subtitle">Mở khóa tải 4K, siêu tốc độ &amp; không quảng cáo</string>
+    <string name="card_subscription_subtitle">Mở khóa tải HD, siêu tốc độ &amp; không quảng cáo</string>
     <string name="card_policy_title">Chính sách bảo mật</string>
     <string name="card_policy_desc">Cam kết bảo mật &amp; quyền riêng tư</string>
     <string name="card_tos_title">Điều khoản dịch vụ</string>
@@ -53,7 +53,7 @@
     <string name="paywall_subtitle">Tải video tốc độ cực đại &amp; không quảng cáo</string>
     <string name="paywall_benefit_1">Trải nghiệm hoàn toàn không quảng cáo</string>
     <string name="paywall_benefit_2">Tăng tốc tải đa luồng 5X siêu nhanh</string>
-    <string name="paywall_benefit_3">Hỗ trợ độ phân giải 4K &amp; 8K siêu nét</string>
+    <string name="paywall_benefit_3">Hỗ trợ độ phân giải HD sắc nét</string>
     <string name="paywall_benefit_4">Két sắt mã hóa AES-256 không giới hạn</string>
     <string name="paywall_plan_weekly">Gói Tuần</string>
     <string name="paywall_plan_yearly">Gói Năm (Tiết kiệm 70%)</string>
@@ -100,6 +100,11 @@
     <string name="vault_status_unlocked">🛡️ Đã mở khóa • AES-256</string>
     <string name="vault_empty_detail">Chưa có video nào trong Két riêng tư.\nBấm biểu tượng dấu 3 chấm (⋮) trên video trong Thư viện để đưa vào Két.</string>
     <string name="vault_item_security">🔒 Mã hóa AES-256</string>
+    <string name="btn_vault_add_demo">+ Thêm video mẫu</string>
+    <string name="btn_vault_import">+ Nhập video từ máy</string>
+    <string name="toast_adding_demo_vault">Đang nạp video mẫu vào kho riêng tư...</string>
+    <string name="toast_demo_vault_ready">Video mẫu đã được mã hoá và lưu vào kho!</string>
+    <string name="toast_imported_to_vault">Đã đưa %1$s vào Kho riêng tư!</string>
     
     <!-- Player & Folders -->
     <string name="all_videos">Tất cả Video</string>
@@ -161,7 +166,7 @@
     <string name="toast_gallery_saved_quota">Đã lưu vào Bộ sưu tập! (Còn %1$d/10 lượt miễn phí)</string>
     <string name="toast_gallery_saved_vip">Đã lưu vào Bộ sưu tập! (VIP Không giới hạn)</string>
     <string name="toast_gallery_save_error">Không thể lưu video vào Bộ sưu tập!</string>
-    <string name="paywall_gallery_notice">Bạn đã dùng hết 10 lượt tải miễn phí về Bộ sưu tập. Nâng cấp PRO để lưu không giới hạn video vào thư viện máy &amp; mở khóa tốc độ 4K!</string>
+    <string name="paywall_gallery_notice">Bạn đã dùng hết 10 lượt tải miễn phí về Bộ sưu tập. Nâng cấp PRO để lưu không giới hạn video vào thư viện máy &amp; mở khóa tốc độ siêu tốc!</string>
 
     <!-- Tab Management -->
     <string name="btn_close_all_tabs">Đóng tất cả</string>

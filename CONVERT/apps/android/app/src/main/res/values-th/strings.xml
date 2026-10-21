@@ -9,7 +9,7 @@
     <string name="title_language">ภาษา</string>
     <string name="title_vault">ตู้นิรภัยส่วนตัว</string>
     <string name="card_subscription_title">การสมัครสมาชิก AI Downloader Pro</string>
-    <string name="card_subscription_subtitle">ปลดล็อก 4K ความเร็วสูง และไร้โฆษณา</string>
+    <string name="card_subscription_subtitle">ปลดล็อก HD ความเร็วสูง และไร้โฆษณา</string>
     <string name="card_policy_title">นโยบายความเป็นส่วนตัว</string>
     <string name="card_policy_desc">การปกป้องข้อมูลและความเป็นส่วนตัว</string>
     <string name="card_tos_title">ข้อกำหนดในการให้บริการ</string>
@@ -32,7 +32,7 @@
     <string name="paywall_subtitle">ดาวน์โหลดความเร็วสูงสุดและไม่มีโฆษณา</string>
     <string name="paywall_benefit_1">ประสบการณ์ไร้โฆษณา 100%</string>
     <string name="paywall_benefit_2">ความเร็วเทอร์โบหลายเธรด 5 เท่า</string>
-    <string name="paywall_benefit_3">รองรับความละเอียด 4K และ 8K UHD</string>
+    <string name="paywall_benefit_3">High Definition HD Resolution Support</string>
     <string name="paywall_benefit_4">ตู้นิรภัยส่วนตัวเข้ารหัสไม่จำกัด</string>
     <string name="paywall_plan_weekly">แผนรายสัปดาห์</string>
     <string name="paywall_plan_yearly">แผนรายปี (คุ้มค่าที่สุด)</string>

@@ -122,6 +122,29 @@ class DownloadEngine(
     }
 
     /**
+     * Đăng ký tệp video đã nhập từ bên ngoài hoặc mẫu vào danh sách hoàn thành
+     * Register an externally imported or sample video file as a completed download task
+     */
+    fun registerImportedFile(title: String, file: File, qualityLabel: String = "HD Video"): DownloadTask {
+        val taskId = "IMPORT_${System.currentTimeMillis()}_${(1000..9999).random()}"
+        val task = DownloadTask(
+            id = taskId,
+            title = title,
+            downloadUrl = file.absolutePath,
+            targetFilePath = file.absolutePath,
+            qualityLabel = qualityLabel,
+            totalBytes = file.length(),
+            downloadedBytes = file.length(),
+            status = DownloadStatus.COMPLETED,
+            createdAt = System.currentTimeMillis(),
+            completedAt = System.currentTimeMillis()
+        )
+        tasksMap[taskId] = task
+        emitUpdate()
+        return task
+    }
+
+    /**
      * Thêm nhiệm vụ tải mới vào hàng đợi
      * Enqueue a new video download task with anti-hotlink Referer support
      */

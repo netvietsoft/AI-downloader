@@ -9,7 +9,7 @@
     <string name="title_language">语言选择</string>
     <string name="title_vault">私密保险箱</string>
     <string name="card_subscription_title">AI Downloader Pro 会员订阅</string>
-    <string name="card_subscription_subtitle">解锁4K超清、极速下载与免广告</string>
+    <string name="card_subscription_subtitle">解锁HD超清、极速下载与免广告</string>
     <string name="card_policy_title">隐私政策</string>
     <string name="card_policy_desc">安全保障与个人信息保护</string>
     <string name="card_tos_title">服务条款</string>
@@ -32,7 +32,7 @@
     <string name="paywall_subtitle">超速下载，零广告干扰</string>
     <string name="paywall_benefit_1">纯净体验，零广告</string>
     <string name="paywall_benefit_2">5倍多线程急速下载引擎</string>
-    <string name="paywall_benefit_3">支持4K和8K超高清视频</string>
+    <string name="paywall_benefit_3">支持高清HD超清视频</string>
     <string name="paywall_benefit_4">无限私密加密空间</string>
     <string name="paywall_plan_weekly">周会员</string>
     <string name="paywall_plan_yearly">年度会员 (推荐)</string>

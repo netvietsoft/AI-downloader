@@ -18,6 +18,7 @@
 | **6. Google Play Policy & Billing v8 Compliance** | `DONE` | Agent 3 (Android) | Xử lý Subscriptions & Broken Functionality, Billing v8.0.0, Build 8 |
 | **7. Khắc phục Crash Play Billing v8 (VC 9)** | `DONE` | Agent 3 (Android) | Tách truy vấn SUBS và INAPP, chống crash Main Thread, Build 9 |
 | **8. Tuân Thủ Target API Level 36 & Release Build 10** | `DONE` | Agent 3 (Android) | Nâng cấp compileSdk/targetSdk 36, versionCode 10, v1.0.4 AAB/APK ký số |
+| **9. Khắc Phục Misleading Claims & Release Build 11** | `DONE` | Agent 3 (Android) | Bóc tách Instagram/Meta CDN, Private Vault độc lập, Purge 4K/8K, Build 11 |
 
 ---
 
@@ -53,3 +54,10 @@
   - **Cấu hình Compiler:** Cập nhật `android.suppressUnsupportedCompileSdk=36` trong `gradle.properties`.
   - **Version Code 10:** Tăng `versionCode = 10`, `versionName = "1.0.4"` tránh xung đột version code đã tải lên Google Play Console.
   - **Đóng gói phát hành:** Build thành công AAB Release (`com.ai.video.downloader.videodownloader_v1.0.4_vc10.aab`, 10.52 MB) và APK (`com.ai.video.downloader.videodownloader_v1.0.4_vc10.apk`, 6.94 MB) ký số hoàn chỉnh.
+- [x] **TASK-011:** Khắc phục vi phạm chính sách Misleading Claims & In-App Experience (Rejection VC 10) & Nâng cấp Version Code 11 (v1.0.5):
+  - **Khắc phục nhận diện Instagram Reels & Meta CDN:** Tích hợp bộ giải mã `extractInstagramVideo()`, thẻ `og:video`, xử lý stream CDN `cdninstagram.com` & `fbcdn.net` loại bỏ byte-range chunk parameter mà không bị drop stream, bổ sung DOM OuterHTML & `<video>` Play event listener đảm bảo nút Download FAB xuất hiện ngay lập tức khi phát video.
+  - **Private Vault độc lập & Tự kiểm thử (Self-Contained Vault):** Bổ sung nút "+ Add Demo Video" (`btn_vault_add_sample`) và "+ Import Video" (`btn_vault_import_file` qua `ActivityResultContracts.GetContent()`), cho phép người dùng và reviewer kiểm thử toàn bộ luồng mã hóa AES-256, xem, xóa, khôi phục ngay trên bản cài mới tinh (clean install) mà không cần tải từ web trước.
+  - **Thanh lọc toàn bộ phát ngôn 4K / 8K & Unrealistic Formats:** Rà soát và thay thế toàn bộ từ khóa "4K", "8K" thành "HD / High Definition" trên toàn bộ 50 thư mục `res/values-*/strings.xml` và layout `activity_payment_wall.xml`.
+  - **Version Code 11:** Nâng `versionCode = 11`, `versionName = "1.0.5"` trong `app/build.gradle.kts`.
+  - **Đóng gói & Kiểm thử thực tế:** Build thành công AAB Release (`app-release.aab`, 11.05 MB) và APK Release (`app-release.apk`, 7.29 MB) ký số hoàn chỉnh. Cài đặt và kiểm thử trực tiếp trên điện thoại Samsung Galaxy thật qua ADB không lỗi.
+

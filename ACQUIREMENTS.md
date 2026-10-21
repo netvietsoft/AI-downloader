@@ -69,3 +69,20 @@ Tài liệu chưng cất kinh nghiệm, nguyên tắc và giải pháp kỹ thu�
   3. **Quy tắc tăng Version Code một chiều (Monotonically Increasing):** Mỗi khi một file bundle AAB đã được upload lên Google Play Console (dù ở bất kỳ track thử nghiệm nào hay bị cảnh báo lỗi), Google Play Console sẽ lưu định danh version code đó vào Thư viện gói ứng dụng (App Bundle Explorer). Để upload bản sửa lỗi thành công, bắt buộc phải tăng `versionCode` (từ 9 lên 10) và cập nhật `versionName` tương ứng (`1.0.4`).
 - **Lợi ích:** Vượt qua hoàn toàn bộ lọc kiểm duyệt Target API của Google Play Console, tránh lỗi xung đột "Version code has already been used", đảm bảo ứng dụng được tối ưu hóa bảo mật và hiệu năng trên các hệ điều hành Android mới nhất.
 
+---
+
+## [ACQ-007] Phòng Ngừa Vi Phạm Chính Sách Misleading Claims & Đảm Bảo Tính Toàn Vẹn In-App Experience
+- **Bối cảnh:** Google Play kiểm duyệt ứng dụng ngày càng nghiêm ngặt về tính trung thực giữa nội dung giới thiệu (Store Listing Description, Screenshots) và chức năng thực tế trong ứng dụng (In-App Experience). Mọi tuyên bố quá mức (như 4K/8K, hỗ trợ mọi nền tảng mạng xã hội) hoặc tính năng quảng cáo nhưng không thể kiểm thử trực tiếp trên ứng dụng mới cài đặt đều bị từ chối phát hành theo *Misleading Claims Policy*.
+- **Nguyên tắc kỹ thuật tối ưu:**
+  1. **Đồng nhất 100% giữa Tuyên Bố và Năng Lực Thật (Feature Parity):**
+     - Tuyệt đối không quảng cáo các định dạng hay độ phân giải vượt quá năng lực thực tế của app (chuyển toàn bộ "4K, 8K" sang "HD / High Definition" trên mọi file `strings.xml` và layout).
+     - Không cam kết tải video từ các trang mạng xã hội bị hạn chế hoặc có cơ chế bản quyền đặc thù trừ khi engine đã được kiểm chứng hoạt động ổn định và nhất quán.
+  2. **Bắt luồng Video Web Di Động Đa Tầng (Multi-Tier Sniffing Engine):**
+     - Với các CDN lớn (như Meta/Instagram `cdninstagram.com`, `fbcdn.net`), các chunk video thường có query byte-range (`&bytestart=...&byteend=...`). Không được lọc bỏ toàn bộ URL chỉ vì có chứa byte-range; thay vào đó, giữ nguyên URL gốc và strip các tham số chunk range để tải về file video hoàn chỉnh.
+     - Kết hợp cả ba cơ chế: Network Interception (`shouldInterceptRequest`), DOM Inspection (`outerHTML` + `og:video`), và JS Event Hooking (`<video>` play event).
+  3. **Tính Độc Lập Cho Các Tính Năng Bảo Mật & Két Riêng Tư (Self-Contained Private Vault):**
+     - Một tính năng được quảng cáo như "Két video riêng tư mã hóa PIN" phải có khả năng trải nghiệm và kiểm thử ngay cả khi người dùng hoặc Google reviewer chưa tải bất kỳ video nào từ web.
+     - Cung cấp nút "+ Nhập video từ máy" (`ActivityResultContracts.GetContent()`) và nút "+ Thêm video mẫu" (demo video) trực tiếp trong két, đảm bảo reviewer kiểm thử được 100% luồng mở khóa, xem, khôi phục và xóa video.
+- **Lợi ích:** Đảm bảo ứng dụng minh bạch, vượt qua 100% các tiêu chuẩn kiểm duyệt gắt gao của Google Play Policy, bảo vệ tài khoản nhà phát triển và mang lại trải nghiệm người dùng chân thực, tin cậy.
+
+

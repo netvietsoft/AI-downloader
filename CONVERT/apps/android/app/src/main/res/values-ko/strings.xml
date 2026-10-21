@@ -9,7 +9,7 @@
     <string name="title_language">언어 설정</string>
     <string name="title_vault">비밀 금고</string>
     <string name="card_subscription_title">AI Downloader Pro 정기구독</string>
-    <string name="card_subscription_subtitle">4K 다운로드, 초고속 속도 및 광고 제거</string>
+    <string name="card_subscription_subtitle">HD 다운로드, 초고속 속도 및 광고 제거</string>
     <string name="card_policy_title">개인정보 처리방침</string>
     <string name="card_policy_desc">데이터 보호 및 보안 정책</string>
     <string name="card_tos_title">서비스 이용약관</string>
@@ -32,7 +32,7 @@
     <string name="paywall_subtitle">초고속 다운로드 및 완벽한 광고 제거</string>
     <string name="paywall_benefit_1">완전한 무광고 환경</string>
     <string name="paywall_benefit_2">5배 빠른 멀티스레드 터보 다운로드</string>
-    <string name="paywall_benefit_3">4K 및 8K 초고화질 완벽 지원</string>
+    <string name="paywall_benefit_3">High Definition HD Resolution Support</string>
     <string name="paywall_benefit_4">무제한 암호화 개인 금고</string>
     <string name="paywall_plan_weekly">주간 플랜</string>
     <string name="paywall_plan_yearly">연간 플랜 (최대 혜택)</string>

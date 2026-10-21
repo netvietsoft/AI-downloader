@@ -9,7 +9,7 @@
     <string name="title_language">اللغة</string>
     <string name="title_vault">الخزنة الخاصة</string>
     <string name="card_subscription_title">اشتراك AI Downloader Pro</string>
-    <string name="card_subscription_subtitle">افتح 4K، سرعة فائقة وبدون إعلانات</string>
+    <string name="card_subscription_subtitle">افتح HD، سرعة فائقة وبدون إعلانات</string>
     <string name="card_policy_title">سياسة الخصوصية</string>
     <string name="card_policy_desc">التزامات الأمان وحماية البيانات</string>
     <string name="card_tos_title">شروط الخدمة</string>
@@ -32,7 +32,7 @@
     <string name="paywall_subtitle">تنزيل فائق السرعة وخالٍ من الإعلانات</string>
     <string name="paywall_benefit_1">تجربة خالية تماماً من الإعلانات</string>
     <string name="paywall_benefit_2">تنزيل توربو فائق السرعة 5X</string>
-    <string name="paywall_benefit_3">دعم دقة 4K و 8K فائقة الوضوح</string>
+    <string name="paywall_benefit_3">High Definition HD Resolution Support</string>
     <string name="paywall_benefit_4">خزنة مشفرة غير محدودة</string>
     <string name="paywall_plan_weekly">الخطة الأسبوعية</string>
     <string name="paywall_plan_yearly">الخطة السنوية (الأفضل قيمة)</string>

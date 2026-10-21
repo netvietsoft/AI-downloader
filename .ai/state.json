@@ -1,12 +1,13 @@
 {
   "project": "AI-Video-Downloader",
   "version": "2.1.2",
-  "last_updated": "2026-10-12T13:35:00Z",
-  "active_phase": "TASK-010_TARGET_SDK_36_AND_BUILD_V1.0.4",
+  "last_updated": "2026-10-21T12:15:00Z",
+  "active_phase": "TASK-011_FIX_MISLEADING_CLAIMS_AND_BUILD_V1.0.5",
   "status": "COMPLETED",
-  "task_description": "Upgrade targetSdk and compileSdk to 36, bump versionCode to 10 (v1.0.4), package signed AAB and APK for Google Play Console",
+  "task_description": "Fix Misleading Claims policy rejection: Instagram/Meta CDN sniffing, self-contained Private Vault, purge 4K/8K claims across 50 locales, bump versionCode to 11 (v1.0.5), package signed AAB and APK",
   "branches": {
     "main": "Full project (Android Kotlin + Web Platform + Governance)",
+    "fix/misleading-claims-v1.0.5": "Fix Misleading Claims and In-App Experience rejection",
     "web": "Standalone Web deployment (snaptik2.com Port 3080)"
   }
 }

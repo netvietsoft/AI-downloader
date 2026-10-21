@@ -9,7 +9,7 @@
     <string name="title_language">言語設定</string>
     <string name="title_vault">プライベート保管庫</string>
     <string name="card_subscription_title">AI Downloader Pro サブスクリプション</string>
-    <string name="card_subscription_subtitle">4K保存、超高速ダウンロード＆広告非表示</string>
+    <string name="card_subscription_subtitle">HD保存、超高速ダウンロード＆広告非表示</string>
     <string name="card_policy_title">プライバシーポリシー</string>
     <string name="card_policy_desc">セキュリティと個人情報保護方針</string>
     <string name="card_tos_title">利用規約</string>
@@ -32,7 +32,7 @@
     <string name="paywall_subtitle">超高速ダウンロード＆完全広告なし</string>
     <string name="paywall_benefit_1">広告なしの快適な体験</string>
     <string name="paywall_benefit_2">5倍速マルチスレッドターボダウンロード</string>
-    <string name="paywall_benefit_3">4Kおよび8K超高画質動画に対応</string>
+    <string name="paywall_benefit_3">High Definition HD Resolution Support</string>
     <string name="paywall_benefit_4">無制限のAES暗号化プライベート金庫</string>
     <string name="paywall_plan_weekly">週間プラン</string>
     <string name="paywall_plan_yearly">年間プラン (お得)</string>

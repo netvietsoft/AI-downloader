@@ -9,7 +9,7 @@
     <string name="title_language">Dil</string>
     <string name="title_vault">Gizli Kasa</string>
     <string name="card_subscription_title">AI Downloader Pro Aboneliği</string>
-    <string name="card_subscription_subtitle">4K, ultra hız ve reklamsız deneyim</string>
+    <string name="card_subscription_subtitle">HD, ultra hız ve reklamsız deneyim</string>
     <string name="card_policy_title">Gizlilik Politikası</string>
     <string name="card_policy_desc">Güvenlik taahhütleri ve veri koruma</string>
     <string name="card_tos_title">Kullanım Şartları</string>
@@ -32,7 +32,7 @@
     <string name="paywall_subtitle">Ultra hızlı indirmeler ve sıfır reklam</string>
     <string name="paywall_benefit_1">Tamamen reklamsız deneyim</string>
     <string name="paywall_benefit_2">5X çok iş parçacıklı turbo hız</string>
-    <string name="paywall_benefit_3">4K ve 8K ultra HD desteği</string>
+    <string name="paywall_benefit_3">High Definition HD Resolution Support</string>
     <string name="paywall_benefit_4">Sınırsız şifreli gizli kasa</string>
     <string name="paywall_plan_weekly">Haftalık Plan</string>
     <string name="paywall_plan_yearly">Yıllık Plan (En İyi Fiyat)</string>

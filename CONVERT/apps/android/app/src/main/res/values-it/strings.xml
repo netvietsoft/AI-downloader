@@ -9,7 +9,7 @@
     <string name="title_language">Lingua</string>
     <string name="title_vault">Cassaforte Privata</string>
     <string name="card_subscription_title">Abbonamento AI Downloader Pro</string>
-    <string name="card_subscription_subtitle">Sblocca 4K, velocità ultra e zero pubblicità</string>
+    <string name="card_subscription_subtitle">Sblocca HD, velocità ultra e zero pubblicità</string>
     <string name="card_policy_title">Informativa sulla Privacy</string>
     <string name="card_policy_desc">Impegni di sicurezza e protezione dati</string>
     <string name="card_tos_title">Termini di Servizio</string>
@@ -32,7 +32,7 @@
     <string name="paywall_subtitle">Download ultra veloci e zero pubblicità</string>
     <string name="paywall_benefit_1">Esperienza al 100% senza pubblicità</string>
     <string name="paywall_benefit_2">Download turbo multi-thread 5X</string>
-    <string name="paywall_benefit_3">Supporto risoluzione 4K e 8K</string>
+    <string name="paywall_benefit_3">High Definition HD Resolution Support</string>
     <string name="paywall_benefit_4">Cassaforte crittografata illimitata</string>
     <string name="paywall_plan_weekly">Piano Settimanale</string>
     <string name="paywall_plan_yearly">Piano Annuale (Miglior Valore)</string>

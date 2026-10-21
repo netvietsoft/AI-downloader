@@ -193,7 +193,9 @@ class HomeFragment : Fragment() {
                     view?.evaluateJavascript(MOBILE_RESPONSIVE_JS, null)
 
                     // 1. Phân tích trực tiếp toàn bộ DOM HTML đã nạp trong WebView (Bảo đảm vượt tường lửa ISP)
-                    if (url != null && (url.contains("xnxx.com") || url.contains("xnxx2.com") ||
+                    if (url != null && (url.contains("instagram.com") || url.contains("facebook.com") ||
+                            url.contains("fb.watch") || url.contains("tiktok.com") ||
+                            url.contains("xnxx.com") || url.contains("xnxx2.com") ||
                             url.contains("xvideos.com") || url.contains("pornhub.com") ||
                             url.contains("youtube.com") || url.contains("youtu.be") ||
                             url.contains("vimeo.com") || url.contains("dailymotion.com") ||
@@ -283,19 +285,32 @@ class HomeFragment : Fragment() {
                                         }
                                     }
 
-                                    // C. Quét thẻ <video> và <source> trong DOM
+                                    // C. Quét thẻ meta og:video hoặc video tags (Instagram, Facebook, etc.)
+                                    if (!stream) {
+                                        var metaVid = document.querySelector('meta[property="og:video"]') ||
+                                                      document.querySelector('meta[property="og:video:secure_url"]');
+                                        if (metaVid && metaVid.content && metaVid.content.startsWith('http')) {
+                                            stream = metaVid.content;
+                                        }
+                                    }
+
+                                    // D. Quét thẻ <video> và <source> trong DOM
                                     if (!stream) {
                                         var vids = document.querySelectorAll('video, video source');
                                         for (var j = 0; j < vids.length; j++) {
                                             var vSrc = vids[j].src || vids[j].getAttribute('src') || '';
-                                            if (vSrc && vSrc.startsWith('http') && (vSrc.indexOf('.mp4') !== -1 || vSrc.indexOf('.m3u8') !== -1)) {
-                                                stream = vSrc;
-                                                break;
+                                            if (vSrc && vSrc.startsWith('http')) {
+                                                if (vSrc.indexOf('.mp4') !== -1 || vSrc.indexOf('.m3u8') !== -1 ||
+                                                    vSrc.indexOf('cdninstagram.com') !== -1 || vSrc.indexOf('fbcdn.net') !== -1 ||
+                                                    vSrc.indexOf('tiktokcdn.com') !== -1) {
+                                                    stream = vSrc;
+                                                    break;
+                                                }
                                             }
                                         }
                                     }
 
-                                    // D. Hook prototype play để bắt luồng khi người dùng bấm phát
+                                    // E. Hook prototype play & event listeners để bắt luồng khi video phát
                                     if (!window.__videoPlayHooked) {
                                         window.__videoPlayHooked = true;
                                         var origPlay = HTMLMediaElement.prototype.play;
@@ -306,6 +321,16 @@ class HomeFragment : Fragment() {
                                             }
                                             return origPlay.apply(this, arguments);
                                         };
+
+                                        var allVids = document.querySelectorAll('video');
+                                        for (var vIdx = 0; vIdx < allVids.length; vIdx++) {
+                                            allVids[vIdx].addEventListener('play', function() {
+                                                var s = this.currentSrc || this.src || '';
+                                                if (s && s.startsWith('http') && window.AndroidSniffer) {
+                                                    window.AndroidSniffer.onVideoFound(s, document.title);
+                                                }
+                                            });
+                                        }
                                     }
 
                                     if (stream && stream.startsWith('http')) {
@@ -338,10 +363,14 @@ class HomeFragment : Fragment() {
 
     private fun inspectUrlForVideo(url: String, pageTitle: String? = null) {
         val lower = url.lowercase()
+        val isMetaVideo = (lower.contains("cdninstagram.com") || lower.contains(".fbcdn.net"))
+
         // Bỏ qua các phân đoạn chunk byte range, segment files, init files và static assets
         // Filter out chunk segments, range requests, init segments, tracking & non-video assets
-        if (lower.contains("bytestart") || lower.contains("byteend") ||
-            lower.contains(".m4s") || lower.contains(".ts") || lower.contains("seg-") ||
+        if (!isMetaVideo && (lower.contains("bytestart") || lower.contains("byteend"))) {
+            return
+        }
+        if (lower.contains(".m4s") || lower.contains(".ts") || lower.contains("seg-") ||
             lower.contains("-seg") || lower.contains("/frag/") || lower.contains("init-") ||
             lower.contains("init.mp4") || lower.contains(".aac")) {
             return
@@ -368,7 +397,7 @@ class HomeFragment : Fragment() {
 
         val isVideoUrl = (lower.contains(".m3u8") || lower.contains(".mpd") ||
             (lower.contains(".mp4") && !lower.contains(".m4s")) ||
-            (lower.contains("video.") && lower.contains(".fbcdn.net") && lower.contains(".mp4")) ||
+            (isMetaVideo && (lower.contains(".mp4") || lower.contains("/v/") || lower.contains("/o1/v/") || lower.contains("oe="))) ||
             (lower.contains("tiktokcdn.com") && lower.contains(".mp4")) ||
             (lower.contains("video.twimg.com") && (lower.contains(".mp4") || lower.contains(".m3u8"))) ||
             (lower.contains("v.redd.it") && (lower.contains(".mp4") || lower.contains(".m3u8"))) ||
@@ -383,7 +412,13 @@ class HomeFragment : Fragment() {
             !lower.contains(".gif")
 
         if (isVideoUrl) {
-            val sanitized = SnifferEngine.sanitizeMediaUrl(url)
+            var targetMediaUrl = url
+            if (isMetaVideo) {
+                targetMediaUrl = targetMediaUrl
+                    .replace(Regex("&?bytestart=\\d+"), "")
+                    .replace(Regex("&?byteend=\\d+"), "")
+            }
+            val sanitized = SnifferEngine.sanitizeMediaUrl(targetMediaUrl)
             val cleanTitle = pageTitle?.trim()?.takeIf { it.isNotEmpty() && !it.startsWith("http") }
             activity?.runOnUiThread {
                 (activity as? MainActivity)?.notifyVideoDetected(sanitized, cleanTitle)
@@ -498,8 +533,9 @@ class HomeFragment : Fragment() {
             }
         }
 
-        // Nếu là liên kết YouTube, Facebook, Vimeo hoặc thuộc 1822+ Monetized Domains -> Trích xuất trực tiếp song song
+        // Nếu là liên kết YouTube, Instagram, Facebook, Vimeo hoặc thuộc 1822+ Monetized Domains -> Trích xuất trực tiếp song song
         if (targetUrl.contains("youtube.com") || targetUrl.contains("youtu.be") ||
+            targetUrl.contains("instagram.com") ||
             targetUrl.contains("facebook.com") || targetUrl.contains("fb.watch") ||
             targetUrl.contains("vimeo.com") ||
             com.nextaitechnology.antidetect.core.network.MonetizedDomainRegistry.isMonetizedDomain(targetUrl)) {
@@ -512,6 +548,7 @@ class HomeFragment : Fragment() {
     fun extractVideoDirectly(url: String) {
         val platformName = when {
             url.contains("youtube.com") || url.contains("youtu.be") -> "YouTube"
+            url.contains("instagram.com") -> "Instagram"
             url.contains("vimeo.com") -> "Vimeo"
             url.contains("facebook") || url.contains("fb.watch") -> "Facebook"
             url.contains("xnxx") -> "XNXX"

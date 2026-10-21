@@ -9,7 +9,7 @@
     <string name="title_language">Язык</string>
     <string name="title_vault">Сейф</string>
     <string name="card_subscription_title">Подписка AI Downloader Pro</string>
-    <string name="card_subscription_subtitle">4K, максимальная скорость и без рекламы</string>
+    <string name="card_subscription_subtitle">HD, максимальная скорость и без рекламы</string>
     <string name="card_policy_title">Политика конфиденциальности</string>
     <string name="card_policy_desc">Безопасность и защита персональных данных</string>
     <string name="card_tos_title">Условия использования</string>
@@ -32,7 +32,7 @@
     <string name="paywall_subtitle">Сверхскоростная загрузка без рекламы</string>
     <string name="paywall_benefit_1">Полное отсутствие рекламы</string>
     <string name="paywall_benefit_2">5-кратное турбо-ускорение загрузки</string>
-    <string name="paywall_benefit_3">Поддержка разрешения 4K и 8K UHD</string>
+    <string name="paywall_benefit_3">High Definition HD Resolution Support</string>
     <string name="paywall_benefit_4">Неограниченный зашифрованный сейф</string>
     <string name="paywall_plan_weekly">Недельный план</string>
     <string name="paywall_plan_yearly">Годовой план (Выгодно)</string>

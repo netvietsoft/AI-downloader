@@ -158,7 +158,7 @@
                 android:layout_marginBottom="10dp"
                 android:background="#1E293B" />
 
-            <!-- Item 3: 4K / 8K -->
+            <!-- Item 3: High Definition HD -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

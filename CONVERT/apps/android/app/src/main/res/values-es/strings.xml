@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">AI Downloader Descargador</string>
     <string name="tab_browser">Navegador</string>
@@ -9,7 +9,7 @@
     <string name="title_language">Idioma</string>
     <string name="title_vault">Bóveda Privada</string>
     <string name="card_subscription_title">Suscripción AI Downloader Pro</string>
-    <string name="card_subscription_subtitle">Desbloquea 4K, velocidad ultra y sin anuncios</string>
+    <string name="card_subscription_subtitle">Desbloquea HD, velocidad ultra y sin anuncios</string>
     <string name="card_policy_title">Política de Privacidad</string>
     <string name="card_policy_desc">Protección de datos y privacidad</string>
     <string name="card_tos_title">Términos del Servicio</string>
@@ -32,7 +32,7 @@
     <string name="paywall_subtitle">Descargas ultra rápidas y sin anuncios</string>
     <string name="paywall_benefit_1">Experiencia 100% libre de anuncios</string>
     <string name="paywall_benefit_2">Descarga turbo multihilo 5X</string>
-    <string name="paywall_benefit_3">Soporte para resolución 4K y 8K</string>
+    <string name="paywall_benefit_3">Soporte para resolución en Alta Definición HD</string>
     <string name="paywall_benefit_4">Bóveda privada encriptada ilimitada</string>
     <string name="paywall_plan_weekly">Plan Semanal</string>
     <string name="paywall_plan_yearly">Plan Anual (Mejor Valor)</string>
@@ -41,4 +41,9 @@
     <string name="paywall_btn_restore">Restaurar Compras</string>
     <string name="msg_update_latest">¡Ya estás usando la versión más reciente!</string>
     <string name="msg_pro_unlocked">¡Felicidades! ¡AI Downloader PRO ha sido desbloqueado!</string>
+    <string name="btn_vault_add_demo">+ Añadir video de prueba</string>
+    <string name="btn_vault_import">+ Importar video</string>
+    <string name="toast_adding_demo_vault">Añadiendo video de prueba a la caja fuerte...</string>
+    <string name="toast_demo_vault_ready">¡Video de prueba añadido y protegido en la caja fuerte!</string>
+    <string name="toast_imported_to_vault">¡%1$s importado a la caja fuerte!</string>
 </resources>

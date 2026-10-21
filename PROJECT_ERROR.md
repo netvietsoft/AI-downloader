@@ -206,3 +206,36 @@ Tài liệu ghi nhận các lỗi đã gặp trong dự án, nguyên nhân gốc
 - **Ngăn ngừa:**
   - Luôn kiểm tra yêu cầu Target API tối thiểu hiện hành của Google Play Console trước khi cấu hình `targetSdk` cho các bản build release;
   - Khi một bản build gặp lỗi sau khi đã upload lên Play Console, luôn tăng `versionCode` lên ít nhất +1 trước khi đóng gói lại.
+
+---
+
+## [ERR-012] Google Play Console Từ Chối Do Vi Phạm Chính Sách Misleading Claims & In-App Experience
+- **Mức độ:** CRITICAL
+- **Ngày phát hiện:** 2026-10-21 (Google Play Rejection - Version Code 10)
+- **Triệu chứng:**
+  - Google Play gửi thông báo từ chối duyệt: *"Issue found: Violation of Misleading Claims policy"*
+  - 1. Missing features in description: (a) App description hứa hẹn tự động nhận diện và tải video trên mọi trang web mạng xã hội, nhưng reviewer kiểm tra link Instagram (`https://www.instagram.com/reel/DCync3DTMtI`) trong WebView thì nút Download FAB không xuất hiện; (b) Hứa hẹn tải video độ phân giải "4K, 8K, 2K" và các định dạng hiếm "MKV, AVI, FLV, MOV" trong khi engine chỉ phục vụ stream web di động; (c) Quảng cáo tính năng "Private Vault" (Két video riêng tư) nhưng khi mở app mới tinh (clean install), kho trống rỗng và không có nút thêm/nhập video trực tiếp từ máy để reviewer kiểm thử.
+  - 2. Missing features in screenshots: Ảnh chụp màn hình mock-up trên Store Listing chứa các nút chức năng và badge "4K / All Social Media Download" không khớp với giao diện thực tế.
+  - 3. Reviewer đính kèm ảnh chụp màn hình paywall tiếng Tây Ban Nha `IN_APP_EXPERIENCE-6747.png` hiển thị: *"Soporte para resolución 4K y 8K"*.
+- **Root Cause:**
+  - 1. Instagram Web Sniffing: Trong `HomeFragment.kt`, hàm `inspectUrlForVideo` tự động loại bỏ mọi URL có chứa `bytestart` hoặc `byteend`, mà các luồng video CDN của Instagram (`cdninstagram.com`, `fbcdn.net`) luôn kèm query byte-range này; đồng thời danh sách đuôi mở rộng chưa nhận diện các đường dẫn CDN Meta không có đuôi `.mp4`.
+  - 2. Private Vault: `dialog_private_vault.xml` và `PlayerFragment.kt` chỉ hiển thị video đã tải từ trước qua browser, không có nút nhập file từ bộ nhớ máy (`+ Import Video`) hoặc nút tạo video mẫu (`+ Add Demo Video`), khiến tính năng này không thể kiểm thử độc lập trên môi trường máy test của Google.
+  - 3. Khai báo quá mức (Over-promising Claims): Có hơn 50 file `strings.xml` và file layout `activity_payment_wall.xml` chứa các từ khóa "4K", "8K" vi phạm nghiêm ngặt chính sách Misleading Claims của Google Play.
+- **Giải pháp:**
+  1. Nâng cấp `SnifferEngine.kt` và `HomeFragment.kt`:
+     - Tích hợp bóc tách dữ liệu Instagram Reels/Posts chuyên sâu (`extractInstagramVideo()`, thẻ `og:video`, `meta[property="og:video:secure_url"]`, DOM HTML inspection).
+     - Điều chỉnh `inspectUrlForVideo()` xử lý riêng cho `cdninstagram.com` và `fbcdn.net`: giữ nguyên stream, tự động loại bỏ các tham số `bytestart`/`byteend` để tải trọn vẹn video file.
+     - Bổ sung hook Javascript cho `<video>` event `play` và `loadeddata` tự động thông báo stream video ngay khi video chạy.
+  2. Bổ sung tính năng độc lập cho Private Vault:
+     - Thêm 2 nút bấm thao tác nhanh: `btn_vault_add_sample` ("+ Add Demo Video") và `btn_vault_import_file` ("+ Import Video") ngay trong giao diện kho đã mở khóa.
+     - Tích hợp `ActivityResultContracts.GetContent()` cho phép người dùng nhập trực tiếp bất kỳ video nào từ máy vào két mã hóa AES-256.
+     - Hỗ trợ tạo video mẫu demo được bảo vệ an toàn để kiểm thử ngay lập tức 100% flow mà không cần tải từ web trước.
+  3. Thanh lọc triệt để từ khóa 4K / 8K:
+     - Tự động quét và chuẩn hóa toàn bộ 50 thư mục `res/values-*/strings.xml`, chuyển "4K / 8K" thành "HD / High Definition" trung thực và chính xác.
+     - Sửa ghi chú và mô tả trong layout `activity_payment_wall.xml`.
+  4. Nâng version code lên 11 (`versionName = "1.0.5"`), build thành công bản phát hành signed AAB (11.05MB) và APK (7.29MB), cài đặt và kiểm thử thực tế trên thiết bị Samsung Galaxy A07 qua ADB.
+  5. Cung cấp bộ văn bản mô tả Store Listing tiếng Anh và tiếng Tây Ban Nha chuẩn mực không vi phạm chính sách.
+- **Ngăn ngừa:**
+  - Tuyệt đối không đưa các tuyên bố tính năng 4K/8K, tải YouTube/mạng xã hội không được hỗ trợ vào text mô tả Store Listing hoặc strings/paywall trong app.
+  - Mọi tính năng bảo mật, két riêng tư hoặc player phải có khả năng kiểm thử độc lập (self-contained / testable on clean install).
+

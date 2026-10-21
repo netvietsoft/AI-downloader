@@ -9,7 +9,7 @@
     <string name="title_language">Idioma</string>
     <string name="title_vault">Cofre Privado</string>
     <string name="card_subscription_title">Assinatura AI Downloader Pro</string>
-    <string name="card_subscription_subtitle">Desbloqueie 4K, velocidade turbo e sem anúncios</string>
+    <string name="card_subscription_subtitle">Desbloqueie HD, velocidade turbo e sem anúncios</string>
     <string name="card_policy_title">Política de Privacidade</string>
     <string name="card_policy_desc">Compromisso de segurança e proteção de dados</string>
     <string name="card_tos_title">Termos de Serviço</string>
@@ -32,7 +32,7 @@
     <string name="paywall_subtitle">Downloads ultra-rápidos e sem anúncios</string>
     <string name="paywall_benefit_1">Experiência totalmente livre de anúncios</string>
     <string name="paywall_benefit_2">Velocidade turbo multithread 5X</string>
-    <string name="paywall_benefit_3">Suporte a resoluções 4K e 8K</string>
+    <string name="paywall_benefit_3">High Definition HD Resolution Support</string>
     <string name="paywall_benefit_4">Cofre criptografado ilimitado</string>
     <string name="paywall_plan_weekly">Plano Semanal</string>
     <string name="paywall_plan_yearly">Plano Anual (Melhor Valor)</string>

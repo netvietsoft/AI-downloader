@@ -9,7 +9,7 @@
     <string name="title_language">Język</string>
     <string name="title_vault">Prywatny Sejf</string>
     <string name="card_subscription_title">Subskrypcja AI Downloader Pro</string>
-    <string name="card_subscription_subtitle">Odblokuj 4K, ultra prędkość i brak reklam</string>
+    <string name="card_subscription_subtitle">Odblokuj HD, ultra prędkość i brak reklam</string>
     <string name="card_policy_title">Polityka Prywatności</string>
     <string name="card_policy_desc">Ochrona danych i bezpieczeństwo</string>
     <string name="card_tos_title">Warunki Usługi</string>
@@ -32,7 +32,7 @@
     <string name="paywall_subtitle">Ultraszybkie pobieranie bez reklam</string>
     <string name="paywall_benefit_1">Całkowity brak reklam</string>
     <string name="paywall_benefit_2">5x szybsze pobieranie wielowątkowe</string>
-    <string name="paywall_benefit_3">Obsługa rozdzielczości 4K i 8K</string>
+    <string name="paywall_benefit_3">High Definition HD Resolution Support</string>
     <string name="paywall_benefit_4">Nielimitowany szyfrowany sejf</string>
     <string name="paywall_plan_weekly">Plan Tygodniowy</string>
     <string name="paywall_plan_yearly">Plan Roczny (Najlepsza oferta)</string>

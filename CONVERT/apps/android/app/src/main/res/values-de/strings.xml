@@ -9,7 +9,7 @@
     <string name="title_language">Sprache</string>
     <string name="title_vault">Privater Tresor</string>
     <string name="card_subscription_title">AI Downloader Pro Abonnement</string>
-    <string name="card_subscription_subtitle">4K freischalten, Höchstgeschwindigkeit &amp; werbefrei</string>
+    <string name="card_subscription_subtitle">HD freischalten, Höchstgeschwindigkeit &amp; werbefrei</string>
     <string name="card_policy_title">Datenschutzrichtlinie</string>
     <string name="card_policy_desc">Sicherheitsverpflichtungen &amp; Datenschutz</string>
     <string name="card_tos_title">Nutzungsbedingungen</string>
@@ -32,7 +32,7 @@
     <string name="paywall_subtitle">Ultraschnelle Downloads &amp; werbefrei</string>
     <string name="paywall_benefit_1">Vollständig werbefreies Erlebnis</string>
     <string name="paywall_benefit_2">5X Turbo-Multi-Threading-Downloads</string>
-    <string name="paywall_benefit_3">Unterstützung für 4K &amp; 8K Auflösung</string>
+    <string name="paywall_benefit_3">High Definition HD Resolution Support</string>
     <string name="paywall_benefit_4">Unbegrenzter verschlüsselter Tresor</string>
     <string name="paywall_plan_weekly">Wochenabo</string>
     <string name="paywall_plan_yearly">Jahresabo (Bester Preis)</string>

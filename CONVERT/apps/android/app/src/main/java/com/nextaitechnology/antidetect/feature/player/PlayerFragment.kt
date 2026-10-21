@@ -27,9 +27,17 @@ import java.io.File
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.nextaitechnology.antidetect.feature.settings.SettingsRepository
 import android.content.Intent
+import android.net.Uri
+import android.provider.OpenableColumns
+import androidx.activity.result.contract.ActivityResultContracts
 import com.nextaitechnology.antidetect.core.storage.MediaStoreExporter
 import com.nextaitechnology.antidetect.feature.settings.PaymentWallActivity
 import com.nextaitechnology.antidetect.core.analytics.FirebaseAnalyticsManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.FileOutputStream
 
 /**
  * Màn hình Trung Tâm AcePlayer & Thư Viện Video (PlayerFragment)
@@ -42,6 +50,14 @@ class PlayerFragment : Fragment() {
     private lateinit var tvVideoCount: TextView
     private lateinit var containerPlayerDownloads: LinearLayout
     private lateinit var tvEmptyPlayerDownloads: TextView
+
+    private var onVaultUpdatedCallback: (() -> Unit)? = null
+
+    private val importVideoLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let { handleImportedVaultVideo(it) }
+    }
 
     private val downloadEngine: DownloadEngine
         get() = (requireActivity().application as NextAIApplication).downloadEngine
@@ -300,6 +316,8 @@ class PlayerFragment : Fragment() {
         val btnCancel = dialogView.findViewById<View>(R.id.btn_vault_cancel)
         val btnUnlock = dialogView.findViewById<View>(R.id.btn_vault_unlock)
         val btnRelock = dialogView.findViewById<View>(R.id.btn_vault_relock)
+        val btnAddSample = dialogView.findViewById<View>(R.id.btn_vault_add_sample)
+        val btnImportFile = dialogView.findViewById<View>(R.id.btn_vault_import_file)
         val containerVaultItems = dialogView.findViewById<LinearLayout>(R.id.container_vault_items)
         val tvEmptyVault = dialogView.findViewById<TextView>(R.id.tv_empty_vault_detail)
         val tvVaultCount = dialogView.findViewById<TextView>(R.id.tv_vault_items_count)
@@ -375,6 +393,47 @@ class PlayerFragment : Fragment() {
             }
         }
 
+        btnImportFile?.setOnClickListener {
+            onVaultUpdatedCallback = {
+                etPin.post { renderVaultContent() }
+            }
+            importVideoLauncher.launch("video/*")
+        }
+
+        btnAddSample?.setOnClickListener {
+            Toast.makeText(ctx, getString(R.string.toast_adding_demo_vault), Toast.LENGTH_SHORT).show()
+            lifecycleScope.launch(Dispatchers.IO) {
+                val demoFile = File(downloadEngine.downloadDir, "Demo_Protected_Sample.mp4")
+                if (!demoFile.exists() || demoFile.length() < 1000) {
+                    try {
+                        val req = Request.Builder()
+                            .url("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4")
+                            .build()
+                        val res = OkHttpClient().newCall(req).execute()
+                        if (res.isSuccessful) {
+                            res.body?.byteStream()?.use { input ->
+                                FileOutputStream(demoFile).use { output ->
+                                    input.copyTo(output)
+                                }
+                            }
+                        }
+                    } catch (e: Exception) {
+                        if (!demoFile.exists()) {
+                            demoFile.writeBytes(ByteArray(1024 * 128))
+                        }
+                    }
+                }
+                val task = downloadEngine.registerImportedFile("Demo_Protected_Sample.mp4", demoFile, "HD 720p")
+                settingsRepository.addTaskToVault(task.id)
+                withContext(Dispatchers.Main) {
+                    renderVaultContent()
+                    renderDownloadedVideos(downloadEngine.tasksFlow.value)
+                    Toast.makeText(ctx, getString(R.string.toast_demo_vault_ready), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+
         btnUnlock.setOnClickListener {
             val pin = etPin.text.toString().trim()
             if (settingsRepository.verifyVaultPin(pin)) {
@@ -397,7 +456,46 @@ class PlayerFragment : Fragment() {
         bottomSheet.setOnShowListener {
             (dialogView.parent as? View)?.setBackgroundColor(android.graphics.Color.TRANSPARENT)
         }
+        bottomSheet.setOnDismissListener {
+            onVaultUpdatedCallback = null
+        }
         bottomSheet.show()
+    }
+
+    private fun handleImportedVaultVideo(uri: Uri) {
+        val ctx = context ?: return
+        try {
+            val resolver = ctx.contentResolver
+            var displayName = "Imported_Vault_Video_${System.currentTimeMillis()}.mp4"
+            val cursor = resolver.query(uri, null, null, null, null)
+            cursor?.use {
+                if (it.moveToFirst()) {
+                    val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                    if (nameIndex != -1) {
+                        val name = it.getString(nameIndex)
+                        if (!name.isNullOrBlank()) displayName = name
+                    }
+                }
+            }
+            if (!displayName.endsWith(".mp4", ignoreCase = true) &&
+                !displayName.endsWith(".mkv", ignoreCase = true) &&
+                !displayName.endsWith(".webm", ignoreCase = true)) {
+                displayName = "$displayName.mp4"
+            }
+            val targetFile = File(downloadEngine.downloadDir, displayName)
+            resolver.openInputStream(uri)?.use { input ->
+                FileOutputStream(targetFile).use { output ->
+                    input.copyTo(output)
+                }
+            }
+            val task = downloadEngine.registerImportedFile(displayName, targetFile)
+            settingsRepository.addTaskToVault(task.id)
+            Toast.makeText(ctx, getString(R.string.toast_imported_to_vault, displayName), Toast.LENGTH_SHORT).show()
+            onVaultUpdatedCallback?.invoke()
+            renderDownloadedVideos(downloadEngine.tasksFlow.value)
+        } catch (e: Exception) {
+            Toast.makeText(ctx, "Error importing video: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
     }
 }
 
