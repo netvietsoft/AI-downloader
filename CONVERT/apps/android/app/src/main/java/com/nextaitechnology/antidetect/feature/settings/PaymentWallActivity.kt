@@ -298,9 +298,33 @@ class PaymentWallActivity : AppCompatActivity() {
         btnSubscribe?.text = "⏳ " + getString(R.string.btn_upgrade_pro) + "..."
         btnSubscribe?.isEnabled = false
 
+        val cachedDetails = billingManager.getProductDetails(sku)
+        if (cachedDetails == null) {
+            val connectingDialog = AlertDialog.Builder(this)
+                .setTitle(getString(R.string.billing_dialog_title))
+                .setMessage(getString(R.string.billing_connecting))
+                .setCancelable(false)
+                .create()
+            connectingDialog.show()
+
+            billingManager.queryAvailableProducts {
+                runOnUiThread {
+                    if (connectingDialog.isShowing) {
+                        connectingDialog.dismiss()
+                    }
+                    startBillingFlowInternal(sku, originalText)
+                }
+            }
+        } else {
+            startBillingFlowInternal(sku, originalText)
+        }
+    }
+
+    private fun startBillingFlowInternal(sku: String, originalBtnText: String) {
+        val btnSubscribe = findViewById<TextView>(R.id.btn_paywall_subscribe)
         billingManager.launchBillingFlow(this, sku) { success, errorMsg ->
             runOnUiThread {
-                btnSubscribe?.text = originalText
+                btnSubscribe?.text = originalBtnText
                 btnSubscribe?.isEnabled = true
 
                 if (success) {
@@ -312,7 +336,7 @@ class PaymentWallActivity : AppCompatActivity() {
                     !errorMsg.contains("cancel", ignoreCase = true)
                 ) {
                     AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.card_subscription_title))
+                        .setTitle(getString(R.string.billing_dialog_title))
                         .setMessage(errorMsg)
                         .setPositiveButton(getString(R.string.btn_ok), null)
                         .show()
@@ -326,7 +350,7 @@ class PaymentWallActivity : AppCompatActivity() {
 
         val progressDialog = AlertDialog.Builder(this)
             .setTitle(getString(R.string.paywall_btn_restore))
-            .setMessage("Đang kết nối Google Play để kiểm tra gói cước...")
+            .setMessage(getString(R.string.billing_connecting))
             .setCancelable(false)
             .create()
         progressDialog.show()

@@ -239,3 +239,38 @@ Tài liệu ghi nhận các lỗi đã gặp trong dự án, nguyên nhân gốc
   - Tuyệt đối không đưa các tuyên bố tính năng 4K/8K, tải YouTube/mạng xã hội không được hỗ trợ vào text mô tả Store Listing hoặc strings/paywall trong app.
   - Mọi tính năng bảo mật, két riêng tư hoặc player phải có khả năng kiểm thử độc lập (self-contained / testable on clean install).
 
+---
+
+## [ERR-013] Vi Phạm Chính Sách Subscriptions Do Sai Lệch Tiền Tệ Trên Offer Page & Race Condition BillingClient
+- **Mức độ:** CRITICAL
+- **Ngày phát hiện:** 2026-10-28 (Google Play Review Rejection Version Code 11 - Subscriptions Policy Rejection / IN_APP_EXPERIENCE-6840.png)
+- **Triệu chứng:**
+  - Google Play gửi thông báo từ chối duyệt: *"Issue found: Violation of Subscriptions policy - Currency differences with prominent display price. Ensure that currency displayed is consistent through multiple screens such as offers page and payment cart within the purchase flow and is appropriately localized for each country that your app is targeting."*
+  - Reviewer đính kèm ảnh 6 khung hình `IN_APP_EXPERIENCE-6840.png` thể hiện:
+    1. Khi mở Paywall, các gói cước hiển thị giá tĩnh hoặc giá USD (`$2.99`, `$19.99`, `$39.99`, kèm subtext `"Just $1.66 / month • Save 70%"`), trong khi thiết bị test tại các quốc gia khác nhau.
+    2. Khi ấn vào nút "SUBSCRIBE NOW" cho cả 3 gói Weekly, Yearly, Lifetime, giỏ hàng Google Play không mở ra mà hiện AlertDialog unlocalized tiếng Việt: *"AI Downloader Pro Subscription: Sản phẩm đang được đồng bộ từ Google Play. Vui lòng thử lại trong giây lát."*
+- **Root Cause:**
+  1. Sai lệch đơn vị tiền tệ trên thẻ gói Năm (`yearlySubtext`): Trong `CurrencyFormatter.kt`, khi Google Play trả về giá thực tế (ví dụ: `19,99 €` hoặc `499.000 ₫`), trường `yearlySubtext` vẫn lấy từ `fallback.yearlySubtext` vốn bị hardcode ký tự USD `$` (`"Just $1.66 / month • Save 70%"`), gây ra tình trạng giá chính là EUR/VND còn dòng chữ phụ bên dưới là USD.
+  2. Bảng giá dự phòng (Fallback) chỉ hỗ trợ 11 quốc gia cứng, các quốc gia còn lại (Canada, Úc, Singapore...) đều bị fallback sang USD `$`.
+  3. Layout XML `activity_payment_wall.xml` chứa text mặc định hardcode `$2.99`, `$19.99`, `$39.99` gây chớp giá USD khi màn hình vừa mở.
+  4. Lỗi Race Condition trong `BillingManager.kt`: `startConnection()` được gọi trong `init`. Khi `PaymentWallActivity.onResume()` chạy ngay sau đó, `billingClient.isReady` vẫn đang `false`, kích hoạt cuộc gọi `startConnection()` thứ hai. Google Play BillingClient từ chối/bỏ qua các cuộc gọi kết nối đồng thời, khiến callback không được gọi và `_productDetailsMap` bị rỗng. Khi người dùng bấm nút mua, hàm kiểm tra `details == null` và hiển thị thông báo lỗi tiếng Việt hardcode.
+  5. Các chuỗi thông báo lỗi thanh toán và hội thoại quản lý thuê bao trong `BillingManager.kt`, `PaymentWallActivity.kt` và `SettingsFragment.kt` chưa được quốc tế hóa (hardcoded tiếng Việt), hiển thị unlocalized trên thiết bị của reviewer.
+- **Giải pháp:**
+  1. Cập nhật `BillingManager.kt`:
+     - Xây dựng hàng đợi kết nối an toàn thread-safe với cờ `@Volatile var isConnecting` và `pendingReadyCallbacks`.
+     - Bổ sung helper `getProductDetails(sku)` và `getRecurringPricingPhase(sku)`.
+     - Thay thế toàn bộ chuỗi hardcoded bằng chuỗi tài nguyên `appContext.getString(R.string.*)` đã được đa ngữ hóa.
+  2. Cập nhật `CurrencyFormatter.kt`:
+     - Tự động trích xuất `pricingPhase.priceAmountMicros` và `priceCurrencyCode` từ Google Play Billing để tính toán `monthlyAmount = (priceAmountMicros / 1_000_000.0) / 12.0` và định dạng bằng `formatAmountWithCurrency` chuẩn theo Locale và Currency Code thực tế, ghép vào template string `paywall_subtext_yearly_format`.
+     - Mở rộng bảng giá fallback hỗ trợ Canada (CAD), Úc (AUD), Singapore (SGD) và tự động nhận diện currency của thiết bị để định dạng nếu không phải USD.
+  3. Cập nhật `activity_payment_wall.xml`: Chuyển các giá trị tĩnh thành `@string/paywall_price_loading`, `@string/paywall_subtext_weekly`, `@string/paywall_subtext_lifetime`.
+  4. Cập nhật `PaymentWallActivity.kt`: Thêm luồng kiểm tra cache ProductDetails và hiển thị dialog kết nối nếu đang đồng bộ, loại bỏ hoàn toàn dead click và chớp giá sai.
+  5. Cập nhật `SettingsFragment.kt`: Quốc tế hóa toàn bộ dialog thông tin gói thuê bao đang kích hoạt.
+  6. Bổ sung 20 resource strings trong `strings.xml` và `values-vi/strings.xml`.
+  7. Nâng `versionCode = 12` và `versionName = "1.0.6"`.
+  8. Viết 11 unit test trong `CurrencyFormatterTest.kt` kiểm chứng 100% currency parity.
+- **Ngăn ngừa:**
+  - Mọi dòng chữ liên quan đến giá chia nhỏ (subtext, monthly breakdown, daily cost) đều phải được tính toán động từ `ProductDetails` của Google Play với cùng mã tiền tệ `priceCurrencyCode`, tuyệt đối không hardcode ký hiệu tiền tệ hoặc con số tĩnh.
+  - Luôn sử dụng hàng đợi kết nối an toàn cho `BillingClient.startConnection()` để tránh race condition khi mở Activity.
+
+

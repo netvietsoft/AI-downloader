@@ -67,6 +67,26 @@
     <string name="paywall_best_value">BEST VALUE</string>
     <string name="paywall_legal_text">By subscribing you agree to our Terms of Service &amp; Privacy Policy. Cancel anytime via Google Play Subscriptions.</string>
     <string name="paywall_monetized_notice">🔒 You have used your 1 free download from this website list. Please upgrade to AI Downloader PRO for unlimited downloads!</string>
+    <string name="paywall_subtext_weekly">Flexible weekly billing</string>
+    <string name="paywall_subtext_yearly_format">Just %1$s / month • Save 70%</string>
+    <string name="paywall_subtext_lifetime">One-time purchase • Forever access</string>
+    <string name="paywall_price_loading">Loading...</string>
+    <string name="billing_connecting">Connecting to Google Play...</string>
+    <string name="billing_syncing_msg">Subscription products are currently synchronizing with Google Play. Please try again in a moment.</string>
+    <string name="billing_token_not_found">Subscription offer token could not be retrieved.</string>
+    <string name="billing_launch_error">Unable to open Google Play payment cart (Error code: %1$d)</string>
+    <string name="billing_connection_error">Google Play Billing connection error: %1$s</string>
+    <string name="billing_no_purchase_found">No active purchases found for this Google Play account.</string>
+    <string name="billing_restore_success">Restore successful! Your subscription has been activated.</string>
+    <string name="billing_restore_lifetime_success">Restore successful! Your Lifetime Access has been activated.</string>
+    <string name="billing_user_canceled">Purchase canceled.</string>
+    <string name="billing_item_already_owned">You already own this subscription!</string>
+    <string name="billing_purchase_failed">Payment error: %1$s</string>
+    <string name="billing_dialog_title">AI Downloader Pro Subscription</string>
+    <string name="btn_manage_subscription">Manage on Google Play</string>
+    <string name="sub_status_active">Status: ACTIVE</string>
+    <string name="sub_current_plan">Current Plan: %1$s</string>
+    <string name="sub_vip_benefits">Your VIP Benefits:</string>
     
     <!-- Video Detection & Download Modal -->
     <string name="video_detected">Video Detected</string>

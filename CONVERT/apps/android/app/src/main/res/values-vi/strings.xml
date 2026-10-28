@@ -67,6 +67,26 @@
     <string name="paywall_best_value">TIẾT KIỆM NHẤT</string>
     <string name="paywall_legal_text">Khi đăng ký, bạn đồng ý với Điều khoản Dịch vụ &amp; Chính sách Bảo mật của chúng tôi. Hủy bất cứ lúc nào qua Google Play.</string>
     <string name="paywall_monetized_notice">🔒 Bạn đã dùng hết 1 lượt tải video miễn phí từ danh sách website này. Vui lòng đăng ký AI Downloader PRO để tiếp tục tải không giới hạn!</string>
+    <string name="paywall_subtext_weekly">Thanh toán theo tuần linh hoạt</string>
+    <string name="paywall_subtext_yearly_format">Chỉ %1$s / tháng • Tiết kiệm 70%</string>
+    <string name="paywall_subtext_lifetime">Mua 1 lần • Sở hữu trọn đời</string>
+    <string name="paywall_price_loading">Đang tải...</string>
+    <string name="billing_connecting">Đang kết nối Google Play...</string>
+    <string name="billing_syncing_msg">Sản phẩm đang được đồng bộ từ Google Play. Vui lòng thử lại trong giây lát.</string>
+    <string name="billing_token_not_found">Không tìm thấy token ưu đãi của gói cước.</string>
+    <string name="billing_launch_error">Không thể mở trang thanh toán Google Play (Mã lỗi: %1$d)</string>
+    <string name="billing_connection_error">Lỗi kết nối thanh toán Google Play: %1$s</string>
+    <string name="billing_no_purchase_found">Không tìm thấy gói cước nào đang hoạt động trên tài khoản Google Play này.</string>
+    <string name="billing_restore_success">Khôi phục thành công! Gói cước Google Play của bạn đã được kích hoạt.</string>
+    <string name="billing_restore_lifetime_success">Khôi phục thành công! Gói Trọn Đời của bạn đã được kích hoạt.</string>
+    <string name="billing_user_canceled">Bạn đã hủy giao dịch thanh toán.</string>
+    <string name="billing_item_already_owned">Bạn đã sở hữu gói cước này trước đó!</string>
+    <string name="billing_purchase_failed">Lỗi thanh toán: %1$s</string>
+    <string name="billing_dialog_title">Đăng Ký AI Downloader PRO</string>
+    <string name="btn_manage_subscription">Quản lý trên Google Play</string>
+    <string name="sub_status_active">Trạng thái: Đang hoạt động (ACTIVE)</string>
+    <string name="sub_current_plan">Gói hiện tại: %1$s</string>
+    <string name="sub_vip_benefits">Quyền lợi VIP của bạn:</string>
     
     <!-- Video Detection & Download Modal -->
     <string name="video_detected">Đã phát hiện video</string>

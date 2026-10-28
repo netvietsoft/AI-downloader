@@ -1,12 +1,17 @@
 package com.nextaitechnology.antidetect.core.i18n
 
 import android.content.Context
+import com.nextaitechnology.antidetect.R
 import com.nextaitechnology.antidetect.core.billing.BillingManager
+import java.text.NumberFormat
+import java.util.Currency
 import java.util.Locale
 
 /**
  * Định dạng Giá Cước & Tiền Tệ Toàn Cầu (CurrencyFormatter)
  * Synchronizes pricing dynamically with Google Play Billing Client product details.
+ * Calculates monthly breakdown for yearly subscriptions directly from the BillingClient
+ * pricing phase (priceAmountMicros / 12) formatted with the exact same currency code.
  * Falls back to device Locale/Country rather than static language code to guarantee
  * 100% price and currency parity with the Google Play payment cart.
  *
@@ -25,6 +30,8 @@ object CurrencyFormatter {
 
     /**
      * Lấy bảng giá tự động ưu tiên dữ liệu thực tế từ Google Play Billing.
+     * Tự động tính toán giá chia theo tháng của gói Năm (Yearly Subtext) dựa trên giá thực tế
+     * và mã tiền tệ trả về từ Google Play để đảm bảo 100% nhất quán, không sai lệch đơn vị tiền tệ.
      * Nếu Google Play chưa tải xong, tự động fallback theo Locale/Country thiết bị.
      */
     fun getPricing(context: Context, langCode: String = ""): PlanPricing {
@@ -35,14 +42,60 @@ object CurrencyFormatter {
 
         val fallback = getFallbackPricing(langCode)
 
+        // Tính toán dynamic yearlySubtext từ pricing phase của Google Play
+        val yearlyPhase = billingManager.getRecurringPricingPhase(BillingManager.SKU_YEARLY)
+        val dynamicYearlySubtext = if (yearlyPhase != null) {
+            val monthlyAmount = (yearlyPhase.priceAmountMicros / 1_000_000.0) / 12.0
+            val formattedMonthly = formatAmountWithCurrency(monthlyAmount, yearlyPhase.priceCurrencyCode, Locale.getDefault())
+            context.getString(R.string.paywall_subtext_yearly_format, formattedMonthly)
+        } else {
+            fallback.yearlySubtext
+        }
+
+        val dynamicWeeklySubtext = context.getString(R.string.paywall_subtext_weekly)
+        val dynamicLifetimeSubtext = context.getString(R.string.paywall_subtext_lifetime)
+
         return PlanPricing(
             weeklyPrice = liveWeekly ?: fallback.weeklyPrice,
-            weeklySubtext = fallback.weeklySubtext,
+            weeklySubtext = dynamicWeeklySubtext,
             yearlyPrice = liveYearly ?: fallback.yearlyPrice,
-            yearlySubtext = fallback.yearlySubtext,
+            yearlySubtext = dynamicYearlySubtext,
             lifetimePrice = liveLifetime ?: fallback.lifetimePrice,
-            lifetimeSubtext = fallback.lifetimeSubtext
+            lifetimeSubtext = dynamicLifetimeSubtext
         )
+    }
+
+    /**
+     * Định dạng số tiền kèm mã tiền tệ chuẩn theo Locale.
+     * Đảm bảo các đồng tiền không có số thập phân (VND, JPY, KRW...) hiển thị số nguyên,
+     * các đồng tiền khác (USD, EUR, GBP, CAD...) hiển thị 2 chữ số thập phân.
+     */
+    fun formatAmountWithCurrency(amount: Double, currencyCode: String, locale: Locale = Locale.getDefault()): String {
+        return try {
+            val currency = Currency.getInstance(currencyCode)
+            val format = NumberFormat.getCurrencyInstance(locale).apply {
+                this.currency = currency
+                if (currency.defaultFractionDigits == 0) {
+                    maximumFractionDigits = 0
+                    minimumFractionDigits = 0
+                } else {
+                    maximumFractionDigits = 2
+                    minimumFractionDigits = 2
+                }
+            }
+            format.format(amount)
+        } catch (e: Exception) {
+            try {
+                val symbol = Currency.getInstance(currencyCode).getSymbol(locale)
+                if (currencyCode in setOf("VND", "JPY", "KRW", "IDR")) {
+                    String.format(locale, "%s%,.0f", symbol, amount)
+                } else {
+                    String.format(locale, "%s%.2f", symbol, amount)
+                }
+            } catch (_: Exception) {
+                String.format(locale, "%.2f %s", amount, currencyCode)
+            }
+        }
     }
 
     /**
@@ -77,7 +130,43 @@ object CurrencyFormatter {
             )
         }
 
-        // 3. Liên Minh Châu Âu (EUR)
+        // 3. Canada (CAD)
+        if (country == "CA") {
+            return PlanPricing(
+                weeklyPrice = "CA$ 3.99",
+                weeklySubtext = "Flexible weekly billing",
+                yearlyPrice = "CA$ 26.99",
+                yearlySubtext = "Just CA$ 2.25 / month • Save 70%",
+                lifetimePrice = "CA$ 49.99",
+                lifetimeSubtext = "One-time purchase • Forever access"
+            )
+        }
+
+        // 4. Australia (AUD)
+        if (country == "AU") {
+            return PlanPricing(
+                weeklyPrice = "A$ 4.49",
+                weeklySubtext = "Flexible weekly billing",
+                yearlyPrice = "A$ 29.99",
+                yearlySubtext = "Just A$ 2.50 / month • Save 70%",
+                lifetimePrice = "A$ 59.99",
+                lifetimeSubtext = "One-time purchase • Forever access"
+            )
+        }
+
+        // 5. Singapore (SGD)
+        if (country == "SG") {
+            return PlanPricing(
+                weeklyPrice = "S$ 4.49",
+                weeklySubtext = "Flexible weekly billing",
+                yearlyPrice = "S$ 29.98",
+                yearlySubtext = "Just S$ 2.50 / month • Save 70%",
+                lifetimePrice = "S$ 58.98",
+                lifetimeSubtext = "One-time purchase • Forever access"
+            )
+        }
+
+        // 6. Liên Minh Châu Âu (EUR)
         val euCountries = setOf("DE", "FR", "ES", "IT", "NL", "BE", "PT", "AT", "IE", "FI", "GR")
         if (euCountries.contains(country) || lang in setOf("de", "fr", "es", "it")) {
             val subWeekly = when (lang) {
@@ -111,7 +200,7 @@ object CurrencyFormatter {
             )
         }
 
-        // 4. Nhật Bản (JPY)
+        // 7. Nhật Bản (JPY)
         if (country == "JP" || lang == "ja") {
             return PlanPricing(
                 weeklyPrice = "¥450",
@@ -123,7 +212,7 @@ object CurrencyFormatter {
             )
         }
 
-        // 5. Hàn Quốc (KRW)
+        // 8. Hàn Quốc (KRW)
         if (country == "KR" || lang == "ko") {
             return PlanPricing(
                 weeklyPrice = "₩3,900",
@@ -131,11 +220,11 @@ object CurrencyFormatter {
                 yearlyPrice = "₩26,000",
                 yearlySubtext = "월 ₩2,166 • 70% 할인",
                 lifetimePrice = "₩52,000",
-                lifetimeSubtext = "1회 구매 • 평생 이용"
+                lifetimeSubtext = "1회 구매 • 평生 이용"
             )
         }
 
-        // 6. Trung Quốc (CNY)
+        // 9. Trung Quốc (CNY)
         if (country == "CN" || lang == "zh") {
             return PlanPricing(
                 weeklyPrice = "¥19.00",
@@ -147,7 +236,7 @@ object CurrencyFormatter {
             )
         }
 
-        // 7. Ấn Độ (INR)
+        // 10. Ấn Độ (INR)
         if (country == "IN" || lang == "hi") {
             return PlanPricing(
                 weeklyPrice = "₹249",
@@ -159,7 +248,7 @@ object CurrencyFormatter {
             )
         }
 
-        // 8. Brazil (BRL)
+        // 11. Brazil (BRL)
         if (country == "BR" || lang == "pt") {
             return PlanPricing(
                 weeklyPrice = "R$ 14,90",
@@ -171,7 +260,7 @@ object CurrencyFormatter {
             )
         }
 
-        // 9. Indonesia (IDR)
+        // 12. Indonesia (IDR)
         if (country == "ID" || lang == "id") {
             return PlanPricing(
                 weeklyPrice = "Rp 45.000",
@@ -183,7 +272,7 @@ object CurrencyFormatter {
             )
         }
 
-        // 10. Thái Lan (THB)
+        // 13. Thái Lan (THB)
         if (country == "TH" || lang == "th") {
             return PlanPricing(
                 weeklyPrice = "฿99",
@@ -195,7 +284,7 @@ object CurrencyFormatter {
             )
         }
 
-        // 11. Nga (RUB)
+        // 14. Nga (RUB)
         if (country == "RU" || lang == "ru") {
             return PlanPricing(
                 weeklyPrice = "299 ₽",
@@ -207,7 +296,26 @@ object CurrencyFormatter {
             )
         }
 
-        // 12. Mặc định Toàn cầu / US (USD)
+        // 15. Kiểm tra tiền tệ của thiết bị nếu không phải USD
+        val deviceCurrency = try {
+            Currency.getInstance(currentLocale)
+        } catch (_: Exception) {
+            Currency.getInstance("USD")
+        }
+
+        if (deviceCurrency != null && deviceCurrency.currencyCode != "USD") {
+            val formattedMonthly = formatAmountWithCurrency(1.66, deviceCurrency.currencyCode, currentLocale)
+            return PlanPricing(
+                weeklyPrice = formatAmountWithCurrency(2.99, deviceCurrency.currencyCode, currentLocale),
+                weeklySubtext = "Flexible weekly billing",
+                yearlyPrice = formatAmountWithCurrency(19.99, deviceCurrency.currencyCode, currentLocale),
+                yearlySubtext = "Just $formattedMonthly / month • Save 70%",
+                lifetimePrice = formatAmountWithCurrency(39.99, deviceCurrency.currencyCode, currentLocale),
+                lifetimeSubtext = "One-time purchase • Forever access"
+            )
+        }
+
+        // 16. Mặc định Toàn cầu / US (USD)
         return PlanPricing(
             weeklyPrice = "$2.99",
             weeklySubtext = "Flexible weekly billing",

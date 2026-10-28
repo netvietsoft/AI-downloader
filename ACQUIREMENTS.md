@@ -85,4 +85,20 @@ Tài liệu chưng cất kinh nghiệm, nguyên tắc và giải pháp kỹ thu�
      - Cung cấp nút "+ Nhập video từ máy" (`ActivityResultContracts.GetContent()`) và nút "+ Thêm video mẫu" (demo video) trực tiếp trong két, đảm bảo reviewer kiểm thử được 100% luồng mở khóa, xem, khôi phục và xóa video.
 - **Lợi ích:** Đảm bảo ứng dụng minh bạch, vượt qua 100% các tiêu chuẩn kiểm duyệt gắt gao của Google Play Policy, bảo vệ tài khoản nhà phát triển và mang lại trải nghiệm người dùng chân thực, tin cậy.
 
+---
+
+## [ACQ-008] Tiêu Chuẩn Đồng Nhất Tiền Tệ Tuyệt Đối (Currency Parity) & Hàng Đợi Kết Nối An Toàn Play Billing Client
+- **Bối cảnh:** Chính sách Subscriptions của Google Play yêu cầu tính nhất quán 100% về đơn vị tiền tệ và giá hiển thị nổi bật trên toàn bộ các màn hình ưu đãi (Offer Page / Paywall) so với giỏ hàng thanh toán Google Play (Payment Cart). Ngoài ra, bất kỳ thông báo lỗi nào trên thiết bị kiểm thử quốc tế đều phải được bản địa hóa và không được để xảy ra race condition làm rớt callback kết nối.
+- **Nguyên tắc kỹ thuật tối ưu:**
+  1. **Tính toán động chi phí chu kỳ con (Dynamic Recurring Pricing Phase Breakdown):**
+     - Luôn lấy `pricingPhase.priceAmountMicros` và `pricingPhase.priceCurrencyCode` từ `ProductDetails.subscriptionOfferDetails`.
+     - Phép tính `(priceAmountMicros / 1_000_000.0) / 12.0` được format bằng `NumberFormat.getCurrencyInstance(locale)` với `currency = Currency.getInstance(priceCurrencyCode)`.
+     - Điều này đảm bảo khi người dùng ở bất kỳ quốc gia nào (Việt Nam ₫, Châu Âu €, Anh £, Canada CA$, Úc A$, Singapore S$, Nhật ¥, Hàn ₩...), dòng subtext chia theo tháng luôn mang đúng đơn vị tiền tệ đó, không bao giờ bị rò rỉ ký tự `$`.
+  2. **Hàng đợi kết nối Thread-Safe (Connection Queue Pattern):**
+     - Đặt cờ `isConnecting` và danh sách `pendingReadyCallbacks` được đồng bộ hóa `synchronized`. Mọi yêu cầu kết nối khi tiến trình đang khởi tạo sẽ được đưa vào hàng đợi và kích hoạt đồng loạt khi `onBillingSetupFinished` thành công.
+  3. **Quốc tế hóa 100% phản hồi Billing:**
+     - Mọi dialog lỗi, thông báo kết nối, khôi phục giao dịch đều dùng chuỗi tài nguyên qua `Context.getString(R.string.*)`.
+- **Lợi ích:** Vượt qua 100% tiêu chí kiểm duyệt chính sách Subscriptions của Google Play trên mọi quốc gia, loại bỏ hoàn toàn các lỗi từ chối duyệt về Currency mismatch và Broken Functionality do lỗi đồng bộ.
+
+
 

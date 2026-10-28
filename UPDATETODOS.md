@@ -2,7 +2,7 @@
 
 **Người quản lý:** Agent 0 (CEO - ORCHESTRATOR)  
 **Phiên bản chuẩn:** Development Workspace Standard V2.1.2  
-**Thời gian cập nhật:** 2026-10-12  
+**Thời gian cập nhật:** 2026-10-28  
 
 ---
 
@@ -19,6 +19,7 @@
 | **7. Khắc phục Crash Play Billing v8 (VC 9)** | `DONE` | Agent 3 (Android) | Tách truy vấn SUBS và INAPP, chống crash Main Thread, Build 9 |
 | **8. Tuân Thủ Target API Level 36 & Release Build 10** | `DONE` | Agent 3 (Android) | Nâng cấp compileSdk/targetSdk 36, versionCode 10, v1.0.4 AAB/APK ký số |
 | **9. Khắc Phục Misleading Claims & Release Build 11** | `DONE` | Agent 3 (Android) | Bóc tách Instagram/Meta CDN, Private Vault độc lập, Purge 4K/8K, Build 11 |
+| **10. Tuân Thủ Chính Sách Subscriptions & Release Build 12** | `DONE` | Agent 3 (Android) | Currency Parity động từ Google Play, Connection Queue, Build 12 (AAB 11.05MB, APK 7.30MB) |
 
 ---
 
@@ -60,4 +61,12 @@
   - **Thanh lọc toàn bộ phát ngôn 4K / 8K & Unrealistic Formats:** Rà soát và thay thế toàn bộ từ khóa "4K", "8K" thành "HD / High Definition" trên toàn bộ 50 thư mục `res/values-*/strings.xml` và layout `activity_payment_wall.xml`.
   - **Version Code 11:** Nâng `versionCode = 11`, `versionName = "1.0.5"` trong `app/build.gradle.kts`.
   - **Đóng gói & Kiểm thử thực tế:** Build thành công AAB Release (`app-release.aab`, 11.05 MB) và APK Release (`app-release.apk`, 7.29 MB) ký số hoàn chỉnh. Cài đặt và kiểm thử trực tiếp trên điện thoại Samsung Galaxy thật qua ADB không lỗi.
+- [x] **TASK-012:** Khắc phục vi phạm chính sách Subscriptions (Currency differences with prominent display price - Rejection VC 11) & Nâng cấp Version Code 12 (v1.0.6):
+  - **Đồng bộ giá & tiền tệ thời gian thực (Dynamic Localized Price & Currency):** Lấy trực tiếp `formattedPrice` từ `ProductDetails` của Google Play Billing v8, loại bỏ 100% việc hiển thị giá cứng USD (`$2.99`, `$19.99`, `$39.99`) khi chưa có dữ liệu từ Google Play.
+  - **Tính toán động phân rã tháng cho gói Năm (Dynamic Monthly Breakdown):** Tính `priceAmountMicros / 12` và định dạng theo đúng mã tiền tệ `priceCurrencyCode` thực tế của Google Play (`paywall_subtext_yearly_format`), khắc phục triệt để lỗi xung đột tiền tệ giữa giá năm và phụ đề tháng (như hiển thị VND/EUR nhưng phụ đề lại có `$1.66`).
+  - **Loại bỏ hardcoded XML:** Xóa bỏ toàn bộ giá USD `$2.99`, `$19.99`, `$39.99` và `$1.66` trong `activity_payment_wall.xml`, thay bằng placeholder loading hoặc chuỗi định vị.
+  - **Khắc phục lỗi kết nối BillingClient & Race Condition:** Triển khai cơ chế connection queue (`isConnecting` + `pendingReadyCallbacks`) chống gọi trùng lặp hoặc drop callback khi mở màn hình thanh toán.
+  - **Đa ngôn ngữ hóa toàn diện (Comprehensive Localization):** Chuyển toàn bộ các chuỗi thông báo, hộp thoại và callback trong `BillingManager.kt`, `PaymentWallActivity.kt`, `SettingsFragment.kt` sang `strings.xml` (hỗ trợ đầy đủ tiếng Anh, tiếng Việt và các ngôn ngữ hệ thống).
+  - **Version Code 12:** Cập nhật `versionCode = 12`, `versionName = "1.0.6"` trong `app/build.gradle.kts`.
+  - **Đóng gói & Kiểm thử:** Chạy 11 unit test trong `CurrencyFormatterTest.kt` kiểm chứng 100% parity, build AAB Release (`com.ai.video.downloader.videodownloader_v1.0.6_vc12.aab`, 11.05MB) và APK Release (`com.ai.video.downloader.videodownloader_v1.0.6_vc12.apk`, 7.30MB) ký số hoàn chỉnh.
 

@@ -1,12 +1,13 @@
 {
   "project": "AI-Video-Downloader",
   "version": "2.1.2",
-  "last_updated": "2026-10-21T12:15:00Z",
-  "active_phase": "TASK-011_FIX_MISLEADING_CLAIMS_AND_BUILD_V1.0.5",
+  "last_updated": "2026-10-28T18:48:00Z",
+  "active_phase": "TASK-012_FIX_SUBSCRIPTION_CURRENCY_POLICY_AND_BUILD_V1.0.6",
   "status": "COMPLETED",
-  "task_description": "Fix Misleading Claims policy rejection: Instagram/Meta CDN sniffing, self-contained Private Vault, purge 4K/8K claims across 50 locales, bump versionCode to 11 (v1.0.5), package signed AAB and APK",
+  "task_description": "Fix Subscriptions policy rejection: Currency differences with prominent display price, dynamic localized pricing from Google Play Billing v8, dynamic monthly breakdown, eliminate hardcoded USD, localize all dialogs and callbacks, bump versionCode to 12 (v1.0.6), package signed AAB and APK",
   "branches": {
     "main": "Full project (Android Kotlin + Web Platform + Governance)",
+    "fix/subscription-currency-v1.0.6": "Fix Subscriptions currency difference policy rejection and localized billing flow",
     "fix/misleading-claims-v1.0.5": "Fix Misleading Claims and In-App Experience rejection",
     "web": "Standalone Web deployment (snaptik2.com Port 3080)"
   }

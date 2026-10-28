@@ -14,6 +14,7 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
+import com.nextaitechnology.antidetect.R
 import com.nextaitechnology.antidetect.core.analytics.FirebaseAnalyticsManager
 import com.nextaitechnology.antidetect.feature.settings.SettingsRepository
 import kotlinx.coroutines.CoroutineScope
@@ -60,6 +61,10 @@ class BillingManager private constructor(private val appContext: Context) : Purc
     private val _isBillingReady = MutableStateFlow(false)
     val isBillingReady: StateFlow<Boolean> = _isBillingReady.asStateFlow()
 
+    @Volatile
+    private var isConnecting = false
+    private val pendingReadyCallbacks = mutableListOf<() -> Unit>()
+
     private var onPurchaseResultListener: ((Boolean, String?) -> Unit)? = null
 
     private val billingClient: BillingClient = BillingClient.newBuilder(appContext)
@@ -79,28 +84,52 @@ class BillingManager private constructor(private val appContext: Context) : Purc
      * Khởi tạo kết nối với Google Play Billing Services
      */
     fun startConnection(onReady: (() -> Unit)? = null) {
-        if (billingClient.isReady) {
-            _isBillingReady.value = true
-            onReady?.invoke()
-            queryAvailableProducts()
-            return
+        synchronized(this) {
+            if (billingClient.isReady) {
+                _isBillingReady.value = true
+                onReady?.invoke()
+                queryAvailableProducts()
+                return
+            }
+
+            if (onReady != null) {
+                pendingReadyCallbacks.add(onReady)
+            }
+
+            if (isConnecting) {
+                Log.d(TAG, "BillingClient is already connecting, queued onReady callback.")
+                return
+            }
+
+            isConnecting = true
         }
 
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
+                val callbacks: List<() -> Unit>
+                synchronized(this@BillingManager) {
+                    isConnecting = false
+                    callbacks = ArrayList(pendingReadyCallbacks)
+                    pendingReadyCallbacks.clear()
+                }
+
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     Log.i(TAG, "Google Play Billing setup successful.")
                     _isBillingReady.value = true
                     queryAvailableProducts()
                     queryActivePurchases()
-                    onReady?.invoke()
+                    callbacks.forEach { it.invoke() }
                 } else {
                     Log.w(TAG, "Billing setup failed with response code: ${billingResult.responseCode} - ${billingResult.debugMessage}")
                     _isBillingReady.value = false
+                    callbacks.forEach { it.invoke() }
                 }
             }
 
             override fun onBillingServiceDisconnected() {
+                synchronized(this@BillingManager) {
+                    isConnecting = false
+                }
                 Log.w(TAG, "Billing service disconnected. Retrying...")
                 _isBillingReady.value = false
             }
@@ -187,6 +216,21 @@ class BillingManager private constructor(private val appContext: Context) : Purc
     }
 
     /**
+     * Lấy ProductDetails đã cache cho SKU chỉ định
+     */
+    fun getProductDetails(sku: String): ProductDetails? {
+        return _productDetailsMap.value[sku]
+    }
+
+    /**
+     * Lấy PricingPhase định kỳ của gói thuê bao (SUBS) để trích xuất giá và currency code
+     */
+    fun getRecurringPricingPhase(sku: String): ProductDetails.PricingPhase? {
+        val details = _productDetailsMap.value[sku] ?: return null
+        return details.subscriptionOfferDetails?.firstOrNull()?.pricingPhases?.pricingPhaseList?.firstOrNull()
+    }
+
+    /**
      * Lấy giá định dạng chính xác từ Google Play (ví dụ: "$2.99", "69.000 ₫", "€2.99")
      */
     fun getFormattedPrice(sku: String): String? {
@@ -236,7 +280,7 @@ class BillingManager private constructor(private val appContext: Context) : Purc
                     executeBillingFlow(activity, retryDetails, onResult)
                 } else {
                     Log.w(TAG, "ProductDetails not available for SKU: $sku")
-                    onResult(false, "Sản phẩm đang được đồng bộ từ Google Play. Vui lòng thử lại trong giây lát.")
+                    onResult(false, appContext.getString(R.string.billing_syncing_msg))
                 }
             }
             return
@@ -253,7 +297,7 @@ class BillingManager private constructor(private val appContext: Context) : Purc
         try {
             val productDetailsParamsList = if (details.productType == BillingClient.ProductType.SUBS) {
                 val offerToken = details.subscriptionOfferDetails?.firstOrNull()?.offerToken ?: run {
-                    onResult(false, "Không tìm thấy token ưu đãi của gói cước.")
+                    onResult(false, appContext.getString(R.string.billing_token_not_found))
                     return
                 }
                 listOf(
@@ -277,11 +321,11 @@ class BillingManager private constructor(private val appContext: Context) : Purc
             val responseCode = billingClient.launchBillingFlow(activity, billingFlowParams).responseCode
             if (responseCode != BillingClient.BillingResponseCode.OK) {
                 Log.e(TAG, "launchBillingFlow failed with response code: $responseCode")
-                onResult(false, "Không thể mở trang thanh toán Google Play (Mã lỗi: $responseCode)")
+                onResult(false, appContext.getString(R.string.billing_launch_error, responseCode))
             }
         } catch (e: Exception) {
             Log.e(TAG, "Exception during executeBillingFlow", e)
-            onResult(false, "Lỗi kết nối thanh toán Google Play: ${e.message}")
+            onResult(false, appContext.getString(R.string.billing_connection_error, e.message ?: ""))
         }
     }
 
@@ -294,21 +338,21 @@ class BillingManager private constructor(private val appContext: Context) : Purc
                     }
                     onPurchaseResultListener?.invoke(true, null)
                 } else {
-                    onPurchaseResultListener?.invoke(false, "Không có giao dịch nào được ghi nhận.")
+                    onPurchaseResultListener?.invoke(false, appContext.getString(R.string.billing_no_purchase_found))
                 }
             }
             BillingClient.BillingResponseCode.USER_CANCELED -> {
                 Log.i(TAG, "User canceled the purchase.")
-                onPurchaseResultListener?.invoke(false, "Bạn đã hủy giao dịch thanh toán.")
+                onPurchaseResultListener?.invoke(false, appContext.getString(R.string.billing_user_canceled))
             }
             BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
                 Log.i(TAG, "User already owns this item.")
                 settingsRepository.isProUser = true
-                onPurchaseResultListener?.invoke(true, "Bạn đã sở hữu gói cước này trước đó!")
+                onPurchaseResultListener?.invoke(true, appContext.getString(R.string.billing_item_already_owned))
             }
             else -> {
                 Log.e(TAG, "Purchase error: ${billingResult.responseCode} - ${billingResult.debugMessage}")
-                onPurchaseResultListener?.invoke(false, "Lỗi thanh toán: ${billingResult.debugMessage}")
+                onPurchaseResultListener?.invoke(false, appContext.getString(R.string.billing_purchase_failed, billingResult.debugMessage))
             }
         }
     }
@@ -360,7 +404,7 @@ class BillingManager private constructor(private val appContext: Context) : Purc
             if (hasActiveSubs) {
                 val active = subsPurchases.first { it.purchaseState == Purchase.PurchaseState.PURCHASED }
                 handlePurchase(active)
-                onResult(true, "Khôi phục thành công! Gói cước Google Play của bạn đã được kích hoạt.")
+                onResult(true, appContext.getString(R.string.billing_restore_success))
                 return@queryPurchasesAsync
             }
 
@@ -376,9 +420,9 @@ class BillingManager private constructor(private val appContext: Context) : Purc
                 if (hasActiveInApp) {
                     val active = inAppPurchases.first { it.purchaseState == Purchase.PurchaseState.PURCHASED }
                     handlePurchase(active)
-                    onResult(true, "Khôi phục thành công! Gói Trọn Đời của bạn đã được kích hoạt.")
+                    onResult(true, appContext.getString(R.string.billing_restore_lifetime_success))
                 } else {
-                    onResult(false, "Không tìm thấy gói cước nào đang hoạt động trên tài khoản Google Play này.")
+                    onResult(false, appContext.getString(R.string.billing_no_purchase_found))
                 }
             }
         }

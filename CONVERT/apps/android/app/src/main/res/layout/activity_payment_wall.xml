@@ -275,7 +275,7 @@
                         android:id="@+id/tv_subtext_weekly"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Flexible weekly billing"
+                        android:text="@string/paywall_subtext_weekly"
                         android:textColor="#94A3B8"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -284,7 +284,7 @@
                     android:id="@+id/tv_price_weekly"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$2.99"
+                    android:text="@string/paywall_price_loading"
                     android:textColor="#FFFFFF"
                     android:textSize="17sp"
                     android:textStyle="bold" />
@@ -364,7 +364,7 @@
                             android:id="@+id/tv_subtext_yearly"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Just $1.66 / month • Save 70%"
+                            android:text="@string/paywall_price_loading"
                             android:textColor="#F59E0B"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -373,7 +373,7 @@
                         android:id="@+id/tv_price_yearly"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="$19.99"
+                        android:text="@string/paywall_price_loading"
                         android:textColor="#F59E0B"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -461,7 +461,7 @@
                         android:id="@+id/tv_subtext_lifetime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Pay once, own forever"
+                        android:text="@string/paywall_subtext_lifetime"
                         android:textColor="#94A3B8"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -470,7 +470,7 @@
                     android:id="@+id/tv_price_lifetime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$39.99"
+                    android:text="@string/paywall_price_loading"
                     android:textColor="#FFFFFF"
                     android:textSize="17sp"
                     android:textStyle="bold" />

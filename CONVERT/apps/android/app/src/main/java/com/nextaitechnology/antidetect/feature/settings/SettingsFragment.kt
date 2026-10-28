@@ -167,15 +167,15 @@ class SettingsFragment : Fragment() {
         AlertDialog.Builder(requireContext())
             .setTitle("👑 " + getString(R.string.card_subscription_title))
             .setMessage(
-                "Trạng thái: Đang hoạt động (ACTIVE)\n" +
-                "Gói hiện tại: $planName\n\n" +
-                "Quyền lợi VIP của bạn:\n" +
+                getString(R.string.sub_status_active) + "\n" +
+                getString(R.string.sub_current_plan, planName) + "\n\n" +
+                getString(R.string.sub_vip_benefits) + "\n" +
                 "• " + getString(R.string.paywall_benefit_1) + "\n" +
                 "• " + getString(R.string.paywall_benefit_2) + "\n" +
                 "• " + getString(R.string.paywall_benefit_3) + "\n" +
                 "• " + getString(R.string.paywall_benefit_4)
             )
-            .setPositiveButton("Quản lý trên Google Play") { _, _ ->
+            .setPositiveButton(getString(R.string.btn_manage_subscription)) { _, _ ->
                 openWebUrl("https://play.google.com/store/account/subscriptions")
             }
             .setNegativeButton(getString(R.string.btn_ok), null)
