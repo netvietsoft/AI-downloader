@@ -8,12 +8,14 @@ Tài liệu lưu giữ toàn bộ bối cảnh vận hành, kiến trúc hiện 
 
 - **Tên dự án:** AI Video Downloader & Player Platform
 - **Mã định danh ứng dụng (Application ID):** `com.ai.video.downloader.videodownloader`
-- **Phiên bản hiện tại:** `1.0.4` (Version Code: `10`)
+- **Phiên bản hiện tại:** `1.0.6` (Version Code: `12`)
 - **Chuẩn quản trị:** Development Workspace Standard V2.1.2 (Design-Gated)
 - **Kho lưu trữ:** `git@github.com:netvietsoft/AI-downloader.git`
 - **Các nhánh hoạt động:**
   - `main`: Mã nguồn toàn thể (Android Kotlin + Web Platform + Governance)
   - `web`: Nhánh trích xuất độc lập phục vụ server production `snaptik2.com`
+  - `fix/subscription-currency-v1.0.6`: Nhánh xử lý Subscriptions Currency Parity & Connection Queue
+  - `fix/misleading-claims-v1.0.5`: Nhánh xử lý Misleading Claims & Private Vault
   - `fix/play-billing-crash-v1.0.3`: Nhánh xử lý sự cố Play Billing và Target SDK 36
 
 ---
@@ -35,8 +37,9 @@ Tài liệu lưu giữ toàn bộ bối cảnh vận hành, kiến trúc hiện 
 - **Kiến trúc cốt lõi:**
   - MVVM Architecture + ViewBinding + Flow/Coroutines
   - Media3 ExoPlayer (Playback Engine)
-  - AES-256 Vault Encryption (Bảo vệ video riêng tư)
-  - Google Play Billing Library v8.0.0 (Quản lý gói Pro Subscriptions & Lifetime In-App Purchase)
+  - AES-256 Vault Encryption (Bảo vệ video riêng tư tích hợp Demo Video Generator & Local Video Importer)
+  - Sniffer Engine (Bóc tách sâu Instagram Reels, Meta CDN, TikTok, Facebook, X/Twitter, Video Web)
+  - Google Play Billing Library v8.0.0 (Quản lý Pro Subscriptions & Lifetime Purchase với Connection Queue, dynamic recurring price breakdown, 100% localized)
   - Google Mobile Ads (AdMob SDK 23.0.0)
   - Firebase Analytics & Crashlytics (BoM 33.1.0)
 - **Chứng chỉ ký số (Signing Config):**
@@ -63,10 +66,14 @@ Tài liệu lưu giữ toàn bộ bối cảnh vận hành, kiến trúc hiện 
 
 | File | Phiên bản | Dung lượng | Vị trí lưu trữ |
 | :--- | :---: | :---: | :--- |
-| **AAB (Play Store)** | **VC 10 (v1.0.4)** | **10.52 MB** | [`File/com.ai.video.downloader.videodownloader_v1.0.4_vc10.aab`](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/File/com.ai.video.downloader.videodownloader_v1.0.4_vc10.aab) |
-| **APK (Thiết bị thật)** | **VC 10 (v1.0.4)** | **6.94 MB** | [`File/com.ai.video.downloader.videodownloader_v1.0.4_vc10.apk`](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/File/com.ai.video.downloader.videodownloader_v1.0.4_vc10.apk) |
-| **AAB (Bản trước)** | VC 9 (v1.0.3) | 10.52 MB | `File/com.ai.video.downloader.videodownloader_v1.0.3_vc9.aab` |
-| **APK (Bản trước)** | VC 9 (v1.0.3) | 6.94 MB | `File/com.ai.video.downloader.videodownloader_v1.0.3_vc9.apk` |
+| **AAB (Play Store Release)** | **VC 12 (v1.0.6)** | **11.05 MB** | [`CONVERT/apps/android/app/build/outputs/bundle/release/com.ai.video.downloader.videodownloader_v1.0.6_vc12.aab`](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/CONVERT/apps/android/app/build/outputs/bundle/release/com.ai.video.downloader.videodownloader_v1.0.6_vc12.aab) |
+| **APK (Thiết bị thật Release)** | **VC 12 (v1.0.6)** | **7.30 MB** | [`CONVERT/apps/android/app/build/outputs/apk/release/com.ai.video.downloader.videodownloader_v1.0.6_vc12.apk`](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/CONVERT/apps/android/app/build/outputs/apk/release/com.ai.video.downloader.videodownloader_v1.0.6_vc12.apk) |
+| **AAB (Bản build 11)** | VC 11 (v1.0.5) | 11.05 MB | `CONVERT/apps/android/app/build/outputs/bundle/release/com.ai.video.downloader.videodownloader_v1.0.5_vc11.aab` |
+| **APK (Bản build 11)** | VC 11 (v1.0.5) | 7.29 MB | `CONVERT/apps/android/app/build/outputs/apk/release/app-release.apk` |
+| **AAB (Bản build 10)** | VC 10 (v1.0.4) | 10.52 MB | `File/com.ai.video.downloader.videodownloader_v1.0.4_vc10.aab` |
+| **APK (Bản build 10)** | VC 10 (v1.0.4) | 6.94 MB | `File/com.ai.video.downloader.videodownloader_v1.0.4_vc10.apk` |
+| **AAB (Bản build 9)** | VC 9 (v1.0.3) | 10.52 MB | `File/com.ai.video.downloader.videodownloader_v1.0.3_vc9.aab` |
+| **APK (Bản build 9)** | VC 9 (v1.0.3) | 6.94 MB | `File/com.ai.video.downloader.videodownloader_v1.0.3_vc9.apk` |
 
 ---
 
@@ -77,10 +84,10 @@ Tài liệu lưu giữ toàn bộ bối cảnh vận hành, kiến trúc hiện 
    - [Docs/rules.md](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/Docs/rules.md): Phân định quyền hạn từng Agent và quy tắc bảo mật.
 2. **Bộ nhớ vận hành (Operational Memory):**
    - [PROJECT_MEMORY.md](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/PROJECT_MEMORY.md): Bối cảnh và hiện trạng vận hành của dự án (Tài liệu này).
-   - [TASK_LOG.md](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/TASK_LOG.md): Nhật ký hoạt động chi tiết theo thời gian thực.
-   - [UPDATETODOS.md](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/UPDATETODOS.md): Bảng điều phối tiến độ của CEO Orchestrator.
-   - [CHANGELOG.md](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/CHANGELOG.md): Lịch sử thay đổi sản phẩm theo chuẩn SemVer.
-   - [.ai/state.json](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/.ai/state.json): Trạng thái máy đọc (Machine-readable state).
+   - [TASK_LOG.md](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/TASK_LOG.md): Nhật ký hoạt động chi tiết theo thời gian thực (đã ghi nhận đến TASK-012).
+   - [UPDATETODOS.md](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/UPDATETODOS.md): Bảng điều phối tiến độ của CEO Orchestrator (12 tasks hoàn tất).
+   - [CHANGELOG.md](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/CHANGELOG.md): Lịch sử thay đổi sản phẩm theo chuẩn SemVer (đã ghi nhận đến v1.0.6).
+   - [.ai/state.json](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/.ai/state.json): Trạng thái máy đọc (Machine-readable state, status: COMPLETED).
 3. **Bộ nhớ bền vững (Durable Memory):**
-   - [PROJECT_ERROR.md](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/PROJECT_ERROR.md): Danh mục 11 lỗi quan trọng đã gặp, nguyên nhân gốc rễ và biện pháp phòng ngừa (`[ERR-001]` đến `[ERR-011]`).
-   - [ACQUIREMENTS.md](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/ACQUIREMENTS.md): Danh mục 6 kiến thức và giải pháp kỹ thuật đã chưng cất kiểm chứng (`[ACQ-001]` đến `[ACQ-006]`).
+   - [PROJECT_ERROR.md](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/PROJECT_ERROR.md): Danh mục 13 lỗi quan trọng đã gặp, nguyên nhân gốc rễ và biện pháp phòng ngừa (`[ERR-001]` đến `[ERR-013]`).
+   - [ACQUIREMENTS.md](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/ACQUIREMENTS.md): Danh mục 8 kiến thức và giải pháp kỹ thuật đã chưng cất kiểm chứng (`[ACQ-001]` đến `[ACQ-008]`).

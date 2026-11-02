@@ -4,6 +4,51 @@ Tài liệu ghi nhận toàn bộ tiến trình và hoạt động thực thi th
 
 ---
 
+## [2026-10-31 12:30] TASK-012: Khắc Phục Vi Phạm Chính Sách Subscriptions (Currency Differences) & Release Build 12 (v1.0.6)
+- **Agent chịu trách nhiệm:** Agent 3 (Android Frontend & Billing) / Agent 0 (CEO Orchestrator)
+- **Bối cảnh:** Google Play Console từ chối bản build Version Code 11 theo chính sách Subscriptions Policy: *"Currency differences with prominent display price. Ensure that currency displayed is consistent through multiple screens such as offers page and payment cart within the purchase flow and is appropriately localized for each country that your app is targeting."* (IN_APP_EXPERIENCE-6840.png). Reviewer gặp tình trạng thẻ gói năm hiển thị tiền tệ bất nhất ($1.66 hardcoded dưới giá EUR/VND) và khi bấm Subscribe Now hiện thông báo lỗi tiếng Việt hardcode do race condition BillingClient.
+- **Hành động đã thực hiện:**
+  1. Loại bỏ toàn bộ giá USD cứng `$2.99`, `$19.99`, `$39.99` và subtext cứng trong `activity_payment_wall.xml`, thay bằng `@string/paywall_price_loading`, `@string/paywall_subtext_weekly`, `@string/paywall_subtext_lifetime`.
+  2. Nâng cấp `CurrencyFormatter.kt`: tính toán động phân rã tháng cho gói Năm từ `yearlyPhase.priceAmountMicros / 12` và định dạng bằng `formatAmountWithCurrency` đồng nhất 100% với `priceCurrencyCode` từ Google Play; mở rộng fallback sang CAD, AUD, SGD và tự động nhận diện currency của thiết bị.
+  3. Tái cấu trúc `BillingManager.kt`: triển khai hàng đợi kết nối an toàn (Connection Queue với cờ `@Volatile var isConnecting` và `pendingReadyCallbacks` được đồng bộ `synchronized`), loại bỏ rớt callback do race condition khi mở `PaymentWallActivity`.
+  4. Bản địa hóa toàn bộ thông báo, dialog lỗi, restore purchase và chi tiết gói đang active trong `SettingsFragment.kt` sang `strings.xml` và `values-vi/strings.xml` (20 chuỗi tài nguyên mới).
+  5. Tăng `versionCode = 12` và `versionName = "1.0.6"` trong `CONVERT/apps/android/app/build.gradle.kts`.
+  6. Viết 11 Unit Test trong `CurrencyFormatterTest.kt` kiểm chứng 100% currency parity (Passed 11/11).
+  7. Build AAB Release (`com.ai.video.downloader.videodownloader_v1.0.6_vc12.aab`, 11.05 MB) và APK Release (`com.ai.video.downloader.videodownloader_v1.0.6_vc12.apk`, 7.30 MB) ký số hoàn chỉnh.
+  8. Push nhánh `fix/subscription-currency-v1.0.6` lên GitHub và merge vào nhánh `main`, push lên `origin/main` (Commit `3b28519`).
+- **Kết quả kiểm chứng:**
+  - `testDebugUnitTest`: 11/11 unit tests passed.
+  - `bundleRelease` & `assembleRelease`: BUILD SUCCESSFUL.
+  - Mã nguồn đã đồng bộ trên GitHub `origin/main` và `origin/fix/subscription-currency-v1.0.6`.
+- **Trạng thái:** `COMPLETED`
+- **Tài liệu cập nhật kèm theo:**
+  - `PROJECT_ERROR.md`: Bổ sung `[ERR-013]`.
+  - `ACQUIREMENTS.md`: Bổ sung `[ACQ-008]`.
+  - `CHANGELOG.md`: Bổ sung phiên bản `[1.0.6]`.
+  - `UPDATETODOS.md`: Hoàn thành `TASK-012`.
+  - `.ai/state.json`: Chuyển trạng thái `COMPLETED`.
+
+---
+
+## [2026-10-21 16:45] TASK-011: Khắc Phục Vi Phạm Chính Sách Misleading Claims & Release Build 11 (v1.0.5)
+- **Agent chịu trách nhiệm:** Agent 3 (Android Frontend & Engine) / Agent 0 (CEO Orchestrator)
+- **Bối cảnh:** Google Play Console từ chối bản build Version Code 10 theo chính sách Misleading Claims & In-App Experience: mô tả hứa hẹn tự động tải trên mọi mạng xã hội nhưng Instagram Reels không hiện nút tải; hứa hẹn 4K/8K và định dạng không thực tế; Private Vault trống rỗng không thể kiểm thử độc lập trên clean install (IN_APP_EXPERIENCE-6747.png).
+- **Hành động đã thực hiện:**
+  1. Nâng cấp `SnifferEngine.kt` & `HomeFragment.kt`: bóc tách Instagram Reels/Posts chuyên sâu (`extractInstagramVideo()`, thẻ `og:video`, `meta[property="og:video:secure_url"]`), xử lý luồng CDN Meta `cdninstagram.com` & `fbcdn.net` loại bỏ query byte-range (`bytestart`/`byteend`) mà không drop stream.
+  2. Bổ sung tính năng tự kiểm thử cho Private Vault (`dialog_private_vault.xml` & `PlayerFragment.kt`): thêm nút "+ Add Demo Video" (`btn_vault_add_demo`) và "+ Import Video" (`btn_vault_import` qua `ActivityResultContracts.GetContent()`), cho phép kiểm thử toàn bộ luồng mã hóa AES-256 ngay trên clean install.
+  3. Rà soát và thanh lọc toàn bộ từ khóa "4K", "8K" thành "HD / High Definition" trên toàn bộ 50 thư mục `res/values-*/strings.xml` và layout `activity_payment_wall.xml`.
+  4. Nâng `versionCode = 11` và `versionName = "1.0.5"` trong `app/build.gradle.kts`.
+  5. Đóng gói AAB Release (`com.ai.video.downloader.videodownloader_v1.0.5_vc11.aab`, 11.05 MB) và APK Release (7.29 MB) ký số hoàn chỉnh.
+  6. Kiểm thử thực tế trên thiết bị Samsung Galaxy A07 thật qua ADB thành công 100%.
+- **Trạng thái:** `COMPLETED`
+- **Tài liệu cập nhật kèm theo:**
+  - `PROJECT_ERROR.md`: Bổ sung `[ERR-012]`.
+  - `ACQUIREMENTS.md`: Bổ sung `[ACQ-007]`.
+  - `CHANGELOG.md`: Bổ sung phiên bản `[1.0.5]`.
+  - `UPDATETODOS.md`: Hoàn thành `TASK-011`.
+
+---
+
 ## [2026-10-12 20:30] TASK-010: Nâng cấp Target API Level 36 & Release Build 10 (v1.0.4)
 - **Agent chịu trách nhiệm:** Agent 3 (Android Frontend & Build) / Agent 0 (CEO Orchestrator)
 - **Bối cảnh:** Google Play Console từ chối bản build Version Code 9 với lỗi: *"Your app currently targets API level 35 and must target at least API level 36 to ensure that it is built on the latest APIs optimised for security and performance."*

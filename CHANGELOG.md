@@ -4,6 +4,33 @@ Tất cả các thay đổi quan trọng trong dự án **AI Video Downloader** 
 
 ---
 
+## [1.0.6] - 2026-10-31 (Build 12)
+
+### Đã khắc phục & Nâng cấp (Fixed & Changed)
+- **Khắc phục triệt để vi phạm chính sách Subscriptions (Currency differences with prominent display price):**
+  - **Dynamic Recurring Price Breakdown:** Lấy trực tiếp `priceAmountMicros` và `priceCurrencyCode` từ Google Play Billing để tính toán chi phí tháng của gói năm (`paywall_subtext_yearly_format`), đảm bảo 100% khớp đơn vị tiền tệ thực tế của người dùng, loại bỏ hoàn toàn việc hiển thị USD `$1.66` dưới giá VND/EUR/GBP.
+  - **Loại bỏ giá cứng USD:** Xóa bỏ giá mặc định `$2.99`, `$19.99`, `$39.99` trong layout `activity_payment_wall.xml`, thay bằng placeholder loading và chuỗi tài nguyên động.
+  - **Mở rộng Currency Fallback:** Thêm hỗ trợ CAD, AUD, SGD và tự động phát hiện tiền tệ thiết bị nếu người dùng offline.
+  - **Connection Queue trong BillingManager:** Thiết lập hàng đợi kết nối thread-safe chống race condition gọi `startConnection()` đồng thời khi mở `PaymentWallActivity`, đảm bảo không bao giờ drop callback mở Google Play Cart.
+  - **Quốc tế hóa 100%:** Bản địa hóa 20 chuỗi thông báo, dialog lỗi, khôi phục giao dịch và quản lý thuê bao trong `SettingsFragment` sang `strings.xml` và `values-vi/strings.xml`.
+  - **Nâng cấp phiên bản:** Tăng `versionCode` lên `12` và `versionName` lên `1.0.6`.
+  - **Kiểm thử tự động:** Bổ sung 11 unit test trong `CurrencyFormatterTest.kt` kiểm chứng currency parity trên toàn cầu (100% Passed).
+  - **Đóng gói phát hành:** Đóng gói thành công AAB Release (`com.ai.video.downloader.videodownloader_v1.0.6_vc12.aab`, 11.05 MB) và APK (`com.ai.video.downloader.videodownloader_v1.0.6_vc12.apk`, 7.30 MB) ký số hoàn chỉnh.
+
+---
+
+## [1.0.5] - 2026-10-21 (Build 11)
+
+### Đã khắc phục & Nâng cấp (Fixed & Changed)
+- **Khắc phục vi phạm chính sách Misleading Claims & In-App Experience:**
+  - **Bóc tách sâu luồng video Instagram Reels & Meta CDN:** Nâng cấp `SnifferEngine.kt` và `HomeFragment.kt`, nhận diện các thẻ `og:video`, `meta[property="og:video:secure_url"]`, xử lý stream CDN `cdninstagram.com` & `fbcdn.net` loại bỏ query byte-range (`bytestart`/`byteend`) mà không drop stream.
+  - **Self-Contained Private Vault:** Thêm nút "+ Add Demo Video" (`btn_vault_add_demo`) và "+ Import Video" (`btn_vault_import`), cho phép reviewer và người dùng kiểm thử toàn bộ luồng mã hóa AES-256 ngay trên clean install.
+  - **Thanh lọc phát ngôn 4K / 8K:** Rà soát và chuẩn hóa toàn bộ 50 thư mục `res/values-*/strings.xml` và layout `activity_payment_wall.xml`, chuyển "4K / 8K" thành "HD / High Definition" trung thực với năng lực thực tế.
+  - **Nâng cấp phiên bản:** Tăng `versionCode` lên `11` và `versionName` lên `1.0.5`.
+  - **Đóng gói phát hành:** Build thành công AAB Release (`com.ai.video.downloader.videodownloader_v1.0.5_vc11.aab`, 11.05 MB) và APK (7.29 MB) ký số hoàn chỉnh.
+
+---
+
 ## [1.0.4] - 2026-10-12 (Build 10)
 
 ### Đã thay đổi & Nâng cấp (Changed)
