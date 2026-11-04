@@ -12,7 +12,7 @@ architecture:
     path: "WWW"
     runtime: "Node.js"
     framework: "Express"
-    port: 3070
+    port: 3080
     domain: "snaptik2.com"
 deploy:
   server_path: "/home/netviet/projects-deploy/ai-dowloader"

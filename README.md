@@ -2,7 +2,7 @@
 
 Hệ thống tải và phát video đa nền tảng chất lượng cao (Hỗ trợ TikTok No-Watermark, Facebook Reels, YouTube, Instagram, X/Twitter, Douyin...), bao gồm:
 - **Android App:** Native Android Kotlin Studio project (`CONVERT/apps/android`)
-- **Web Platform & Sniffer API:** Node.js Express server (`WWW/`) phục vụ website **snaptik2.com** trên Port 3070
+- **Web Platform & Sniffer API:** Node.js Express server (`WWW/`) phục vụ website **snaptik2.com** trên Port 3080
 - **Chrome Extension:** Tiện ích mở rộng bóc tách link tải video (`WWW/Extension`)
 - **Quản trị dự án:** Tuân thủ tiêu chuẩn [Development_Workspace_Standard_V2.1_Design_Gated 29-9-2026.txt](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/Development_Workspace_Standard_V2.1_Design_Gated%2029-9-2026.txt)
 
@@ -15,7 +15,7 @@ PROJECT_ROOT/
 ├── CONVERT/                      # Toàn bộ mã nguồn Android Kotlin & Assets
 │   └── apps/android/             # Android Studio Kotlin Project
 ├── WWW/                          # Web Platform, API & Extension (snaptik2.com)
-│   ├── server.js                 # Unified Production Server (Port 3070)
+│   ├── server.js                 # Unified Production Server (Port 3080)
 │   ├── snifferService.js         # Multi-platform video parser
 │   ├── database.js               # User, history & subscription db
 │   ├── public/                   # Web Frontend UI
@@ -27,6 +27,9 @@ PROJECT_ROOT/
 ├── .ai/                          # Trạng thái máy đọc (State, Locks, Project)
 ├── AGENTS.md                     # Hiến pháp AI Agent
 ├── UPDATETODOS.md                # Bảng điều phối tiến độ của CEO Orchestrator
+├── TASK_LOG.md                   # Nhật ký hoạt động chi tiết theo thời gian thực
+├── CHANGELOG.md                  # Lịch sử thay đổi sản phẩm theo chuẩn SemVer
+├── PROJECT_MEMORY.md             # Bộ nhớ vận hành và hiện trạng của dự án
 ├── Tasksrequiring.md             # Danh mục tham số cần User bổ sung
 ├── PROJECT_ERROR.md              # Bộ nhớ lỗi bền vững (Error Memory)
 └── ACQUIREMENTS.md               # Kiến thức & bài học chưng cất (Knowledge Loop)
