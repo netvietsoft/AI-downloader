@@ -17,6 +17,7 @@ class CurrencyFormatterTest {
         assertNotNull(pricing)
         assertEquals("69.000 ₫", pricing.weeklyPrice)
         assertEquals("499.000 ₫", pricing.yearlyPrice)
+        assertEquals("Tiết kiệm 70%", pricing.yearlySubtext)
         assertEquals("899.000 ₫", pricing.lifetimePrice)
     }
 
@@ -29,6 +30,7 @@ class CurrencyFormatterTest {
             assertNotNull(pricing)
             assertEquals("$2.99", pricing.weeklyPrice)
             assertEquals("$19.99", pricing.yearlyPrice)
+            assertEquals("Save 70%", pricing.yearlySubtext)
             assertEquals("$39.99", pricing.lifetimePrice)
         } finally {
             Locale.setDefault(originalLocale)
@@ -44,6 +46,7 @@ class CurrencyFormatterTest {
             assertNotNull(pricing)
             assertEquals("£2.99", pricing.weeklyPrice)
             assertEquals("£19.99", pricing.yearlyPrice)
+            assertEquals("Save 70%", pricing.yearlySubtext)
             assertEquals("£39.99", pricing.lifetimePrice)
         } finally {
             Locale.setDefault(originalLocale)
@@ -60,7 +63,7 @@ class CurrencyFormatterTest {
             assertEquals("2,99 €", pricing.weeklyPrice)
             assertEquals("19,99 €", pricing.yearlyPrice)
             assertEquals("39,99 €", pricing.lifetimePrice)
-            assertTrue(pricing.yearlySubtext.contains("€"))
+            assertEquals("70% sparen", pricing.yearlySubtext)
         } finally {
             Locale.setDefault(originalLocale)
         }
@@ -76,7 +79,7 @@ class CurrencyFormatterTest {
             assertEquals("CA$ 3.99", pricing.weeklyPrice)
             assertEquals("CA$ 26.99", pricing.yearlyPrice)
             assertEquals("CA$ 49.99", pricing.lifetimePrice)
-            assertTrue(pricing.yearlySubtext.contains("CA$"))
+            assertEquals("Save 70%", pricing.yearlySubtext)
         } finally {
             Locale.setDefault(originalLocale)
         }
@@ -92,7 +95,7 @@ class CurrencyFormatterTest {
             assertEquals("A$ 4.49", pricing.weeklyPrice)
             assertEquals("A$ 29.99", pricing.yearlyPrice)
             assertEquals("A$ 59.99", pricing.lifetimePrice)
-            assertTrue(pricing.yearlySubtext.contains("A$"))
+            assertEquals("Save 70%", pricing.yearlySubtext)
         } finally {
             Locale.setDefault(originalLocale)
         }
@@ -108,7 +111,7 @@ class CurrencyFormatterTest {
             assertEquals("S$ 4.49", pricing.weeklyPrice)
             assertEquals("S$ 29.98", pricing.yearlyPrice)
             assertEquals("S$ 58.98", pricing.lifetimePrice)
-            assertTrue(pricing.yearlySubtext.contains("S$"))
+            assertEquals("Save 70%", pricing.yearlySubtext)
         } finally {
             Locale.setDefault(originalLocale)
         }
@@ -178,7 +181,7 @@ class CurrencyFormatterTest {
             Locale.setDefault(resolvedIndia)
             val indiaPricing = CurrencyFormatter.getFallbackPricing("en")
             assertTrue("India en_IN should use INR ₹, got ${indiaPricing.yearlyPrice}", indiaPricing.yearlyPrice.contains("₹"))
-            assertTrue("India subtext should use INR ₹, got ${indiaPricing.yearlySubtext}", indiaPricing.yearlySubtext.contains("₹"))
+            assertEquals("Save 70%", indiaPricing.yearlySubtext)
 
             // Simulate reviewer in Philippines with English language (en_PH)
             Locale.setDefault(Locale("en", "PH"))
@@ -187,7 +190,7 @@ class CurrencyFormatterTest {
             Locale.setDefault(resolvedPh)
             val phPricing = CurrencyFormatter.getFallbackPricing("en")
             assertTrue("Philippines en_PH should use PHP ₱, got ${phPricing.yearlyPrice}", phPricing.yearlyPrice.contains("₱"))
-            assertTrue("Philippines subtext should use PHP ₱, got ${phPricing.yearlySubtext}", phPricing.yearlySubtext.contains("₱"))
+            assertEquals("Save 70%", phPricing.yearlySubtext)
 
             // Simulate reviewer in Poland (pl_PL)
             Locale.setDefault(Locale("pl", "PL"))
@@ -196,7 +199,7 @@ class CurrencyFormatterTest {
             Locale.setDefault(resolvedPl)
             val plPricing = CurrencyFormatter.getFallbackPricing("pl")
             assertTrue("Poland pl_PL should use zł, got ${plPricing.yearlyPrice}", plPricing.yearlyPrice.contains("zł"))
-            assertTrue("Poland subtext should use zł, got ${plPricing.yearlySubtext}", plPricing.yearlySubtext.contains("zł"))
+            assertEquals("Save 70%", plPricing.yearlySubtext)
         } finally {
             Locale.setDefault(originalLocale)
         }
