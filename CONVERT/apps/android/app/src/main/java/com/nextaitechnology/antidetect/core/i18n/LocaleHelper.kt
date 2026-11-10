@@ -35,6 +35,9 @@ object LocaleHelper {
      */
     private val initialBootLocale: Locale = Locale.getDefault()
 
+    @Volatile
+    private var cachedDeviceCountryCode: String? = null
+
     /**
      * Ánh xạ 50 ngôn ngữ hỗ trợ sang mã quốc gia ISO 3166-1 chuẩn tương ứng
      */
@@ -289,38 +292,54 @@ object LocaleHelper {
      * Lấy mã quốc gia ISO 3166-1 alpha-2 chính xác của thiết bị (ví dụ: "VN", "US", "IN", "GB", "DE", "PH", "KR"...)
      */
     fun getDeviceCountryCode(context: Context? = null): String {
-        // Khi chạy trên thiết bị Android thực (context != null):
+        // Khi chạy trên thiết bị Android thực (context != null): dùng cache O(1) để không gọi lặp lại Binder IPC TelephonyManager trên UI thread
         if (context != null) {
+            cachedDeviceCountryCode?.let { if (it.length == 2) return it }
+
+            var resolved = ""
             try {
                 val tm = context.getSystemService(Context.TELEPHONY_SERVICE) as? TelephonyManager
                 val simCountry = tm?.simCountryIso?.trim()?.uppercase(Locale.ROOT).orEmpty()
                 if (simCountry.length == 2 && simCountry.all { it in 'A'..'Z' }) {
-                    return simCountry
-                }
-                val netCountry = tm?.networkCountryIso?.trim()?.uppercase(Locale.ROOT).orEmpty()
-                if (netCountry.length == 2 && netCountry.all { it in 'A'..'Z' }) {
-                    return netCountry
+                    resolved = simCountry
+                } else {
+                    val netCountry = tm?.networkCountryIso?.trim()?.uppercase(Locale.ROOT).orEmpty()
+                    if (netCountry.length == 2 && netCountry.all { it in 'A'..'Z' }) {
+                        resolved = netCountry
+                    }
                 }
             } catch (_: Exception) {
             }
 
-            val sysCountry = getSystemDeviceLocale().country.trim().uppercase(Locale.ROOT)
-            if (sysCountry.length == 2 && sysCountry != "US") {
-                return sysCountry
+            if (resolved.isEmpty()) {
+                val sysCountry = getSystemDeviceLocale().country.trim().uppercase(Locale.ROOT)
+                if (sysCountry.length == 2 && sysCountry != "US") {
+                    resolved = sysCountry
+                }
             }
 
             // Nếu thiết bị không có SIM và để mặc định en_US, kiểm tra TimeZone của thiết bị
-            try {
-                val tzId = java.util.TimeZone.getDefault().id
-                val tzCountry = TIMEZONE_TO_COUNTRY[tzId]
-                if (!tzCountry.isNullOrEmpty()) {
-                    return tzCountry
+            if (resolved.isEmpty()) {
+                try {
+                    val tzId = java.util.TimeZone.getDefault().id
+                    val tzCountry = TIMEZONE_TO_COUNTRY[tzId]
+                    if (!tzCountry.isNullOrEmpty()) {
+                        resolved = tzCountry
+                    }
+                } catch (_: Exception) {
                 }
-            } catch (_: Exception) {
             }
 
-            if (sysCountry.length == 2) {
-                return sysCountry
+            if (resolved.isEmpty()) {
+                val sysCountry = getSystemDeviceLocale().country.trim().uppercase(Locale.ROOT)
+                if (sysCountry.length == 2) {
+                    resolved = sysCountry
+                }
+            }
+
+            if (resolved.length == 2) {
+                cachedDeviceCountryCode = resolved
+                return resolved
             }
         }
 

@@ -8,6 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ImageView
@@ -21,6 +23,7 @@ import com.nextaitechnology.antidetect.core.analytics.FirebaseAnalyticsManager
 import com.nextaitechnology.antidetect.core.billing.BillingManager
 import com.nextaitechnology.antidetect.core.i18n.CurrencyFormatter
 import com.nextaitechnology.antidetect.core.i18n.LocaleHelper
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -42,6 +45,24 @@ class PaymentWallActivity : AppCompatActivity() {
     private var selectedPlan: String = "yearly"
     private var sheenAnimator: ValueAnimator? = null
     private var cardSheenAnimator: ValueAnimator? = null
+    private val mainHandler = Handler(Looper.getMainLooper())
+    private var cardSheenRunnable: Runnable? = null
+    private var ctaSheenRunnable: Runnable? = null
+    private var cachedPricing: CurrencyFormatter.PlanPricing? = null
+
+    // Cached View references to eliminate repeated findViewById() calls during plan switching
+    private var tvPriceWeekly: TextView? = null
+    private var tvSubtextWeekly: TextView? = null
+    private var tvPriceYearly: TextView? = null
+    private var tvSubtextYearly: TextView? = null
+    private var tvPriceLifetime: TextView? = null
+    private var tvSubtextLifetime: TextView? = null
+    private var sheenWeekly: View? = null
+    private var sheenYearly: View? = null
+    private var sheenLifetime: View? = null
+    private var containerWeeklyRef: View? = null
+    private var containerYearlyRef: View? = null
+    private var containerLifetimeRef: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +79,26 @@ class PaymentWallActivity : AppCompatActivity() {
                 windowInsets
             }
         }
+
+        tvPriceWeekly = findViewById(R.id.tv_price_weekly)
+        tvSubtextWeekly = findViewById(R.id.tv_subtext_weekly)
+        tvPriceYearly = findViewById(R.id.tv_price_yearly)
+        tvSubtextYearly = findViewById(R.id.tv_subtext_yearly)
+        tvPriceLifetime = findViewById(R.id.tv_price_lifetime)
+        tvSubtextLifetime = findViewById(R.id.tv_subtext_lifetime)
+
+        sheenWeekly = findViewById<View>(R.id.view_sheen_weekly)?.apply {
+            setLayerType(View.LAYER_TYPE_HARDWARE, null)
+        }
+        sheenYearly = findViewById<View>(R.id.view_sheen_yearly)?.apply {
+            setLayerType(View.LAYER_TYPE_HARDWARE, null)
+        }
+        sheenLifetime = findViewById<View>(R.id.view_sheen_lifetime)?.apply {
+            setLayerType(View.LAYER_TYPE_HARDWARE, null)
+        }
+        containerWeeklyRef = findViewById(R.id.card_plan_weekly_container)
+        containerYearlyRef = findViewById(R.id.card_plan_yearly_container)
+        containerLifetimeRef = findViewById(R.id.card_plan_lifetime_container)
 
         settingsRepository = SettingsRepository(this)
         billingManager = BillingManager.getInstance(this)
@@ -89,7 +130,9 @@ class PaymentWallActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.tv_paywall_subtitle)?.text = getString(R.string.paywall_gallery_notice)
         }
 
-        FirebaseAnalyticsManager.logPaywallView(reason ?: "direct")
+        lifecycleScope.launch(Dispatchers.IO) {
+            FirebaseAnalyticsManager.logPaywallView(reason ?: "direct")
+        }
 
         setupPlanSelection()
         setupButtons()
@@ -119,32 +162,39 @@ class PaymentWallActivity : AppCompatActivity() {
         }
     }
 
+    private fun TextView?.setTextIfChanged(newText: String) {
+        if (this != null && this.text?.toString() != newText) {
+            this.text = newText
+        }
+    }
+
     private fun refreshPricing() {
         val isStillLoadingInitial = billingManager.isLoadingProducts.value && !billingManager.hasAnyLoadedProduct()
         if (isStillLoadingInitial) {
             val loadingText = getString(R.string.paywall_price_loading)
-            findViewById<TextView>(R.id.tv_price_weekly)?.text = loadingText
-            findViewById<TextView>(R.id.tv_subtext_weekly)?.text = getString(R.string.paywall_subtext_weekly)
-            findViewById<TextView>(R.id.tv_price_yearly)?.text = loadingText
-            findViewById<TextView>(R.id.tv_subtext_yearly)?.text = getString(R.string.paywall_subtext_yearly)
-            findViewById<TextView>(R.id.tv_price_lifetime)?.text = loadingText
-            findViewById<TextView>(R.id.tv_subtext_lifetime)?.text = getString(R.string.paywall_subtext_lifetime)
+            tvPriceWeekly.setTextIfChanged(loadingText)
+            tvSubtextWeekly.setTextIfChanged(getString(R.string.paywall_subtext_weekly))
+            tvPriceYearly.setTextIfChanged(loadingText)
+            tvSubtextYearly.setTextIfChanged(getString(R.string.paywall_subtext_yearly))
+            tvPriceLifetime.setTextIfChanged(loadingText)
+            tvSubtextLifetime.setTextIfChanged(getString(R.string.paywall_subtext_lifetime))
             return
         }
 
         val pricing = CurrencyFormatter.getPricing(this, settingsRepository.languageCode)
-        findViewById<TextView>(R.id.tv_price_weekly)?.text = pricing.weeklyPrice
-        findViewById<TextView>(R.id.tv_subtext_weekly)?.text = pricing.weeklySubtext
-        findViewById<TextView>(R.id.tv_price_yearly)?.text = pricing.yearlyPrice
-        findViewById<TextView>(R.id.tv_subtext_yearly)?.text = pricing.yearlySubtext
-        findViewById<TextView>(R.id.tv_price_lifetime)?.text = pricing.lifetimePrice
-        findViewById<TextView>(R.id.tv_subtext_lifetime)?.text = pricing.lifetimeSubtext
+        cachedPricing = pricing
+        tvPriceWeekly.setTextIfChanged(pricing.weeklyPrice)
+        tvSubtextWeekly.setTextIfChanged(pricing.weeklySubtext)
+        tvPriceYearly.setTextIfChanged(pricing.yearlyPrice)
+        tvSubtextYearly.setTextIfChanged(pricing.yearlySubtext)
+        tvPriceLifetime.setTextIfChanged(pricing.lifetimePrice)
+        tvSubtextLifetime.setTextIfChanged(pricing.lifetimeSubtext)
     }
 
     private fun setupPlanSelection() {
-        val containerWeekly = findViewById<View>(R.id.card_plan_weekly_container)
-        val containerYearly = findViewById<View>(R.id.card_plan_yearly_container)
-        val containerLifetime = findViewById<View>(R.id.card_plan_lifetime_container)
+        val containerWeekly = containerWeeklyRef ?: findViewById(R.id.card_plan_weekly_container)
+        val containerYearly = containerYearlyRef ?: findViewById(R.id.card_plan_yearly_container)
+        val containerLifetime = containerLifetimeRef ?: findViewById(R.id.card_plan_lifetime_container)
 
         val cardWeekly = findViewById<View>(R.id.card_plan_weekly)
         val cardYearly = findViewById<View>(R.id.card_plan_yearly)
@@ -154,8 +204,10 @@ class PaymentWallActivity : AppCompatActivity() {
         val rbYearly = findViewById<RadioButton>(R.id.rb_plan_yearly)
         val rbLifetime = findViewById<RadioButton>(R.id.rb_plan_lifetime)
 
-        fun selectPlan(plan: String) {
+        fun selectPlan(plan: String, forceInit: Boolean = false) {
+            if (!forceInit && selectedPlan == plan) return
             selectedPlan = plan
+
             rbWeekly.isChecked = (plan == "weekly")
             rbYearly.isChecked = (plan == "yearly")
             rbLifetime.isChecked = (plan == "lifetime")
@@ -164,22 +216,17 @@ class PaymentWallActivity : AppCompatActivity() {
             containerYearly.setBackgroundResource(if (plan == "yearly") R.drawable.bg_plan_selected else R.drawable.bg_plan_unselected)
             containerLifetime.setBackgroundResource(if (plan == "lifetime") R.drawable.bg_plan_selected else R.drawable.bg_plan_unselected)
 
-            refreshPricing()
-            if (!billingManager.hasLoadedAllProducts() && !billingManager.isLoadingProducts.value) {
-                billingManager.queryAvailableProducts {
-                    runOnUiThread { refreshPricing() }
-                }
-            }
-
-            val pricing = CurrencyFormatter.getPricing(this, settingsRepository.languageCode)
-            val price = when (plan) {
-                "weekly" -> pricing.weeklyPrice
-                "lifetime" -> pricing.lifetimePrice
-                else -> pricing.yearlyPrice
-            }
-            FirebaseAnalyticsManager.logPaywallPlanSelected(plan, price)
-
             startSelectedCardSheen(plan)
+
+            val current = cachedPricing
+            val price = when (plan) {
+                "weekly" -> current?.weeklyPrice ?: ""
+                "lifetime" -> current?.lifetimePrice ?: ""
+                else -> current?.yearlyPrice ?: ""
+            }
+            lifecycleScope.launch(Dispatchers.IO) {
+                FirebaseAnalyticsManager.logPaywallPlanSelected(plan, price)
+            }
         }
 
         val clickWeekly = View.OnClickListener { selectPlan("weekly") }
@@ -198,30 +245,38 @@ class PaymentWallActivity : AppCompatActivity() {
         rbLifetime.setOnClickListener(clickLifetime)
 
         // Khởi chạy vệt sáng trượt chéo cho plan mặc định (yearly)
-        selectPlan(selectedPlan)
+        selectPlan(selectedPlan, forceInit = true)
     }
 
     /**
      * Hiệu ứng vệt sáng trượt chéo nhẹ qua Card gói cước đang được chọn (Selected Plan Card Sheen)
+     * Sử dụng View.INVISIBLE thay vì View.GONE để tránh hoàn toàn việc ConstraintLayout phải re-layout.
      */
     private fun startSelectedCardSheen(plan: String) {
-        val sheenWeekly = findViewById<View>(R.id.view_sheen_weekly)
-        val sheenYearly = findViewById<View>(R.id.view_sheen_yearly)
-        val sheenLifetime = findViewById<View>(R.id.view_sheen_lifetime)
+        cardSheenRunnable?.let { mainHandler.removeCallbacks(it) }
+        cardSheenRunnable = null
+        cardSheenAnimator?.cancel()
+        cardSheenAnimator = null
 
-        sheenWeekly?.visibility = if (plan == "weekly") View.VISIBLE else View.GONE
-        sheenYearly?.visibility = if (plan == "yearly") View.VISIBLE else View.GONE
-        sheenLifetime?.visibility = if (plan == "lifetime") View.VISIBLE else View.GONE
+        val sWeekly = sheenWeekly
+        val sYearly = sheenYearly
+        val sLifetime = sheenLifetime
+
+        sWeekly?.visibility = if (plan == "weekly") View.VISIBLE else View.INVISIBLE
+        sYearly?.visibility = if (plan == "yearly") View.VISIBLE else View.INVISIBLE
+        sLifetime?.visibility = if (plan == "lifetime") View.VISIBLE else View.INVISIBLE
 
         val (targetSheen, targetContainer) = when (plan) {
-            "weekly" -> sheenWeekly to findViewById<View>(R.id.card_plan_weekly_container)
-            "lifetime" -> sheenLifetime to findViewById<View>(R.id.card_plan_lifetime_container)
-            else -> sheenYearly to findViewById<View>(R.id.card_plan_yearly_container)
+            "weekly" -> sWeekly to containerWeeklyRef
+            "lifetime" -> sLifetime to containerLifetimeRef
+            else -> sYearly to containerYearlyRef
         }
 
         if (targetSheen == null || targetContainer == null) return
+        targetSheen.translationX = -160f
 
         targetContainer.post {
+            if (isFinishing || isDestroyed || selectedPlan != plan) return@post
             val totalWidth = targetContainer.width.toFloat()
             if (totalWidth <= 0) return@post
 
@@ -233,12 +288,21 @@ class PaymentWallActivity : AppCompatActivity() {
                     targetSheen.translationX = animator.animatedValue as Float
                 }
                 addListener(object : AnimatorListenerAdapter() {
+                    private var isCancelled = false
+
+                    override fun onAnimationCancel(animation: Animator) {
+                        isCancelled = true
+                    }
+
                     override fun onAnimationEnd(animation: Animator) {
-                        targetContainer.postDelayed({
+                        if (isCancelled || isFinishing || isDestroyed || selectedPlan != plan) return
+                        val nextRun = Runnable {
                             if (!isFinishing && !isDestroyed && selectedPlan == plan) {
                                 startSelectedCardSheen(plan)
                             }
-                        }, 2200L)
+                        }
+                        cardSheenRunnable = nextRun
+                        mainHandler.postDelayed(nextRun, 2200L)
                     }
                 })
                 start()
@@ -270,10 +334,14 @@ class PaymentWallActivity : AppCompatActivity() {
      * Hiệu ứng vệt sáng trượt chéo nhẹ qua nút SUBSCRIBE NOW (Sheen Shimmer Effect)
      */
     private fun startSheenAnimation() {
+        ctaSheenRunnable?.let { mainHandler.removeCallbacks(it) }
+        ctaSheenRunnable = null
         val sheenView = findViewById<View>(R.id.view_shimmer_sheen) ?: return
         val container = findViewById<View>(R.id.layout_btn_subscribe_container) ?: return
+        sheenView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
 
         container.post {
+            if (isFinishing || isDestroyed) return@post
             val totalWidth = container.width.toFloat()
             if (totalWidth <= 0) return@post
 
@@ -285,12 +353,21 @@ class PaymentWallActivity : AppCompatActivity() {
                     sheenView.translationX = animator.animatedValue as Float
                 }
                 addListener(object : AnimatorListenerAdapter() {
+                    private var isCancelled = false
+
+                    override fun onAnimationCancel(animation: Animator) {
+                        isCancelled = true
+                    }
+
                     override fun onAnimationEnd(animation: Animator) {
-                        container.postDelayed({
+                        if (isCancelled || isFinishing || isDestroyed) return
+                        val nextRun = Runnable {
                             if (!isFinishing && !isDestroyed) {
                                 startSheenAnimation()
                             }
-                        }, 2000L)
+                        }
+                        ctaSheenRunnable = nextRun
+                        mainHandler.postDelayed(nextRun, 2000L)
                     }
                 })
                 start()
@@ -299,6 +376,10 @@ class PaymentWallActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        cardSheenRunnable?.let { mainHandler.removeCallbacks(it) }
+        cardSheenRunnable = null
+        ctaSheenRunnable?.let { mainHandler.removeCallbacks(it) }
+        ctaSheenRunnable = null
         sheenAnimator?.cancel()
         sheenAnimator = null
         cardSheenAnimator?.cancel()

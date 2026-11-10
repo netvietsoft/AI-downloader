@@ -299,7 +299,7 @@
                 android:rotation="25"
                 android:scaleY="1.8"
                 android:translationX="-160dp"
-                android:visibility="gone"
+                android:visibility="invisible"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -485,7 +485,7 @@
                 android:rotation="25"
                 android:scaleY="1.8"
                 android:translationX="-160dp"
-                android:visibility="gone"
+                android:visibility="invisible"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
