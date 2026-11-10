@@ -32,15 +32,16 @@
 
 ---
 
-## BỘ NHỚ VẬN HÀNH & CHUẨN HÓA PHÁT HÀNH GOOGLE PLAY (v1.0.2 -> v1.0.6 VC 12)
+## BỘ NHỚ VẬN HÀNH & CHUẨN HÓA PHÁT HÀNH GOOGLE PLAY (v1.0.2 -> v1.0.7 VC 13)
 - **Định danh phát hành chính thức (Google Play ID)**: `com.ai.video.downloader.videodownloader`
-- **Phiên bản hiện tại**: `1.0.6` (Version Code: `12`)
+- **Phiên bản hiện tại**: `1.0.7` (Version Code: `13`)
 - **Target SDK**: `compileSdk = 36`, `targetSdk = 36` (Android 16 - Tuân thủ chính sách Google Play 2026)
 - **Google Play Billing v8.0.0 Compliance**:
   - Tách biệt hoàn toàn truy vấn `SUBS` (`weekly_pro`, `yearly_pro`) và `INAPP` (`lifetime_pro`) tránh ngoại lệ `IllegalArgumentException`.
-  - Triển khai **Connection Queue** an toàn (`isConnecting` + `pendingReadyCallbacks` đồng bộ `synchronized`) chống rớt callback khi kết nối BillingClient.
-  - **Dynamic Localized Pricing**: Lấy trực tiếp giá tiền tệ đã định dạng từ Google Play, loại bỏ 100% việc hardcode giá USD `$2.99`, `$19.99`, `$39.99` trên layout XML.
-  - **Dynamic Monthly Breakdown**: Tính toán tự động giá chia theo tháng cho gói Năm (`yearlyPhase.priceAmountMicros / 12`) và định dạng đồng nhất với mã tiền tệ `priceCurrencyCode`, loại bỏ triệt để vi phạm Subscriptions Policy (Currency differences with prominent display price).
+  - Triển khai **Connection Queue** + **Single-Flight Product Query Deduplication** (`isQueryingProducts` + `pendingQueryCallbacks` + `isLoadingProducts: StateFlow<Boolean>`) và **Auto-Retry Backoff** chống rớt callback hoặc trùng truy vấn khi kết nối BillingClient.
+  - **100% Offer & Pricing Phase Parity**: Đồng bộ tuyệt đối `getSelectedSubscriptionOffer(details)` và `getRecurringPricingPhase(sku)` giữa màn hình Offers Page (`PaymentWallActivity`) và Google Play Payment Cart (`executeBillingFlow`).
+  - **Exact Play Store Currency Notation**: Sử dụng `CurrencyFormatter.formatAmountMatchingPlayPrice()` trích xuất trực tiếp `prefix`/`suffix`/dấu phân cách từ `formattedPrice` của Google Play để hiển thị giá chia tháng của gói Năm (`yearlySubtext`) khớp 100% ký hiệu tiền tệ.
+  - **Locale Country Preservation & Multi-Signal Country Detection**: Bảo toàn mã quốc gia thiết bị trong `LocaleHelper.wrapContext()` (`en_IN`, `en_GB`, `en_PH`, `en_SG`, `en_AU`, `en_CA`, v.v.) kết hợp nhận diện SIM/Network ISO + System Locale + Timezone + 50 ngôn ngữ, chấm dứt hoàn toàn lỗi rơi về `$1.66 / $2.99 / $19.99 / $39.99` USD.
   - Bản địa hóa 100% thông báo, callback và dialog liên quan đến thanh toán (`strings.xml` và `values-vi/strings.xml`).
 - **Sniffer Engine Chuyên Sâu**:
   - Bóc tách Instagram Reels/Posts (`og:video`, `meta[property="og:video:secure_url"]`).
@@ -49,9 +50,9 @@
 - **Két Sắt Riêng Tư Tự Kiểm Thử (Self-Contained Vault)**:
   - Tích hợp nút "+ Add Demo Video" (`btn_vault_add_demo`) và "+ Import Video" (`btn_vault_import`), cho phép reviewer kiểm thử trọn vẹn luồng mã hóa AES-256 ngay trên clean install.
 - **Danh mục File Thành Phẩm (Release Artifacts)**:
-  - AAB Release: `CONVERT/apps/android/app/build/outputs/bundle/release/com.ai.video.downloader.videodownloader_v1.0.6_vc12.aab` (11.05 MB, Signed).
-  - APK Release: `CONVERT/apps/android/app/build/outputs/apk/release/com.ai.video.downloader.videodownloader_v1.0.6_vc12.apk` (7.30 MB, Signed).
+  - AAB Release: `CONVERT/apps/android/app/build/outputs/bundle/release/com.ai.video.downloader.videodownloader_v1.0.7_vc13.aab` (Signed).
+  - APK Release: `CONVERT/apps/android/app/build/outputs/apk/release/com.ai.video.downloader.videodownloader_v1.0.7_vc13.apk` (Signed).
 - **Bộ nhớ lỗi và tri thức bền vững tích lũy**:
-  - [PROJECT_ERROR.md](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/PROJECT_ERROR.md): `[ERR-001]` đến `[ERR-013]`.
-  - [ACQUIREMENTS.md](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/ACQUIREMENTS.md): `[ACQ-001]` đến `[ACQ-008]`.
+  - [PROJECT_ERROR.md](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/PROJECT_ERROR.md): `[ERR-001]` đến `[ERR-014]`.
+  - [ACQUIREMENTS.md](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/ACQUIREMENTS.md): `[ACQ-001]` đến `[ACQ-009]`.
 

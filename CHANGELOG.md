@@ -4,6 +4,19 @@ Tất cả các thay đổi quan trọng trong dự án **AI Video Downloader** 
 
 ---
 
+## [1.0.7] - 2026-11-10 (Build 13)
+
+### Đã khắc phục & Nâng cấp (Fixed & Changed)
+- **Khắc phục triệt để vi phạm chính sách Subscriptions (Currency differences with prominent display price - Rejection VC 12):**
+  - **Bảo toàn mã quốc gia ISO 3166-1 trong `LocaleHelper.kt`:** Khắc phục lỗi `Locale(langCode)` xóa trắng thuộc tính `Locale.getDefault().country` (`""`) khi khởi động app, khiến mọi thiết bị nói tiếng Anh ngoài Mỹ (`en_IN` Ấn Độ, `en_GB` Anh, `en_PH` Philippines, `en_SG` Singapore, `en_AU` Úc, `en_CA` Canada, `en_IE` Ireland...) bị rơi về giá USD `$2.99 / $19.99 / $39.99`. Kết hợp đa tầng SIM Country ISO, Network Country ISO, `Resources.getSystem()`, `TimeZone` và ánh xạ chuẩn 50 ngôn ngữ.
+  - **Sao chép chính xác định dạng `formattedPrice` của Google Play (`formatAmountMatchingPlayPrice`):** Tự động trích xuất tiền tố (`prefix`), hậu tố (`suffix`) và dấu phân cách số trực tiếp từ chuỗi giá `ProductDetails` của Google Play để định dạng giá chia theo tháng của gói Năm (`yearlySubtext`), đảm bảo 100% khớp ký hiệu tiền tệ với giá chính và giỏ hàng thanh toán Google Play.
+  - **Single-Flight Product Query & Canonical Offer Selection trong `BillingManager.kt`:** Chống gọi trùng lặp IPC `queryProductDetailsAsync`, tự động retry có backoff khi dịch vụ ngắt kết nối hoặc chưa tải đủ sản phẩm, ưu tiên chọn Base Plan (`offerId == null`, `priceAmountMicros > 0`) đồng nhất giữa màn hình Offer và `offerToken` mở giỏ hàng Google Play.
+  - **Đồng bộ trạng thái tải & Pre-Cart Refresh trên `PaymentWallActivity.kt`:** Giữ trạng thái `@string/paywall_price_loading` khi đang tải lần đầu từ Google Play (tránh chớp giá giả lập) và bắt buộc gọi `refreshPricing()` ngay trước khi mở Google Play Payment Cart.
+  - **Nâng cấp phiên bản:** Tăng `versionCode` lên `13` và `versionName` lên `1.0.7`.
+  - **Kiểm thử tự động:** Mở rộng `CurrencyFormatterTest.kt` lên 14 unit tests kiểm chứng toàn bộ 50 ngôn ngữ, bảo toàn mã quốc gia `en_IN`/`en_PH`/`pl_PL` và `formatAmountMatchingPlayPrice` (100% Passed).
+
+---
+
 ## [1.0.6] - 2026-10-31 (Build 12)
 
 ### Đã khắc phục & Nâng cấp (Fixed & Changed)

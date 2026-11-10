@@ -28,4 +28,6 @@
 | 2026-10-12 20:30 | TASK-025 | ANDROID / API 36 | DONE | Nâng cấp compileSdk = 36 và targetSdk = 36 (Android 16) đáp ứng quy định mới của Google Play Console 2026, build Release VC 10 (v1.0.4). |
 | 2026-10-21 16:45 | TASK-026 | ANDROID / POLICY FIX | DONE | Khắc phục vi phạm Misleading Claims (bóc tách Instagram/Meta CDN, loại bỏ toàn bộ phát ngôn 4K/8K, bổ sung Private Vault Demo & File Import tự kiểm thử độc lập), build Release VC 11 (v1.0.5). |
 | 2026-10-31 12:30 | TASK-027 | ANDROID / CURRENCY FIX | DONE | Khắc phục vi phạm Subscriptions Policy (Currency differences with prominent display price): loại bỏ hardcode USD XML, tính toán phân rã tháng động chuẩn 100% priceCurrencyCode, triển khai Billing Connection Queue, i18n toàn diện, build Release VC 12 (v1.0.6). |
+| 2026-11-10 14:50 | TASK-028 | ANDROID / CURRENCY & LOCALE FIX | DONE | Khắc phục triệt để vi phạm Subscriptions Policy (Currency differences with prominent display price) trên VC 12: bảo toàn mã quốc gia trong LocaleHelper.wrapContext, đồng bộ 100% offer/phase giữa Offers Page và Payment Cart, trích xuất nguyên bản ký hiệu tiền tệ Play Store cho phân rã tháng, single-flight Billing query + auto-retry, bao phủ 50 ngôn ngữ & 190+ quốc gia/múi giờ, build Release VC 13 (v1.0.7). |
+
 

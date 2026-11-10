@@ -100,5 +100,21 @@ Tài liệu chưng cất kinh nghiệm, nguyên tắc và giải pháp kỹ thu�
      - Mọi dialog lỗi, thông báo kết nối, khôi phục giao dịch đều dùng chuỗi tài nguyên qua `Context.getString(R.string.*)`.
 - **Lợi ích:** Vượt qua 100% tiêu chí kiểm duyệt chính sách Subscriptions của Google Play trên mọi quốc gia, loại bỏ hoàn toàn các lỗi từ chối duyệt về Currency mismatch và Broken Functionality do lỗi đồng bộ.
 
+---
+
+## [ACQ-009] Bảo Toàn Mã Quốc Gia ISO 3166-1 Trong Hệ Thống Đa Ngôn Ngữ & Sao Chép Mẫu Chuỗi Giá Google Play (`formatAmountMatchingPlayPrice`)
+- **Bối cảnh:** Khi ứng dụng hỗ trợ bộ chuyển đổi đa ngôn ngữ nội bộ (50 ngôn ngữ), việc khởi tạo `Locale(langCode)` chỉ có mã ngôn ngữ 2 ký tự (ví dụ `Locale("en")`) và gán `Locale.setDefault(locale)` ngay tại `Application.attachBaseContext()` sẽ xóa trắng mã quốc gia (`country == ""`) của thiết bị trên toàn bộ tiến trình. Bên cạnh đó, `NumberFormat.getCurrencyInstance(locale)` của JVM có thể sinh ký hiệu tiền tệ khác với chuỗi `formattedPrice` do Google Play Store trả về (như `IDR` thay vì `Rp`, `CA$` thay vì `$`, `US$` thay vì `$`).
+- **Nguyên tắc kỹ thuật tối ưu:**
+  1. **Không bao giờ khởi tạo `Locale` thiếu `country`:**
+     - Lưu giữ `initialBootLocale` và đọc trực tiếp `Resources.getSystem().configuration.locales[0]` cùng `TelephonyManager.simCountryIso` / `networkCountryIso` và `TimeZone.getDefault().id` để luôn có mã quốc gia ISO 3166-1 thật của thiết bị.
+     - Hàm `resolveLocaleWithCountry(langCode, context)` luôn kết hợp mã ngôn ngữ với mã quốc gia thực tế (ví dụ `Locale("en", "IN")`, `Locale("en", "GB")`, `Locale("en", "PH")`) hoặc ánh xạ chuẩn cho 50 ngôn ngữ.
+  2. **Sao chép trực tiếp cấu trúc chuỗi `formattedPrice` từ Google Play (`formatAmountMatchingPlayPrice`):**
+     - Tách `prefix` (trước chữ số đầu tiên), `suffix` (sau chữ số cuối cùng), dấu thập phân và dấu phân nhóm hàng nghìn trực tiếp từ `ProductDetails.PricingPhase.formattedPrice` của Google Play.
+     - Áp dụng cấu trúc đó cho mọi phép tính chia nhỏ chu kỳ (như giá chia theo tháng của gói Năm), đảm bảo 100% ký hiệu tiền tệ trên phụ đề giống hệt giá chính và giỏ hàng Google Play.
+  3. **Single-Flight Product Query & Canonical Base Plan Offer:**
+     - Hợp nhất các yêu cầu `queryAvailableProducts()` đồng thời vào một truy vấn duy nhất (`isQueryingProducts` + `pendingQueryCallbacks`).
+     - Ưu tiên chọn Base Plan (`offerId == null` và `priceAmountMicros > 0`) làm nguồn dữ liệu duy nhất cho cả hiển thị UI Paywall và `offerToken` khi gọi `launchBillingFlow`.
+- **Lợi ích:** Đảm bảo 100% tính nhất quán tiền tệ (Currency Parity) và định vị vùng lãnh thổ (Regional Localization) trên toàn bộ 190+ quốc gia và 50 ngôn ngữ của Google Play.
+
 
 

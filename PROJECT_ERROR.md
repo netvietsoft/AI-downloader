@@ -273,4 +273,33 @@ Tài liệu ghi nhận các lỗi đã gặp trong dự án, nguyên nhân gốc
   - Mọi dòng chữ liên quan đến giá chia nhỏ (subtext, monthly breakdown, daily cost) đều phải được tính toán động từ `ProductDetails` của Google Play với cùng mã tiền tệ `priceCurrencyCode`, tuyệt đối không hardcode ký hiệu tiền tệ hoặc con số tĩnh.
   - Luôn sử dụng hàng đợi kết nối an toàn cho `BillingClient.startConnection()` để tránh race condition khi mở Activity.
 
+---
+
+## [ERR-014] Mất Mã Quốc Gia ISO Khi Khởi Tạo Locale(langCode) & Xung Đột Ký Hiệu Tiền Tệ Giữa Play Store Và JVM NumberFormat
+- **Mức độ:** CRITICAL
+- **Ngày phát hiện:** 2026-11-10 (Google Play Review Rejection Version Code 12 - Subscriptions Policy Rejection: Currency differences with prominent display price)
+- **Triệu chứng:**
+  - Google Play tiếp tục từ chối bản build Version Code 12 với thông báo: *"Violation of Subscriptions policy - Currency differences with prominent display price. Ensure that currency displayed is consistent through multiple screens such as offers page and payment cart within the purchase flow and is appropriately localized for each country that your app is targeting."*
+  - Ảnh chụp màn hình của Reviewer hiển thị cả 3 gói Weekly, Yearly, Lifetime trên Paywall đều mang giá fallback USD (`$2.99`, `$19.99` kèm `Just $1.66 / month • Save 70%`, `$39.99`) dù thiết bị kiểm thử đặt tại quốc gia mục tiêu ngoài Mỹ và các mã `weekly_pro`, `yearly_pro`, `lifetime_pro` đã được Active trên Google Play Console.
+- **Root Cause:**
+  1. **Mất mã quốc gia ISO 3166-1 trong `LocaleHelper.kt`:** Ngay khi khởi động ứng dụng tại `NextAIApplication.attachBaseContext()`, hàm `LocaleHelper.wrapContext()` và `LocaleHelper.applyLanguage()` khởi tạo `val locale = Locale(langCode)` (ví dụ `Locale("en")` chỉ có mã ngôn ngữ, `country = ""`) rồi gọi `Locale.setDefault(locale)`. Hành động này xóa trắng thuộc tính `Locale.getDefault().country` (`""`) trên toàn bộ thiết bị toàn cầu (như Ấn Độ `en_IN`, Anh `en_GB`, Philippines `en_PH`, Singapore `en_SG`, Úc `en_AU`, Canada `en_CA`, Ireland `en_IE`, Ba Lan `pl_PL`, Thổ Nhĩ Kỳ `tr_TR`...). Khi `CurrencyFormatter.getFallbackPricing()` chạy, `country` luôn bằng `""` và `Currency.getInstance(Locale("en"))` ném `IllegalArgumentException`, dẫn đến 100% thiết bị rơi về nhánh mặc định cuối cùng là USD (`$2.99`, `$19.99`, `Just $1.66 / month • Save 70%`, `$39.99`).
+  2. **Gọi trùng lặp IPC `queryProductDetailsAsync` & hiển thị sớm giá fallback:** Trong `BillingManager.onBillingSetupFinished()`, hệ thống vừa gọi `queryAvailableProducts()` vừa kích hoạt `callbacks` gọi tiếp `queryAvailableProducts()` tại cùng một mili-giây, đồng thời `PaymentWallActivity.onCreate()` gọi `refreshPricing()` ngay lập tức ở frame 0 khi `ProductDetails` chưa tải xong, làm ghi đè `@string/paywall_price_loading` bằng giá fallback USD `$2.99 / $19.99 / $39.99`. Sau đó khi bấm `SUBSCRIBE NOW`, `handleSubscribe()` tải lại `ProductDetails` và mở thẳng Google Play Payment Cart bằng nội tệ mà không gọi `refreshPricing()` cập nhật lại màn hình Offer phía dưới.
+  3. **Sai lệch ký hiệu tiền tệ khi tính giá chia theo tháng (`NumberFormat` vs `formattedPrice`):** Khi định dạng `monthlyAmount` bằng `NumberFormat.getCurrencyInstance(Locale("en"))`, JVM sinh ra mã ISO hoặc ký hiệu khác với chuỗi `formattedPrice` của Google Play (ví dụ `IDR 24,917` dưới `Rp 299.000`, `CA$2.25` dưới `$26.99`, hoặc `US$1.67` dưới `$19.99`), và `subscriptionOfferDetails.firstOrNull()` có nguy cơ lấy nhầm phase Free Trial thay vì Base Plan trả phí định kỳ.
+- **Giải pháp:**
+  1. **Bảo toàn tuyệt đối mã quốc gia ISO trong `LocaleHelper.kt`:**
+     - Xây dựng `getSystemDeviceLocale()`, `getDeviceCountryCode(context)` (ưu tiên SIM Country ISO -> Network Country ISO -> `Resources.getSystem().configuration.locales[0].country` -> `TIMEZONE_TO_COUNTRY` -> `DEFAULT_COUNTRY_FOR_LANGUAGE` cho đủ 50 ngôn ngữ) và `resolveLocaleWithCountry(langCode, context)` luôn tạo `Locale(lang, country)` có đủ mã quốc gia 2 ký tự.
+  2. **Single-Flight Query & Canonical Offer Selection trong `BillingManager.kt`:**
+     - Cơ chế hàng đợi truy vấn đơn luồng (`isQueryingProducts` + `pendingQueryCallbacks` + `isLoadingProducts: StateFlow<Boolean>`) kèm tự động retry có backoff khi dịch vụ ngắt kết nối hoặc chưa tải đủ 3 SKU.
+     - Hàm `getSelectedSubscriptionOffer()` ưu tiên Base Plan (`offerId == null` có `priceAmountMicros > 0`) và `getRecurringPricingPhase()` lấy phase trả phí định kỳ (`lastOrNull { it.priceAmountMicros > 0 }`), dùng chung cho cả hiển thị giá trên Paywall và truyền `offerToken` vào `launchBillingFlow`.
+  3. **Sao chép chính xác định dạng Google Play (`formatAmountMatchingPlayPrice`) trong `CurrencyFormatter.kt`:**
+     - Tách trực tiếp `prefix`, `suffix`, dấu phân cách thập phân và phân nhóm hàng nghìn từ chuỗi `formattedPrice` của Google Play để định dạng chi phí chia theo tháng, đảm bảo khớp 100% ký hiệu tiền tệ trên mọi quốc gia.
+     - Mở rộng bảng ánh xạ tiền tệ phủ kín 50 ngôn ngữ và các quốc gia/vùng lãnh thổ mục tiêu.
+  4. **Đồng bộ hiển thị trên `PaymentWallActivity.kt`:**
+     - Giữ trạng thái `@string/paywall_price_loading` trong khi lần truy vấn đầu tiên từ Google Play đang diễn ra (`isLoadingProducts == true`) để không chớp giá giả lập.
+     - Bắt buộc gọi `refreshPricing()` ngay lập tức trước khi khởi chạy `startBillingFlowInternal()` mở giỏ hàng Google Play.
+  5. Nâng `versionCode = 13` và `versionName = "1.0.7"`, bổ sung 14 bài kiểm thử đơn vị trong `CurrencyFormatterTest.kt`.
+- **Ngăn ngừa:**
+  - Tuyệt đối không bao giờ gọi `Locale.setDefault(Locale(langCode))` thiếu tham số `country` vì sẽ làm hỏng toàn bộ hệ thống nhận diện vùng/tiền tệ của JVM và Android.
+  - Khi hiển thị giá chia nhỏ (theo tháng/tuần) từ gói thuê bao Google Play, luôn sao chép tiền tố/hậu tố tiền tệ trực tiếp từ `ProductDetails.PricingPhase.formattedPrice`.
+
 

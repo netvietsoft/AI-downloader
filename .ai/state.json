@@ -1,12 +1,13 @@
 {
   "project": "AI-Video-Downloader",
   "version": "2.1.2",
-  "last_updated": "2026-10-28T18:48:00Z",
-  "active_phase": "TASK-012_FIX_SUBSCRIPTION_CURRENCY_POLICY_AND_BUILD_V1.0.6",
+  "last_updated": "2026-11-10T14:54:00Z",
+  "active_phase": "TASK-013_FIX_SUBSCRIPTION_CURRENCY_LOCALIZATION_AND_BUILD_V1.0.7",
   "status": "COMPLETED",
-  "task_description": "Fix Subscriptions policy rejection: Currency differences with prominent display price, dynamic localized pricing from Google Play Billing v8, dynamic monthly breakdown, eliminate hardcoded USD, localize all dialogs and callbacks, bump versionCode to 12 (v1.0.6), package signed AAB and APK",
+  "task_description": "Fix Google Play Subscriptions policy rejection (Currency differences with prominent display price): preserve device ISO country in LocaleHelper (prevent Locale(langCode) from wiping country to empty string), single-flight deduplicated BillingClient product query with auto-retry and canonical Base Plan/recurring phase selection, exact currency prefix/suffix/separator cloning from Google Play formattedPrice, 190-country/50-language localized currency mapping, pre-cart UI price sync, bump versionCode to 13 (v1.0.7), package signed AAB and APK",
   "branches": {
     "main": "Full project (Android Kotlin + Web Platform + Governance)",
+    "fix/subscription-currency-v1.0.7": "Fix Subscriptions currency localization, LocaleHelper country preservation, and BillingClient sync (VC 13)",
     "fix/subscription-currency-v1.0.6": "Fix Subscriptions currency difference policy rejection and localized billing flow",
     "fix/misleading-claims-v1.0.5": "Fix Misleading Claims and In-App Experience rejection",
     "web": "Standalone Web deployment (snaptik2.com Port 3080)"

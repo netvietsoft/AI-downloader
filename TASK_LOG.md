@@ -4,6 +4,34 @@ Tài liệu ghi nhận toàn bộ tiến trình và hoạt động thực thi th
 
 ---
 
+## [2026-11-10 14:45] TASK-013: Khắc Phục Triệt Để Vi Phạm Chính Sách Subscriptions (LocaleHelper Country Preservation & Play Price Format Cloning) & Release Build 13 (v1.0.7)
+- **Agent chịu trách nhiệm:** Agent 3 (Android Frontend & Billing) / Agent 7 (Fixer) / Agent 0 (CEO Orchestrator)
+- **Bối cảnh:** Google Play Console từ chối bản build Version Code 12 theo chính sách Subscriptions Policy: *"Currency differences with prominent display price. Ensure that currency displayed is consistent through multiple screens such as offers page and payment cart within the purchase flow and is appropriately localized for each country that your app is targeting."* Ảnh chụp từ Reviewer hiển thị cả 3 gói trên Paywall đều hiện giá fallback USD (`$2.99`, `$19.99`, `Just $1.66 / month • Save 70%`, `$39.99`) dù 3 mã `weekly_pro`, `yearly_pro`, `lifetime_pro` đã được Active trên Google Play Console.
+- **Nguyên nhân gốc rễ (Root Cause):**
+  1. `LocaleHelper.wrapContext()` và `LocaleHelper.applyLanguage()` tạo `Locale(langCode)` (ví dụ `Locale("en")` không có tham số `country`) rồi gán `Locale.setDefault(locale)`, xóa trắng `Locale.getDefault().country` (`""`) trên toàn bộ thiết bị nói tiếng Anh ngoài Mỹ (`en_IN` Ấn Độ, `en_GB` Anh, `en_PH` Philippines, `en_SG` Singapore, `en_AU` Úc, `en_CA` Canada, `en_IE` Ireland...) cũng như 36 ngôn ngữ khác, khiến `CurrencyFormatter.getFallbackPricing()` luôn rơi về USD `$2.99 / $19.99 / $1.66 / $39.99`.
+  2. `BillingManager.onBillingSetupFinished()` gọi trùng lặp `queryAvailableProducts()` tại cùng một mili-giây và `PaymentWallActivity.onCreate()` gọi `refreshPricing()` ngay lập tức khi `ProductDetails` đang tải, ghi đè `@string/paywall_price_loading` bằng giá fallback USD; khi bấm `SUBSCRIBE NOW`, `handleSubscribe()` tải lại `ProductDetails` và mở thẳng giỏ hàng nội tệ mà không gọi `refreshPricing()` cập nhật màn hình Offer.
+  3. `CurrencyFormatter` dùng `NumberFormat.getCurrencyInstance(Locale("en"))` sinh ký hiệu khác với `formattedPrice` của Google Play (`IDR` thay vì `Rp`, `CA$` thay vì `$`, `US$` thay vì `$`).
+- **Hành động đã thực hiện:**
+  1. Nâng cấp `LocaleHelper.kt`: bổ sung `getSystemDeviceLocale()`, `getDeviceCountryCode(context)` (kết hợp SIM Country ISO, Network Country ISO, `Resources.getSystem()`, `TIMEZONE_TO_COUNTRY`, và bảng ánh xạ 50 ngôn ngữ `DEFAULT_COUNTRY_FOR_LANGUAGE`) cùng `resolveLocaleWithCountry(langCode, context)` bảo toàn 100% mã quốc gia ISO 2 ký tự.
+  2. Nâng cấp `BillingManager.kt`: triển khai Single-Flight Product Query (`isQueryingProducts` + `pendingQueryCallbacks` + `isLoadingProducts: StateFlow<Boolean>`), tự động retry có backoff, và chọn `getSelectedSubscriptionOffer()` (ưu tiên Base Plan `offerId == null`, `priceAmountMicros > 0`) đồng nhất cho cả hiển thị Paywall và `offerToken` mở giỏ hàng Google Play.
+  3. Nâng cấp `CurrencyFormatter.kt`: bổ sung `formatAmountMatchingPlayPrice()` sao chép chính xác tiền tố (`prefix`), hậu tố (`suffix`) và dấu phân cách từ `formattedPrice` của Google Play; mở rộng `CURRENCY_SPECS` phủ toàn bộ 50 ngôn ngữ và các quốc gia mục tiêu.
+  4. Nâng cấp `PaymentWallActivity.kt` & `SettingsFragment.kt`: giữ trạng thái `@string/paywall_price_loading` khi đang tải lần đầu từ Google Play và bắt buộc gọi `refreshPricing()` ngay trước khi mở giỏ hàng thanh toán.
+  5. Tăng `versionCode = 13` và `versionName = "1.0.7"` trong `CONVERT/apps/android/app/build.gradle.kts`.
+  6. Bổ sung unit tests trong `CurrencyFormatterTest.kt` (14/14 passed).
+  7. Build AAB Release (`com.ai.video.downloader.videodownloader_v1.0.7_vc13.aab`, 11.07 MB) và APK Release (`com.ai.video.downloader.videodownloader_v1.0.7_vc13.apk`, 7.31 MB) ký số hoàn chỉnh.
+- **Kết quả kiểm chứng:**
+  - `testDebugUnitTest`: 14/14 unit tests passed (`BUILD SUCCESSFUL in 42s`).
+  - `bundleRelease` & `assembleRelease`: `BUILD SUCCESSFUL`, `output-metadata.json` xác nhận `versionCode = 13`, `versionName = "1.0.7"`.
+- **Trạng thái:** `COMPLETED`
+- **Tài liệu cập nhật kèm theo:**
+  - `PROJECT_ERROR.md`: Bổ sung `[ERR-014]`.
+  - `ACQUIREMENTS.md`: Bổ sung `[ACQ-009]`.
+  - `CHANGELOG.md`: Bổ sung phiên bản `[1.0.7]`.
+  - `UPDATETODOS.md`: Hoàn thành `TASK-013`.
+  - `.ai/state.json`: Chuyển trạng thái `COMPLETED`.
+
+---
+
 ## [2026-10-31 12:30] TASK-012: Khắc Phục Vi Phạm Chính Sách Subscriptions (Currency Differences) & Release Build 12 (v1.0.6)
 - **Agent chịu trách nhiệm:** Agent 3 (Android Frontend & Billing) / Agent 0 (CEO Orchestrator)
 - **Bối cảnh:** Google Play Console từ chối bản build Version Code 11 theo chính sách Subscriptions Policy: *"Currency differences with prominent display price. Ensure that currency displayed is consistent through multiple screens such as offers page and payment cart within the purchase flow and is appropriately localized for each country that your app is targeting."* (IN_APP_EXPERIENCE-6840.png). Reviewer gặp tình trạng thẻ gói năm hiển thị tiền tệ bất nhất ($1.66 hardcoded dưới giá EUR/VND) và khi bấm Subscribe Now hiện thông báo lỗi tiếng Việt hardcode do race condition BillingClient.

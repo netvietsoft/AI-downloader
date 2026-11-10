@@ -20,6 +20,7 @@ import com.nextaitechnology.antidetect.feature.settings.SettingsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,8 +28,11 @@ import kotlinx.coroutines.launch
 
 /**
  * Trình Quản Lý Thanh Toán & Đăng Ký Thuê Bao Google Play (Google Play Billing Manager)
- * Full integration with Google Play Billing Library v7.x
- * Ensures dynamic localized price/currency matching between Offer screen and Google Play Payment Cart.
+ * Full integration with Google Play Billing Library v8.0.0.
+ * - Single-flight deduplicated product queries (prevents concurrent IPC race conditions).
+ * - Canonical Base Plan & recurring PricingPhase selection so Offers Page and Payment Cart
+ *   always share the exact same offerToken, price, and currency.
+ * - Automatic retry with exponential backoff on cold start or service disconnect.
  *
  * @author NextAI Technology Core Team
  */
@@ -61,9 +65,20 @@ class BillingManager private constructor(private val appContext: Context) : Purc
     private val _isBillingReady = MutableStateFlow(false)
     val isBillingReady: StateFlow<Boolean> = _isBillingReady.asStateFlow()
 
+    private val _isLoadingProducts = MutableStateFlow(true)
+    val isLoadingProducts: StateFlow<Boolean> = _isLoadingProducts.asStateFlow()
+
     @Volatile
     private var isConnecting = false
     private val pendingReadyCallbacks = mutableListOf<() -> Unit>()
+
+    @Volatile
+    private var isQueryingProducts = false
+    private val pendingQueryCallbacks = mutableListOf<(Map<String, ProductDetails>) -> Unit>()
+
+    @Volatile
+    private var retryCount = 0
+    private val maxAutoRetries = 3
 
     private var onPurchaseResultListener: ((Boolean, String?) -> Unit)? = null
 
@@ -81,14 +96,17 @@ class BillingManager private constructor(private val appContext: Context) : Purc
     }
 
     /**
-     * Khởi tạo kết nối với Google Play Billing Services
+     * Khởi tạo kết nối với Google Play Billing Services (Thread-safe queue)
      */
     fun startConnection(onReady: (() -> Unit)? = null) {
         synchronized(this) {
             if (billingClient.isReady) {
                 _isBillingReady.value = true
-                onReady?.invoke()
-                queryAvailableProducts()
+                if (onReady != null) {
+                    onReady.invoke()
+                } else if (_productDetailsMap.value.size < 3) {
+                    queryAvailableProducts()
+                }
                 return
             }
 
@@ -104,48 +122,94 @@ class BillingManager private constructor(private val appContext: Context) : Purc
             isConnecting = true
         }
 
-        billingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(billingResult: BillingResult) {
-                val callbacks: List<() -> Unit>
-                synchronized(this@BillingManager) {
-                    isConnecting = false
-                    callbacks = ArrayList(pendingReadyCallbacks)
-                    pendingReadyCallbacks.clear()
+        try {
+            billingClient.startConnection(object : BillingClientStateListener {
+                override fun onBillingSetupFinished(billingResult: BillingResult) {
+                    val callbacks: List<() -> Unit>
+                    synchronized(this@BillingManager) {
+                        isConnecting = false
+                        callbacks = ArrayList(pendingReadyCallbacks)
+                        pendingReadyCallbacks.clear()
+                    }
+
+                    if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                        Log.i(TAG, "Google Play Billing setup successful.")
+                        _isBillingReady.value = true
+                        queryActivePurchases()
+                        if (callbacks.isNotEmpty()) {
+                            callbacks.forEach { it.invoke() }
+                        } else {
+                            queryAvailableProducts()
+                        }
+                    } else {
+                        Log.w(TAG, "Billing setup failed: ${billingResult.responseCode} - ${billingResult.debugMessage}")
+                        _isBillingReady.value = false
+                        _isLoadingProducts.value = false
+                        callbacks.forEach { it.invoke() }
+                        scheduleAutoRetryIfNeeded()
+                    }
                 }
 
-                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    Log.i(TAG, "Google Play Billing setup successful.")
-                    _isBillingReady.value = true
-                    queryAvailableProducts()
-                    queryActivePurchases()
-                    callbacks.forEach { it.invoke() }
-                } else {
-                    Log.w(TAG, "Billing setup failed with response code: ${billingResult.responseCode} - ${billingResult.debugMessage}")
+                override fun onBillingServiceDisconnected() {
+                    synchronized(this@BillingManager) {
+                        isConnecting = false
+                    }
+                    Log.w(TAG, "Billing service disconnected. Scheduling automatic reconnect...")
                     _isBillingReady.value = false
-                    callbacks.forEach { it.invoke() }
+                    scheduleAutoRetryIfNeeded()
                 }
+            })
+        } catch (e: Exception) {
+            synchronized(this) {
+                isConnecting = false
             }
+            Log.e(TAG, "Exception starting BillingClient connection", e)
+            _isLoadingProducts.value = false
+        }
+    }
 
-            override fun onBillingServiceDisconnected() {
-                synchronized(this@BillingManager) {
-                    isConnecting = false
-                }
-                Log.w(TAG, "Billing service disconnected. Retrying...")
-                _isBillingReady.value = false
+    private fun scheduleAutoRetryIfNeeded() {
+        if (retryCount >= maxAutoRetries || _productDetailsMap.value.size >= 3) return
+        retryCount++
+        val delayMs = 800L * retryCount
+        scope.launch {
+            delay(delayMs)
+            if (!billingClient.isReady || _productDetailsMap.value.size < 3) {
+                Log.i(TAG, "Auto-retrying Billing connection & product query (attempt $retryCount/$maxAutoRetries)...")
+                queryAvailableProducts()
             }
-        })
+        }
     }
 
     /**
-     * Truy vấn thông tin sản phẩm và giá/tiền tệ trực tiếp từ Google Play Store.
-     * Lưu ý quan trọng: BillingClient 8.0.0 cấm kết hợp SUBS và INAPP trong cùng 1 QueryProductDetailsParams
-     * (gây ra IllegalArgumentException: All products should be of the same product type).
-     * Do đó phải chia thành 2 truy vấn riêng biệt và hợp nhất kết quả.
+     * Truy vấn thông tin sản phẩm và giá/tiền tệ trực tiếp từ Google Play Store (Single-Flight Deduplicated).
+     * Lưu ý quan trọng: BillingClient 8.0.0 cấm kết hợp SUBS và INAPP trong cùng 1 QueryProductDetailsParams.
+     * Do đó phải chia thành các truy vấn riêng biệt theo từng ProductType và hợp nhất kết quả.
      */
     fun queryAvailableProducts(onComplete: ((Map<String, ProductDetails>) -> Unit)? = null) {
         if (!billingClient.isReady) {
-            startConnection { queryAvailableProducts(onComplete) }
+            _isLoadingProducts.value = true
+            startConnection {
+                if (billingClient.isReady) {
+                    queryAvailableProducts(onComplete)
+                } else {
+                    _isLoadingProducts.value = false
+                    onComplete?.invoke(_productDetailsMap.value)
+                }
+            }
             return
+        }
+
+        synchronized(this) {
+            if (onComplete != null) {
+                pendingQueryCallbacks.add(onComplete)
+            }
+            if (isQueryingProducts) {
+                Log.d(TAG, "Product query already in flight, coalescing callback.")
+                return
+            }
+            isQueryingProducts = true
+            _isLoadingProducts.value = true
         }
 
         try {
@@ -175,16 +239,19 @@ class BillingManager private constructor(private val appContext: Context) : Purc
                 .setProductList(inAppProductList)
                 .build()
 
-            val resultMap = HashMap<String, ProductDetails>(_productDetailsMap.value)
+            val mergedMap = HashMap<String, ProductDetails>(_productDetailsMap.value)
 
             // 1. Truy vấn các gói thuê bao tuần & năm (SUBS)
             billingClient.queryProductDetailsAsync(subsParams) { subsBillingResult, subsDetailsResult ->
                 if (subsBillingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     val list = subsDetailsResult.productDetailsList
                     if (!list.isNullOrEmpty()) {
-                        for (item in list) {
-                            resultMap[item.productId] = item
-                            Log.i(TAG, "Loaded SUBS SKU: ${item.productId}, name: ${item.name}")
+                        synchronized(this@BillingManager) {
+                            for (item in list) {
+                                mergedMap[item.productId] = item
+                                Log.i(TAG, "Loaded SUBS SKU: ${item.productId}, price=${extractFormattedPrice(item)}")
+                            }
+                            _productDetailsMap.value = HashMap(mergedMap)
                         }
                     }
                 } else {
@@ -196,24 +263,88 @@ class BillingManager private constructor(private val appContext: Context) : Purc
                     if (inAppBillingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                         val inAppList = inAppDetailsResult.productDetailsList
                         if (!inAppList.isNullOrEmpty()) {
-                            for (item in inAppList) {
-                                resultMap[item.productId] = item
-                                Log.i(TAG, "Loaded INAPP SKU: ${item.productId}, name: ${item.name}")
+                            synchronized(this@BillingManager) {
+                                for (item in inAppList) {
+                                    mergedMap[item.productId] = item
+                                    Log.i(TAG, "Loaded INAPP SKU: ${item.productId}, price=${extractFormattedPrice(item)}")
+                                }
+                                _productDetailsMap.value = HashMap(mergedMap)
                             }
                         }
                     } else {
                         Log.w(TAG, "queryProductDetailsAsync INAPP failed: ${inAppBillingResult.responseCode} - ${inAppBillingResult.debugMessage}")
                     }
 
-                    _productDetailsMap.value = resultMap
-                    onComplete?.invoke(resultMap)
+                    // 3. Nếu có SKU nào chưa tìm thấy ở nhóm mặc định (ví dụ lifetime_pro tạo nhầm ở SUBS hoặc ngược lại),
+                    // kiểm tra chéo an toàn trong từng truy vấn đơn lẻ cùng loại
+                    val missingLifetimeInInApp = !mergedMap.containsKey(SKU_LIFETIME)
+                    if (missingLifetimeInInApp) {
+                        val crossSubsParams = QueryProductDetailsParams.newBuilder()
+                            .setProductList(
+                                listOf(
+                                    QueryProductDetailsParams.Product.newBuilder()
+                                        .setProductId(SKU_LIFETIME)
+                                        .setProductType(BillingClient.ProductType.SUBS)
+                                        .build()
+                                )
+                            )
+                            .build()
+                        billingClient.queryProductDetailsAsync(crossSubsParams) { crossRes, crossDetails ->
+                            if (crossRes.responseCode == BillingClient.BillingResponseCode.OK) {
+                                val crossList = crossDetails.productDetailsList
+                                if (!crossList.isNullOrEmpty()) {
+                                    synchronized(this@BillingManager) {
+                                        for (item in crossList) {
+                                            mergedMap[item.productId] = item
+                                        }
+                                        _productDetailsMap.value = HashMap(mergedMap)
+                                    }
+                                }
+                            }
+                            finishProductQuery(mergedMap)
+                        }
+                    } else {
+                        finishProductQuery(mergedMap)
+                    }
                 }
             }
         } catch (e: Exception) {
             Log.e(TAG, "Exception in queryAvailableProducts", e)
-            onComplete?.invoke(_productDetailsMap.value)
+            finishProductQuery(_productDetailsMap.value)
         }
     }
+
+    private fun finishProductQuery(finalMap: Map<String, ProductDetails>) {
+        val callbacks: List<(Map<String, ProductDetails>) -> Unit>
+        val snapshot: Map<String, ProductDetails>
+        synchronized(this) {
+            snapshot = HashMap(finalMap)
+            _productDetailsMap.value = snapshot
+            isQueryingProducts = false
+            _isLoadingProducts.value = false
+            callbacks = ArrayList(pendingQueryCallbacks)
+            pendingQueryCallbacks.clear()
+        }
+        callbacks.forEach { callback ->
+            try {
+                callback.invoke(snapshot)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error invoking product query callback", e)
+            }
+        }
+        if (snapshot.isEmpty()) {
+            scheduleAutoRetryIfNeeded()
+        } else {
+            retryCount = 0
+        }
+    }
+
+    fun hasAnyLoadedProduct(): Boolean = _productDetailsMap.value.isNotEmpty()
+
+    fun hasLoadedAllProducts(): Boolean =
+        _productDetailsMap.value.containsKey(SKU_WEEKLY) &&
+        _productDetailsMap.value.containsKey(SKU_YEARLY) &&
+        _productDetailsMap.value.containsKey(SKU_LIFETIME)
 
     /**
      * Lấy ProductDetails đã cache cho SKU chỉ định
@@ -223,28 +354,88 @@ class BillingManager private constructor(private val appContext: Context) : Purc
     }
 
     /**
-     * Lấy PricingPhase định kỳ của gói thuê bao (SUBS) để trích xuất giá và currency code
+     * Chọn SubscriptionOfferDetails chuẩn (Ưu tiên Base Plan có offerId == null và có phase trả phí > 0)
+     * Sử dụng đồng nhất cho cả hiển thị giá trên Paywall và truyền offerToken vào launchBillingFlow.
      */
-    fun getRecurringPricingPhase(sku: String): ProductDetails.PricingPhase? {
-        val details = _productDetailsMap.value[sku] ?: return null
-        return details.subscriptionOfferDetails?.firstOrNull()?.pricingPhases?.pricingPhaseList?.firstOrNull()
+    fun getSelectedSubscriptionOffer(details: ProductDetails): ProductDetails.SubscriptionOfferDetails? {
+        val offers = details.subscriptionOfferDetails ?: return null
+        if (offers.isEmpty()) return null
+        // Ưu tiên Base Plan chính gốc (offerId == null) có pricing phase > 0
+        return offers.firstOrNull { offer ->
+            offer.offerId == null && offer.pricingPhases.pricingPhaseList.any { it.priceAmountMicros > 0 }
+        } ?: offers.firstOrNull { offer ->
+            offer.pricingPhases.pricingPhaseList.any { it.priceAmountMicros > 0 }
+        } ?: offers.firstOrNull()
     }
 
     /**
-     * Lấy giá định dạng chính xác từ Google Play (ví dụ: "$2.99", "69.000 ₫", "€2.99")
+     * Lấy PricingPhase định kỳ trả phí của gói thuê bao (SUBS) để trích xuất giá và currency code.
+     * Luôn lấy phase trả phí cuối cùng (lastOrNull { it.priceAmountMicros > 0 }) để không lấy nhầm Free Trial 0đ.
      */
-    fun getFormattedPrice(sku: String): String? {
+    fun getRecurringPricingPhase(sku: String): ProductDetails.PricingPhase? {
         val details = _productDetailsMap.value[sku] ?: return null
+        return extractRecurringPricingPhase(details)
+    }
+
+    private fun extractRecurringPricingPhase(details: ProductDetails): ProductDetails.PricingPhase? {
+        val offer = getSelectedSubscriptionOffer(details) ?: return null
+        val phases = offer.pricingPhases.pricingPhaseList
+        return phases.lastOrNull { it.priceAmountMicros > 0 } ?: phases.lastOrNull()
+    }
+
+    private fun extractFormattedPrice(details: ProductDetails): String? {
         return try {
             if (details.productType == BillingClient.ProductType.SUBS) {
-                details.subscriptionOfferDetails?.firstOrNull()?.pricingPhases?.pricingPhaseList?.firstOrNull()?.formattedPrice
+                extractRecurringPricingPhase(details)?.formattedPrice
             } else {
                 details.oneTimePurchaseOfferDetails?.formattedPrice
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error formatting price for SKU $sku", e)
+            Log.e(TAG, "Error extracting price for ${details.productId}", e)
             null
         }
+    }
+
+    /**
+     * Lấy giá định dạng chính xác từ Google Play (ví dụ: "$2.99", "69.000 ₫", "2,99 €", "₹249.00")
+     */
+    fun getFormattedPrice(sku: String): String? {
+        val details = _productDetailsMap.value[sku] ?: return null
+        return extractFormattedPrice(details)
+    }
+
+    /**
+     * Lấy mã tiền tệ ISO 4217 từ ProductDetails của SKU (ví dụ: "USD", "VND", "EUR", "INR")
+     */
+    fun getPriceCurrencyCode(sku: String): String? {
+        val details = _productDetailsMap.value[sku] ?: return null
+        return try {
+            if (details.productType == BillingClient.ProductType.SUBS) {
+                extractRecurringPricingPhase(details)?.priceCurrencyCode
+            } else {
+                details.oneTimePurchaseOfferDetails?.priceCurrencyCode
+            }
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    /**
+     * Phát hiện mã tiền tệ của tài khoản Google Play từ bất kỳ sản phẩm nào đã tải thành công
+     */
+    fun getDetectedPlayCurrencyCode(): String? {
+        return getPriceCurrencyCode(SKU_YEARLY)
+            ?: getPriceCurrencyCode(SKU_WEEKLY)
+            ?: getPriceCurrencyCode(SKU_LIFETIME)
+    }
+
+    /**
+     * Lấy chuỗi giá mẫu đã định dạng từ Google Play để đồng bộ ký hiệu tiền tệ 100% giữa các gói
+     */
+    fun getDetectedReferenceFormattedPrice(): String? {
+        return getFormattedPrice(SKU_YEARLY)
+            ?: getFormattedPrice(SKU_WEEKLY)
+            ?: getFormattedPrice(SKU_LIFETIME)
     }
 
     /**
@@ -296,7 +487,8 @@ class BillingManager private constructor(private val appContext: Context) : Purc
     ) {
         try {
             val productDetailsParamsList = if (details.productType == BillingClient.ProductType.SUBS) {
-                val offerToken = details.subscriptionOfferDetails?.firstOrNull()?.offerToken ?: run {
+                val selectedOffer = getSelectedSubscriptionOffer(details)
+                val offerToken = selectedOffer?.offerToken ?: run {
                     onResult(false, appContext.getString(R.string.billing_token_not_found))
                     return
                 }
