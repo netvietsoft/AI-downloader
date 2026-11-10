@@ -1,8 +1,11 @@
 package com.nextaitechnology.antidetect
 
 import com.nextaitechnology.antidetect.core.i18n.CurrencyFormatter
+import com.nextaitechnology.antidetect.core.i18n.LocaleHelper
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.util.Locale
 
@@ -57,7 +60,7 @@ class CurrencyFormatterTest {
             assertEquals("2,99 €", pricing.weeklyPrice)
             assertEquals("19,99 €", pricing.yearlyPrice)
             assertEquals("39,99 €", pricing.lifetimePrice)
-            org.junit.Assert.assertTrue(pricing.yearlySubtext.contains("€"))
+            assertTrue(pricing.yearlySubtext.contains("€"))
         } finally {
             Locale.setDefault(originalLocale)
         }
@@ -73,7 +76,7 @@ class CurrencyFormatterTest {
             assertEquals("CA$ 3.99", pricing.weeklyPrice)
             assertEquals("CA$ 26.99", pricing.yearlyPrice)
             assertEquals("CA$ 49.99", pricing.lifetimePrice)
-            org.junit.Assert.assertTrue(pricing.yearlySubtext.contains("CA$"))
+            assertTrue(pricing.yearlySubtext.contains("CA$"))
         } finally {
             Locale.setDefault(originalLocale)
         }
@@ -89,7 +92,7 @@ class CurrencyFormatterTest {
             assertEquals("A$ 4.49", pricing.weeklyPrice)
             assertEquals("A$ 29.99", pricing.yearlyPrice)
             assertEquals("A$ 59.99", pricing.lifetimePrice)
-            org.junit.Assert.assertTrue(pricing.yearlySubtext.contains("A$"))
+            assertTrue(pricing.yearlySubtext.contains("A$"))
         } finally {
             Locale.setDefault(originalLocale)
         }
@@ -105,7 +108,7 @@ class CurrencyFormatterTest {
             assertEquals("S$ 4.49", pricing.weeklyPrice)
             assertEquals("S$ 29.98", pricing.yearlyPrice)
             assertEquals("S$ 58.98", pricing.lifetimePrice)
-            org.junit.Assert.assertTrue(pricing.yearlySubtext.contains("S$"))
+            assertTrue(pricing.yearlySubtext.contains("S$"))
         } finally {
             Locale.setDefault(originalLocale)
         }
@@ -114,8 +117,8 @@ class CurrencyFormatterTest {
     @Test
     fun testFormatAmountWithCurrency_VND() {
         val formatted = CurrencyFormatter.formatAmountWithCurrency(41583.33, "VND", Locale("vi", "VN"))
-        org.junit.Assert.assertTrue("Should contain currency symbol or VND: $formatted", formatted.contains("₫") || formatted.contains("VND"))
-        org.junit.Assert.assertFalse("Should not contain dollar sign: $formatted", formatted.contains("$"))
+        assertTrue("Should contain currency symbol or VND: $formatted", formatted.contains("₫") || formatted.contains("VND"))
+        assertFalse("Should not contain dollar sign: $formatted", formatted.contains("$"))
     }
 
     @Test
@@ -127,8 +130,8 @@ class CurrencyFormatterTest {
     @Test
     fun testFormatAmountWithCurrency_EUR() {
         val formatted = CurrencyFormatter.formatAmountWithCurrency(1.6658, "EUR", Locale.GERMANY)
-        org.junit.Assert.assertTrue("Should contain 1,67: $formatted", formatted.contains("1,67"))
-        org.junit.Assert.assertTrue("Should contain €: $formatted", formatted.contains("€"))
+        assertTrue("Should contain 1,67: $formatted", formatted.contains("1,67"))
+        assertTrue("Should contain €: $formatted", formatted.contains("€"))
     }
 
     @Test
@@ -148,16 +151,120 @@ class CurrencyFormatterTest {
             for (loc in locales) {
                 Locale.setDefault(loc)
                 val pricing = CurrencyFormatter.getFallbackPricing()
-                // If country is not US, yearlySubtext should never contain the raw '$' unless it's CA$ or A$ or S$
                 if (loc.country != "US") {
                     val subtext = pricing.yearlySubtext
                     val price = pricing.yearlyPrice
                     if (!price.contains("$")) {
-                        org.junit.Assert.assertFalse(
+                        assertFalse(
                             "Yearly subtext '$subtext' should not contain '$' when price is '$price' for locale $loc",
                             subtext.contains("$")
                         )
                     }
+                }
+            }
+        } finally {
+            Locale.setDefault(originalLocale)
+        }
+    }
+
+    @Test
+    fun testLocaleHelper_PreservesCountryForEnglishRegions() {
+        val originalLocale = Locale.getDefault()
+        try {
+            // Simulate reviewer in India with English language (en_IN)
+            Locale.setDefault(Locale("en", "IN"))
+            val resolvedIndia = LocaleHelper.resolveLocaleWithCountry("en")
+            assertEquals("IN", resolvedIndia.country)
+            Locale.setDefault(resolvedIndia)
+            val indiaPricing = CurrencyFormatter.getFallbackPricing("en")
+            assertTrue("India en_IN should use INR ₹, got ${indiaPricing.yearlyPrice}", indiaPricing.yearlyPrice.contains("₹"))
+            assertTrue("India subtext should use INR ₹, got ${indiaPricing.yearlySubtext}", indiaPricing.yearlySubtext.contains("₹"))
+
+            // Simulate reviewer in Philippines with English language (en_PH)
+            Locale.setDefault(Locale("en", "PH"))
+            val resolvedPh = LocaleHelper.resolveLocaleWithCountry("en")
+            assertEquals("PH", resolvedPh.country)
+            Locale.setDefault(resolvedPh)
+            val phPricing = CurrencyFormatter.getFallbackPricing("en")
+            assertTrue("Philippines en_PH should use PHP ₱, got ${phPricing.yearlyPrice}", phPricing.yearlyPrice.contains("₱"))
+            assertTrue("Philippines subtext should use PHP ₱, got ${phPricing.yearlySubtext}", phPricing.yearlySubtext.contains("₱"))
+
+            // Simulate reviewer in Poland (pl_PL)
+            Locale.setDefault(Locale("pl", "PL"))
+            val resolvedPl = LocaleHelper.resolveLocaleWithCountry("pl")
+            assertEquals("PL", resolvedPl.country)
+            Locale.setDefault(resolvedPl)
+            val plPricing = CurrencyFormatter.getFallbackPricing("pl")
+            assertTrue("Poland pl_PL should use zł, got ${plPricing.yearlyPrice}", plPricing.yearlyPrice.contains("zł"))
+            assertTrue("Poland subtext should use zł, got ${plPricing.yearlySubtext}", plPricing.yearlySubtext.contains("zł"))
+        } finally {
+            Locale.setDefault(originalLocale)
+        }
+    }
+
+    @Test
+    fun testFormatAmountMatchingPlayPrice_ClonesExactPrefixSuffixAndSeparators() {
+        assertEquals(
+            "$1.67",
+            CurrencyFormatter.formatAmountMatchingPlayPrice(19.99 / 12.0, "USD", "$19.99")
+        )
+        assertEquals(
+            "US$1.67",
+            CurrencyFormatter.formatAmountMatchingPlayPrice(19.99 / 12.0, "USD", "US$19.99")
+        )
+        assertEquals(
+            "CA$ 2.25",
+            CurrencyFormatter.formatAmountMatchingPlayPrice(26.99 / 12.0, "CAD", "CA$ 26.99")
+        )
+        assertEquals(
+            "1,67 €",
+            CurrencyFormatter.formatAmountMatchingPlayPrice(19.99 / 12.0, "EUR", "19,99 €")
+        )
+        assertEquals(
+            "41.583 ₫",
+            CurrencyFormatter.formatAmountMatchingPlayPrice(499000.0 / 12.0, "VND", "499.000 ₫")
+        )
+        assertEquals(
+            "Rp 24.917",
+            CurrencyFormatter.formatAmountMatchingPlayPrice(299000.0 / 12.0, "IDR", "Rp 299.000")
+        )
+        assertEquals(
+            "₹141.58",
+            CurrencyFormatter.formatAmountMatchingPlayPrice(1699.0 / 12.0, "INR", "₹1,699.00")
+        )
+        assertEquals(
+            "¥242",
+            CurrencyFormatter.formatAmountMatchingPlayPrice(2900.0 / 12.0, "JPY", "¥2,900")
+        )
+        assertEquals(
+            "7,50 zł",
+            CurrencyFormatter.formatAmountMatchingPlayPrice(89.99 / 12.0, "PLN", "89,99 zł")
+        )
+    }
+
+    @Test
+    fun testAll50SupportedLanguagesResolveValidCountryAndConsistentCurrency() {
+        val originalLocale = Locale.getDefault()
+        try {
+            for (item in LocaleHelper.SUPPORTED_LANGUAGES) {
+                val resolved = LocaleHelper.resolveLocaleWithCountry(item.code)
+                assertEquals(
+                    "Language ${item.code} must resolve to a 2-letter ISO country code",
+                    2,
+                    resolved.country.length
+                )
+                Locale.setDefault(resolved)
+                val pricing = CurrencyFormatter.getFallbackPricing(item.code)
+                assertNotNull(pricing)
+                if (item.code != "en") {
+                    assertFalse(
+                        "Non-English language '${item.code}' (${resolved.country}) should not default to US '$19.99', got '${pricing.yearlyPrice}'",
+                        pricing.yearlyPrice == "$19.99"
+                    )
+                    assertFalse(
+                        "Non-English language '${item.code}' (${resolved.country}) should not have '$1.66' in subtext, got '${pricing.yearlySubtext}'",
+                        pricing.yearlySubtext.contains("$1.66")
+                    )
                 }
             }
         } finally {

@@ -287,16 +287,16 @@ class SettingsFragment : Fragment() {
     }
 
     private fun checkUpdate() {
-        Toast.makeText(requireContext(), "🔍 Đang kiểm tra phiên bản mới nhất...", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "🔍 " + getString(R.string.msg_update_latest), Toast.LENGTH_SHORT).show()
         AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.card_version_title))
             .setMessage(getString(R.string.msg_update_latest) + "\n\n" + "Version: v${BuildConfig.VERSION_NAME} (Build ${BuildConfig.VERSION_CODE})")
             .setPositiveButton(getString(R.string.btn_ok), null)
-            .setNeutralButton("🧹 Clear Cache") { _, _ ->
+            .setNeutralButton("🧹 " + getString(R.string.btn_clear_all)) { _, _ ->
                 try {
                     requireContext().cacheDir.deleteRecursively()
                     FirebaseAnalyticsManager.logAppClearData("browser_and_storage_cache")
-                    Toast.makeText(requireContext(), "✅ Cache đã được làm sạch!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "✅ " + getString(R.string.toast_all_tabs_closed), Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
                     FirebaseAnalyticsManager.logAppException(e, "ClearCache")
                 }

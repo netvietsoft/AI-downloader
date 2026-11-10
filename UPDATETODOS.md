@@ -20,6 +20,7 @@
 | **8. Tuân Thủ Target API Level 36 & Release Build 10** | `DONE` | Agent 3 (Android) | Nâng cấp compileSdk/targetSdk 36, versionCode 10, v1.0.4 AAB/APK ký số |
 | **9. Khắc Phục Misleading Claims & Release Build 11** | `DONE` | Agent 3 (Android) | Bóc tách Instagram/Meta CDN, Private Vault độc lập, Purge 4K/8K, Build 11 |
 | **10. Tuân Thủ Chính Sách Subscriptions & Release Build 12** | `DONE` | Agent 3 (Android) | Currency Parity động từ Google Play, Connection Queue, Build 12 (AAB 11.05MB, APK 7.30MB) |
+| **11. Khắc Phục Triệt Để Currency Localization & Release Build 13** | `DONE` | Agent 3 / Agent 7 | Bảo toàn Country ISO trong LocaleHelper, Single-Flight Billing Query, Clone Format Play Store, Build 13 (AAB 11.07MB, APK 7.31MB) |
 
 ---
 
@@ -69,4 +70,10 @@
   - **Đa ngôn ngữ hóa toàn diện (Comprehensive Localization):** Chuyển toàn bộ các chuỗi thông báo, hộp thoại và callback trong `BillingManager.kt`, `PaymentWallActivity.kt`, `SettingsFragment.kt` sang `strings.xml` (hỗ trợ đầy đủ tiếng Anh, tiếng Việt và các ngôn ngữ hệ thống).
   - **Version Code 12:** Cập nhật `versionCode = 12`, `versionName = "1.0.6"` trong `app/build.gradle.kts`.
   - **Đóng gói & Kiểm thử:** Chạy 11 unit test trong `CurrencyFormatterTest.kt` kiểm chứng 100% parity, build AAB Release (`com.ai.video.downloader.videodownloader_v1.0.6_vc12.aab`, 11.05MB) và APK Release (`com.ai.video.downloader.videodownloader_v1.0.6_vc12.apk`, 7.30MB) ký số hoàn chỉnh.
+- [x] **TASK-013:** Khắc phục triệt để vi phạm chính sách Subscriptions (Currency differences with prominent display price - Rejection VC 12) & Nâng cấp Version Code 13 (v1.0.7):
+  - **Khắc phục lỗi mất mã quốc gia ISO trong `LocaleHelper.kt`:** Ngăn chặn `Locale(langCode)` ghi đè `Locale.getDefault()` làm rỗng `country` (`""`), bảo toàn mã quốc gia gốc từ `Resources.getSystem()`, `TelephonyManager` (SIM/Network ISO) và `TimeZone`.
+  - **Nâng cấp `BillingManager.kt` (Single-Flight Query & Canonical Offer Selection):** Chống gọi trùng lặp IPC `queryProductDetailsAsync`, tự động retry khi kết nối ngắt hoặc danh sách trống, ưu tiên chọn Base Plan (`offerId == null`) và phase định kỳ trả phí (`priceAmountMicros > 0`) đồng nhất 100% giữa thẻ hiển thị và `offerToken` mở giỏ hàng Google Play.
+  - **Nâng cấp `CurrencyFormatter.kt` (Clone Format & 190-Country/50-Language Localization):** Sao chép chính xác tiền tố/hậu tố ký hiệu tiền tệ và dấu phân cách từ `formattedPrice` của Google Play khi tính giá chia theo tháng (`formatAmountMatchingPlayPrice`), bổ sung ánh xạ đầy đủ 50 ngôn ngữ & 190 quốc gia/múi giờ, tuyệt đối không rò rỉ `$2.99 / $19.99 / $1.66 / $39.99` USD tại các quốc gia ngoài Mỹ.
+  - **Nâng cấp `PaymentWallActivity.kt`:** Đồng bộ hiển thị trạng thái tải và bắt buộc `refreshPricing()` ngay trước khi mở Google Play Payment Cart, tự động điều chỉnh nút CTA & điều khoản theo loại gói (Subscription vs One-time Lifetime).
+  - **Version Code 13:** Cập nhật `versionCode = 13`, `versionName = "1.0.7"` trong `app/build.gradle.kts`, chạy 14/14 unit tests pass và đóng gói AAB Release (`com.ai.video.downloader.videodownloader_v1.0.7_vc13.aab`, 11.07 MB) + APK Release (`com.ai.video.downloader.videodownloader_v1.0.7_vc13.apk`, 7.31 MB) ký số hoàn chỉnh.
 

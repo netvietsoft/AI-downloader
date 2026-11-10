@@ -27,6 +27,7 @@ import kotlinx.coroutines.launch
 /**
  * Màn hình Thanh Toán & Nâng Cấp Gói Cước (Payment Wall / Subscription Activity)
  * Displays VIP Pro features, subscription pricing, and handles Google Play purchase activation.
+ * Guarantees 100% currency consistency between the Offers Page and Google Play Payment Cart.
  *
  * @author NextAI Technology Core Team
  */
@@ -61,11 +62,20 @@ class PaymentWallActivity : AppCompatActivity() {
         settingsRepository = SettingsRepository(this)
         billingManager = BillingManager.getInstance(this)
 
+        // Hiển thị giá nếu đã có dữ liệu từ Google Play, hoặc chờ kết quả truy vấn đang diễn ra
         refreshPricing()
 
         // Lắng nghe cập nhật giá và tiền tệ thực tế từ Google Play Billing
         lifecycleScope.launch {
             billingManager.productDetailsMap.collectLatest {
+                runOnUiThread {
+                    refreshPricing()
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            billingManager.isLoadingProducts.collectLatest {
                 runOnUiThread {
                     refreshPricing()
                 }
@@ -110,6 +120,18 @@ class PaymentWallActivity : AppCompatActivity() {
     }
 
     private fun refreshPricing() {
+        val isStillLoadingInitial = billingManager.isLoadingProducts.value && !billingManager.hasAnyLoadedProduct()
+        if (isStillLoadingInitial) {
+            val loadingText = getString(R.string.paywall_price_loading)
+            findViewById<TextView>(R.id.tv_price_weekly)?.text = loadingText
+            findViewById<TextView>(R.id.tv_subtext_weekly)?.text = getString(R.string.paywall_subtext_weekly)
+            findViewById<TextView>(R.id.tv_price_yearly)?.text = loadingText
+            findViewById<TextView>(R.id.tv_subtext_yearly)?.text = loadingText
+            findViewById<TextView>(R.id.tv_price_lifetime)?.text = loadingText
+            findViewById<TextView>(R.id.tv_subtext_lifetime)?.text = getString(R.string.paywall_subtext_lifetime)
+            return
+        }
+
         val pricing = CurrencyFormatter.getPricing(this, settingsRepository.languageCode)
         findViewById<TextView>(R.id.tv_price_weekly)?.text = pricing.weeklyPrice
         findViewById<TextView>(R.id.tv_subtext_weekly)?.text = pricing.weeklySubtext
@@ -141,6 +163,13 @@ class PaymentWallActivity : AppCompatActivity() {
             containerWeekly.setBackgroundResource(if (plan == "weekly") R.drawable.bg_plan_selected else R.drawable.bg_plan_unselected)
             containerYearly.setBackgroundResource(if (plan == "yearly") R.drawable.bg_plan_selected else R.drawable.bg_plan_unselected)
             containerLifetime.setBackgroundResource(if (plan == "lifetime") R.drawable.bg_plan_selected else R.drawable.bg_plan_unselected)
+
+            refreshPricing()
+            if (!billingManager.hasLoadedAllProducts() && !billingManager.isLoadingProducts.value) {
+                billingManager.queryAvailableProducts {
+                    runOnUiThread { refreshPricing() }
+                }
+            }
 
             val pricing = CurrencyFormatter.getPricing(this, settingsRepository.languageCode)
             val price = when (plan) {
@@ -312,10 +341,13 @@ class PaymentWallActivity : AppCompatActivity() {
                     if (connectingDialog.isShowing) {
                         connectingDialog.dismiss()
                     }
+                    // Bắt buộc đồng bộ lại giá trên màn hình Offer ngay lập tức trước khi mở Google Play Cart
+                    refreshPricing()
                     startBillingFlowInternal(sku, originalText)
                 }
             }
         } else {
+            refreshPricing()
             startBillingFlowInternal(sku, originalText)
         }
     }
