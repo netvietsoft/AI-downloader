@@ -74,6 +74,8 @@ class BillingManager private constructor(private val appContext: Context) : Purc
 
     @Volatile
     private var isQueryingProducts = false
+    @Volatile
+    private var hasCompletedInitialQuery = false
     private val pendingQueryCallbacks = mutableListOf<(Map<String, ProductDetails>) -> Unit>()
 
     @Volatile
@@ -188,11 +190,14 @@ class BillingManager private constructor(private val appContext: Context) : Purc
      */
     fun queryAvailableProducts(onComplete: ((Map<String, ProductDetails>) -> Unit)? = null) {
         if (!billingClient.isReady) {
-            _isLoadingProducts.value = true
+            if (!hasCompletedInitialQuery) {
+                _isLoadingProducts.value = true
+            }
             startConnection {
                 if (billingClient.isReady) {
                     queryAvailableProducts(onComplete)
                 } else {
+                    hasCompletedInitialQuery = true
                     _isLoadingProducts.value = false
                     onComplete?.invoke(_productDetailsMap.value)
                 }
@@ -209,7 +214,9 @@ class BillingManager private constructor(private val appContext: Context) : Purc
                 return
             }
             isQueryingProducts = true
-            _isLoadingProducts.value = true
+            if (!hasCompletedInitialQuery) {
+                _isLoadingProducts.value = true
+            }
         }
 
         try {
@@ -321,6 +328,7 @@ class BillingManager private constructor(private val appContext: Context) : Purc
             snapshot = HashMap(finalMap)
             _productDetailsMap.value = snapshot
             isQueryingProducts = false
+            hasCompletedInitialQuery = true
             _isLoadingProducts.value = false
             callbacks = ArrayList(pendingQueryCallbacks)
             pendingQueryCallbacks.clear()
