@@ -68,7 +68,8 @@
     <string name="paywall_legal_text">By subscribing you agree to our Terms of Service &amp; Privacy Policy. Cancel anytime via Google Play Subscriptions.</string>
     <string name="paywall_monetized_notice">🔒 You have used your 1 free download from this website list. Please upgrade to AI Downloader PRO for unlimited downloads!</string>
     <string name="paywall_subtext_weekly">Flexible weekly billing</string>
-    <string name="paywall_subtext_yearly_format">Just %1$s / month • Save 70%</string>
+    <string name="paywall_subtext_yearly">Save 70%</string>
+    <string name="paywall_subtext_yearly_format">Save 70%</string>
     <string name="paywall_subtext_lifetime">One-time purchase • Forever access</string>
     <string name="paywall_price_loading">Loading...</string>
     <string name="billing_connecting">Connecting to Google Play...</string>

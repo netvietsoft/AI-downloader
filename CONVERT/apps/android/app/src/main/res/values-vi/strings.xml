@@ -68,7 +68,8 @@
     <string name="paywall_legal_text">Khi đăng ký, bạn đồng ý với Điều khoản Dịch vụ &amp; Chính sách Bảo mật của chúng tôi. Hủy bất cứ lúc nào qua Google Play.</string>
     <string name="paywall_monetized_notice">🔒 Bạn đã dùng hết 1 lượt tải video miễn phí từ danh sách website này. Vui lòng đăng ký AI Downloader PRO để tiếp tục tải không giới hạn!</string>
     <string name="paywall_subtext_weekly">Thanh toán theo tuần linh hoạt</string>
-    <string name="paywall_subtext_yearly_format">Chỉ %1$s / tháng • Tiết kiệm 70%</string>
+    <string name="paywall_subtext_yearly">Tiết kiệm 70%</string>
+    <string name="paywall_subtext_yearly_format">Tiết kiệm 70%</string>
     <string name="paywall_subtext_lifetime">Mua 1 lần • Sở hữu trọn đời</string>
     <string name="paywall_price_loading">Đang tải...</string>
     <string name="billing_connecting">Đang kết nối Google Play...</string>

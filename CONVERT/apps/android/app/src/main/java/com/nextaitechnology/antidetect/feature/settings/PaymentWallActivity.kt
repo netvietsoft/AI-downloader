@@ -126,7 +126,7 @@ class PaymentWallActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.tv_price_weekly)?.text = loadingText
             findViewById<TextView>(R.id.tv_subtext_weekly)?.text = getString(R.string.paywall_subtext_weekly)
             findViewById<TextView>(R.id.tv_price_yearly)?.text = loadingText
-            findViewById<TextView>(R.id.tv_subtext_yearly)?.text = loadingText
+            findViewById<TextView>(R.id.tv_subtext_yearly)?.text = getString(R.string.paywall_subtext_yearly)
             findViewById<TextView>(R.id.tv_price_lifetime)?.text = loadingText
             findViewById<TextView>(R.id.tv_subtext_lifetime)?.text = getString(R.string.paywall_subtext_lifetime)
             return
