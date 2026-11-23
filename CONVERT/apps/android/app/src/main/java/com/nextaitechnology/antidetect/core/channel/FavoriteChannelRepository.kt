@@ -672,47 +672,97 @@ class FavoriteChannelRepository(context: Context) {
             }
 
             if (platform == "facebook") {
-                // 1. Bóc tách các cặp video_id + stream URL từ Relay JSON payload
-                val pairRegex = Pattern.compile(
-                    """"(?:video_id|id)"\s*:\s*"(\d{8,25})"[\s\S]{1,3500}?"(browser_native_sd_url|playable_url)"\s*:\s*"(https?:[^"]+)"(?:[\s\S]{1,1500}?"(browser_native_hd_url|playable_url_quality_hd)"\s*:\s*"(https?:[^"]+)")?"""
-                )
-                val pm = pairRegex.matcher(htmlContent)
-                while (pm.find()) {
-                    val vid = pm.group(1) ?: continue
-                    val sd = pm.group(3)
-                    val hd = pm.group(5)
-                    upsert(vid, "https://www.facebook.com/reel/$vid/", hd = hd, sd = sd)
+                // 1. Quét siêu tốc O(N) neo theo luồng browser_native_sd_url / playable_url (xử lý được cả trường hợp dash_manifest dài >10KB chen giữa video_id và stream URL)
+                val sdAnchorRegex = Pattern.compile(""""(?:browser_native_sd_url|playable_url)"\s*:\s*"(https?:[^"]+)"""")
+                val hdLocalRegex = Pattern.compile(""""(?:browser_native_hd_url|playable_url_quality_hd)"\s*:\s*"(https?:[^"]+)"""")
+                val dashUrlIdRegex = Pattern.compile("""dash_mpd_debug\.mpd\?v=(\d{8,25})""")
+                val videoIdLocalRegex = Pattern.compile(""""(?:video_id|id)"\s*:\s*"(\d{8,25})"""")
+
+                val sm = sdAnchorRegex.matcher(htmlContent)
+                while (sm.find()) {
+                    val sd = sm.group(1) ?: continue
+                    val winStart = maxOf(0, sm.start() - 18000)
+                    val winEnd = minOf(htmlContent.length, sm.end() + 3500)
+                    val window = htmlContent.substring(winStart, winEnd)
+                    val afterSlice = htmlContent.substring(sm.start(), winEnd)
+
+                    val hdMatch = hdLocalRegex.matcher(afterSlice)
+                    val hd = if (hdMatch.find()) hdMatch.group(1) else null
+
+                    var vid: String? = null
+                    val dm = dashUrlIdRegex.matcher(window)
+                    if (dm.find()) {
+                        vid = dm.group(1)
+                    }
+                    if (vid.isNullOrBlank()) {
+                        val vm = videoIdLocalRegex.matcher(window)
+                        while (vm.find()) {
+                            vid = vm.group(1)
+                        }
+                    }
+                    if (!vid.isNullOrBlank()) {
+                        upsert(vid, "https://www.facebook.com/reel/$vid/", hd = hd, sd = sd)
+                    }
                 }
 
-                // 2. Bóc tách các link /reel/(\d{8,25}) trên lưới Page Reels
-                val linkRegex = Pattern.compile("""/reel/(\d{8,25})""")
+                // 2. Bóc tách các cặp video_id + stream URL gần nhau
+                if (htmlContent.length <= 2_000_000) {
+                    val pairRegex = Pattern.compile(
+                        """"(?:video_id|id)"\s*:\s*"(\d{8,25})"[\s\S]{1,3500}?"(browser_native_sd_url|playable_url)"\s*:\s*"(https?:[^"]+)"(?:[\s\S]{1,1500}?"(browser_native_hd_url|playable_url_quality_hd)"\s*:\s*"(https?:[^"]+)")?"""
+                    )
+                    val pm = pairRegex.matcher(htmlContent)
+                    while (pm.find()) {
+                        val vid = pm.group(1) ?: continue
+                        val sd = pm.group(3)
+                        val hd = pm.group(5)
+                        upsert(vid, "https://www.facebook.com/reel/$vid/", hd = hd, sd = sd)
+                    }
+                }
+
+                // 3. Bóc tách các link /reel/(\d{8,25}) hoặc /videos/(\d{8,25}) hoặc watch?v=(\d{8,25}) hoặc dash_mpd_debug.mpd?v=(\d{8,25})
+                val linkRegex = Pattern.compile("""(?:/(?:reel|reels|videos)/|watch/?\?v=|dash_mpd_debug\.mpd\?v=)(\d{8,25})""")
                 val lm = linkRegex.matcher(htmlContent)
                 while (lm.find()) {
                     val vid = lm.group(1) ?: continue
                     upsert(vid, "https://www.facebook.com/reel/$vid/")
                 }
             } else if (platform == "instagram") {
-                // 1. Bóc tách shortcode + video_url / video_versions
+                val reservedIgWords = setOf(
+                    "reels", "reel", "videos", "audio", "explore", "accounts",
+                    "direct", "stories", "about", "legal", "privacy", "terms", "p", "tv"
+                )
+                // 1. Bóc tách shortcode + video_url / video_versions (cả chiều thuận và đảo thứ tự key trong JSON)
                 val igJsonRegex = Pattern.compile(
-                    """"(?:code|shortcode)"\s*:\s*"([A-Za-z0-9_-]{6,20})"[\s\S]{1,2500}?"(?:video_url|url)"\s*:\s*"(https?:[^"]+\.mp4[^"]*)""""
+                    """"(?:code|shortcode)"\s*:\s*"([A-Za-z0-9_-]{8,25})"[\s\S]{1,3500}?"(?:video_url|url)"\s*:\s*"(https?:[^"]+\.mp4[^"]*)""""
                 )
                 val im = igJsonRegex.matcher(htmlContent)
                 while (im.find()) {
                     val code = im.group(1) ?: continue
+                    if (code.lowercase(Locale.ROOT) in reservedIgWords) continue
                     val vUrl = im.group(2)
                     upsert(code, "https://www.instagram.com/reel/$code/", hd = vUrl)
                 }
 
-                // 2. Bóc tách các thẻ a href="/reel/CODE/"
-                val igLinkRegex = Pattern.compile("""/(?:reel|p)/([A-Za-z0-9_-]{6,20})""")
+                // 2. Bóc tách mọi shortcode từ JSON "code":"..." hoặc "shortcode":"..."
+                val igCodeRegex = Pattern.compile(""""(?:code|shortcode)"\s*:\s*"([A-Za-z0-9_-]{9,15})"""")
+                val icm = igCodeRegex.matcher(htmlContent)
+                while (icm.find()) {
+                    val code = icm.group(1) ?: continue
+                    if (code.lowercase(Locale.ROOT) in reservedIgWords) continue
+                    upsert(code, "https://www.instagram.com/reel/$code/")
+                }
+
+                // 3. Bóc tách các thẻ a href="/reel/CODE/", "/reels/CODE/", "/username/reel/CODE/", "/p/CODE/"
+                val igLinkRegex = Pattern.compile("""/(?:reel|reels|p|tv)/([A-Za-z0-9_-]{8,25})(?:[/?#"']|$)""")
                 val ilm = igLinkRegex.matcher(htmlContent)
                 while (ilm.find()) {
                     val code = ilm.group(1) ?: continue
+                    if (code.lowercase(Locale.ROOT) in reservedIgWords) continue
                     upsert(code, "https://www.instagram.com/reel/$code/")
                 }
             } else if (platform == "youtube") {
                 // 1. Bóc tách từ link /shorts/VIDEO_ID hoặc watch?v=VIDEO_ID
-                val ytShortsRegex = Pattern.compile("""/shorts/([A-Za-z0-9_-]{11})""")
+                val ytShortsRegex = Pattern.compile("""(?:/shorts/|watch\?v=)([A-Za-z0-9_-]{11})""")
                 val ysm = ytShortsRegex.matcher(htmlContent)
                 while (ysm.find()) {
                     val vid = ysm.group(1) ?: continue

@@ -64,6 +64,7 @@ class HomeFragment : Fragment() {
     private var pendingAutoShowChannelDialog: Boolean = false
 
     private val snifferEngine = SnifferEngine()
+    private var defaultMobileUserAgent: String = SnifferEngine.MOBILE_USER_AGENT
     @Volatile
     private var currentWebTitle: String? = null
     private var pendingUrl: String? = null
@@ -134,6 +135,7 @@ class HomeFragment : Fragment() {
             } catch (_: Exception) {
                 SnifferEngine.MOBILE_USER_AGENT
             }
+            defaultMobileUserAgent = defaultUa
             settings.userAgentString = defaultUa
             settings.useWideViewPort = true
             settings.loadWithOverviewMode = true
@@ -179,10 +181,10 @@ class HomeFragment : Fragment() {
                         btnClearUrl.visibility = if (url.isNotEmpty()) View.VISIBLE else View.GONE
                     }
                     (activity as? MainActivity)?.resetDetectionState()
-                    // [VI] Tiêm script vô hiệu hóa popup và kích hoạt Mobile Responsive ngay khi bắt đầu tải trang
-                    // [EN] Inject anti-popup and mobile responsive scripts right as page starts loading
+                    // [VI] Tiêm script vô hiệu hóa popup, Mobile Responsive và bộ bắt luồng Kênh/Reels (Fetch/XHR/DOM Hook) ngay khi bắt đầu tải trang
                     view?.evaluateJavascript(ANTI_POPUP_JS, null)
                     view?.evaluateJavascript(MOBILE_RESPONSIVE_JS, null)
+                    view?.evaluateJavascript(CHANNEL_HARVESTER_JS, null)
                 }
 
                 override fun shouldOverrideUrlLoading(
@@ -228,10 +230,10 @@ class HomeFragment : Fragment() {
                     if (url != null) {
                         (activity as? MainActivity)?.updateCurrentTabInfo(url, if (pageTitle.isNotEmpty() && !pageTitle.startsWith("http")) pageTitle else (currentWebTitle ?: "Web Page"))
                     }
-                    // [VI] Tái củng cố script chặn popup & responsive sau khi toàn bộ DOM & scripts bên thứ 3 đã nạp
-                    // [EN] Reinforce anti-popup & responsive scripts after DOM & third-party scripts have loaded
+                    // [VI] Tái củng cố script chặn popup, responsive & channel harvester sau khi toàn bộ DOM & scripts bên thứ 3 đã nạp
                     view?.evaluateJavascript(ANTI_POPUP_JS, null)
                     view?.evaluateJavascript(MOBILE_RESPONSIVE_JS, null)
+                    view?.evaluateJavascript(CHANNEL_HARVESTER_JS, null)
 
                     // 1. Phân tích trực tiếp toàn bộ DOM HTML đã nạp trong WebView (Bảo đảm vượt tường lửa ISP)
                     if (url != null && (url.contains("instagram.com") || url.contains("facebook.com") ||
@@ -241,7 +243,7 @@ class HomeFragment : Fragment() {
                             url.contains("youtube.com") || url.contains("youtu.be") ||
                             url.contains("vimeo.com") || url.contains("dailymotion.com") ||
                             com.nextaitechnology.antidetect.core.network.MonetizedDomainRegistry.isMonetizedDomain(url))) {
-                        view?.evaluateJavascript("(function() { return document.documentElement.outerHTML; })();") { rawHtmlJson ->
+                        view?.evaluateJavascript("(function() { if (window.__harvestChannelDom) window.__harvestChannelDom(); return document.documentElement.outerHTML; })();") { rawHtmlJson ->
                             if (!rawHtmlJson.isNullOrBlank() && rawHtmlJson != "null") {
                                 lifecycleScope.launch {
                                     try {
@@ -253,25 +255,27 @@ class HomeFragment : Fragment() {
                                             }
                                         }
                                         val channelReels = FavoriteChannelRepository.harvestChannelReelsFromHtml(url, cleanHtml)
-                                        if (channelReels.isNotEmpty()) {
-                                            activity?.runOnUiThread {
-                                                channelReels.forEach { discoveredChannelReels[it.reelId] = it }
-                                                updateFloatingChannelScanButton(url)
-                                                if (pendingAutoShowChannelDialog) {
-                                                    pendingAutoShowChannelDialog = false
-                                                    showChannelReelsBatchDialog(url)
-                                                }
-                                            }
-                                        } else if (pendingAutoShowChannelDialog) {
-                                            activity?.runOnUiThread {
+                                        activity?.runOnUiThread {
+                                            channelReels.forEach { mergeDiscoveredChannelReel(it) }
+                                            updateFloatingChannelScanButton(url)
+                                            if (pendingAutoShowChannelDialog) {
                                                 pendingAutoShowChannelDialog = false
-                                                showChannelReelsBatchDialog(url)
+                                                pollForChannelReelsAndShowDialog(url, 0)
                                             }
                                         }
                                     } catch (e: Exception) {
                                         android.util.Log.w("NextAI_Sniffer", "Lỗi phân tích DOM HTML", e)
+                                        if (pendingAutoShowChannelDialog) {
+                                            activity?.runOnUiThread {
+                                                pendingAutoShowChannelDialog = false
+                                                pollForChannelReelsAndShowDialog(url, 0)
+                                            }
+                                        }
                                     }
                                 }
+                            } else if (pendingAutoShowChannelDialog) {
+                                pendingAutoShowChannelDialog = false
+                                pollForChannelReelsAndShowDialog(url, 0)
                             }
                         }
                     }
@@ -640,7 +644,28 @@ class HomeFragment : Fragment() {
         discoveredChannelReels.clear()
         updateFloatingChannelScanButton(url)
         (activity as? MainActivity)?.resetDetectionState()
-        webView.loadUrl(url)
+
+        val lower = url.lowercase()
+        val useDesktopChannelMode = pendingAutoShowChannelDialog ||
+            lower.contains("instagram.com") ||
+            lower.contains("facebook.com") ||
+            lower.contains("fb.watch") ||
+            (lower.contains("youtube.com") && (lower.contains("/@") || lower.contains("/shorts") || lower.contains("/channel/") || lower.contains("/videos")))
+
+        if (useDesktopChannelMode) {
+            webView.settings.userAgentString = SnifferEngine.DESKTOP_USER_AGENT
+            val navHeaders = mapOf(
+                "Sec-Fetch-Dest" to "document",
+                "Sec-Fetch-Mode" to "navigate",
+                "Sec-Fetch-Site" to "none",
+                "Sec-Fetch-User" to "?1",
+                "Upgrade-Insecure-Requests" to "1"
+            )
+            webView.loadUrl(url, navHeaders)
+        } else {
+            webView.settings.userAgentString = defaultMobileUserAgent
+            webView.loadUrl(url)
+        }
     }
 
     /**
@@ -744,7 +769,7 @@ class HomeFragment : Fragment() {
                 val directReels = snifferEngine.scanChannelReels(target.reelsTabUrl)
                 if (directReels.isNotEmpty()) {
                     withContext(Dispatchers.Main) {
-                        directReels.forEach { discoveredChannelReels[it.reelId] = it }
+                        directReels.forEach { mergeDiscoveredChannelReel(it) }
                         updateFloatingChannelScanButton(target.reelsTabUrl)
                     }
                 }
@@ -754,8 +779,74 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun mergeDiscoveredChannelReel(incoming: ChannelReelCandidate) {
+        if (incoming.reelId.isBlank()) return
+        val existing = discoveredChannelReels[incoming.reelId]
+        if (existing == null) {
+            discoveredChannelReels[incoming.reelId] = incoming
+        } else {
+            if (existing.hdUrl.isNullOrBlank() && !incoming.hdUrl.isNullOrBlank()) {
+                existing.hdUrl = incoming.hdUrl
+            }
+            if (existing.sdUrl.isNullOrBlank() && !incoming.sdUrl.isNullOrBlank()) {
+                existing.sdUrl = incoming.sdUrl
+            }
+            if (existing.dashVideoUrl.isNullOrBlank() && !incoming.dashVideoUrl.isNullOrBlank()) {
+                existing.dashVideoUrl = incoming.dashVideoUrl
+            }
+            if (existing.caption.isBlank() && incoming.caption.isNotBlank()) {
+                val meta = FavoriteChannelRepository.extractCaptionTitleAndHashtags(incoming.caption)
+                existing.caption = meta.caption
+                existing.title = meta.title
+                existing.hashtags = meta.hashtags
+            }
+        }
+    }
+
+    /**
+     * Đợi trang SPA (Instagram / Facebook / YouTube) render xong lưới Reels/Shorts qua XHR/GraphQL
+     * rồi mới mở hộp thoại kết quả quét kênh (tránh mở sớm ở 0ms khi DOM chưa render kịp).
+     */
+    private fun pollForChannelReelsAndShowDialog(url: String, attempt: Int) {
+        if (!isAdded) return
+        webView.evaluateJavascript("(function() { if (window.__harvestChannelDom) window.__harvestChannelDom(); return document.documentElement.outerHTML; })();") { rawHtmlJson ->
+            lifecycleScope.launch {
+                if (!rawHtmlJson.isNullOrBlank() && rawHtmlJson != "null") {
+                    try {
+                        val cleanHtml = withContext(Dispatchers.Default) {
+                            org.json.JSONTokener(rawHtmlJson).nextValue().toString()
+                        }
+                        val harvested = withContext(Dispatchers.Default) {
+                            FavoriteChannelRepository.harvestChannelReelsFromHtml(url, cleanHtml)
+                        }
+                        harvested.forEach { mergeDiscoveredChannelReel(it) }
+                        updateFloatingChannelScanButton(url)
+                    } catch (_: Exception) {
+                    }
+                }
+
+                // Nếu đã tìm thấy danh sách Reels (sau ít nhất 1 nhịp chờ để gom đủ lưới) hoặc đã hết 7 nhịp chờ (~4.5s) -> mở Dialog
+                if ((discoveredChannelReels.size >= 3 && attempt >= 1) ||
+                    (discoveredChannelReels.isNotEmpty() && attempt >= 3) ||
+                    attempt >= 6
+                ) {
+                    showChannelReelsBatchDialog(url)
+                } else {
+                    if (attempt == 2) {
+                        webView.evaluateJavascript("window.scrollBy(0, 650);", null)
+                    }
+                    webView.postDelayed({
+                        if (isAdded) {
+                            pollForChannelReelsAndShowDialog(url, attempt + 1)
+                        }
+                    }, 700L)
+                }
+            }
+        }
+    }
+
     private fun harvestCurrentWebViewAndShowChannelDialog(url: String) {
-        webView.evaluateJavascript("(function() { return document.documentElement.outerHTML; })();") { rawHtmlJson ->
+        webView.evaluateJavascript("(function() { if (window.__harvestChannelDom) window.__harvestChannelDom(); return document.documentElement.outerHTML; })();") { rawHtmlJson ->
             if (!rawHtmlJson.isNullOrBlank() && rawHtmlJson != "null") {
                 lifecycleScope.launch {
                     try {
@@ -765,7 +856,7 @@ class HomeFragment : Fragment() {
                         val harvested = withContext(Dispatchers.Default) {
                             FavoriteChannelRepository.harvestChannelReelsFromHtml(url, cleanHtml)
                         }
-                        harvested.forEach { discoveredChannelReels[it.reelId] = it }
+                        harvested.forEach { mergeDiscoveredChannelReel(it) }
                         updateFloatingChannelScanButton(url)
                     } catch (_: Exception) {
                     }
@@ -978,6 +1069,35 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+
+        @JavascriptInterface
+        fun onChannelReelFound(
+            platform: String,
+            reelId: String,
+            reelUrl: String,
+            streamUrl: String?,
+            caption: String?
+        ) {
+            val cleanId = reelId.trim()
+            if (cleanId.isEmpty()) return
+            activity?.runOnUiThread {
+                val meta = FavoriteChannelRepository.extractCaptionTitleAndHashtags(caption)
+                val cleanStream = streamUrl?.trim()?.takeIf { it.startsWith("http") }?.let {
+                    FavoriteChannelRepository.stripByteRangeParams(it)
+                }
+                val candidate = ChannelReelCandidate(
+                    reelId = cleanId,
+                    reelUrl = reelUrl.trim(),
+                    platform = platform.trim().ifEmpty { "facebook" },
+                    title = meta.title,
+                    caption = meta.caption,
+                    hashtags = meta.hashtags,
+                    hdUrl = cleanStream
+                )
+                mergeDiscoveredChannelReel(candidate)
+                updateFloatingChannelScanButton(getCurrentUrl())
+            }
+        }
     }
 
 
@@ -1124,6 +1244,219 @@ class HomeFragment : Fragment() {
                         css.innerHTML = 'html, body { max-width: 100vw !important; overflow-x: hidden !important; -webkit-text-size-adjust: 100% !important; } video { max-width: 100% !important; height: auto !important; } pre, code { white-space: pre-wrap !important; word-break: break-word !important; }';
                         (document.head || document.documentElement).appendChild(css);
                     }
+                } catch(e) {}
+            })();
+        """
+
+        // [VI] Script JavaScript tự động bắt toàn bộ danh sách Reels/Shorts từ DOM + Fetch + XHR GraphQL của Instagram, Facebook, YouTube
+        private const val CHANNEL_HARVESTER_JS = """
+            (function() {
+                try {
+                    var reservedIg = {
+                        'reels': 1, 'reel': 1, 'videos': 1, 'audio': 1, 'explore': 1,
+                        'accounts': 1, 'direct': 1, 'stories': 1, 'about': 1, 'legal': 1,
+                        'privacy': 1, 'terms': 1, 'p': 1, 'tv': 1
+                    };
+
+                    function reportReel(platform, id, url, stream, caption) {
+                        if (!id || !window.AndroidSniffer || !window.AndroidSniffer.onChannelReelFound) return;
+                        try {
+                            window.AndroidSniffer.onChannelReelFound(
+                                String(platform || ''),
+                                String(id || ''),
+                                String(url || ''),
+                                String(stream || ''),
+                                String(caption || '')
+                            );
+                        } catch(e) {}
+                    }
+
+                    function walkPayloadObj(node) {
+                        if (!node || typeof node !== 'object') return;
+                        if (Array.isArray(node)) {
+                            for (var i = 0; i < node.length; i++) walkPayloadObj(node[i]);
+                            return;
+                        }
+                        var host = (window.location && window.location.hostname) ? window.location.hostname.toLowerCase() : '';
+                        if (host.indexOf('instagram.com') !== -1) {
+                            var code = node.code || node.shortcode;
+                            if (typeof code === 'string' && /^[A-Za-z0-9_-]{8,25}$/.test(code) && !reservedIg[code.toLowerCase()]) {
+                                var vUrl = '';
+                                if (Array.isArray(node.video_versions) && node.video_versions.length > 0 && node.video_versions[0].url) {
+                                    vUrl = node.video_versions[0].url;
+                                } else if (typeof node.video_url === 'string') {
+                                    vUrl = node.video_url;
+                                }
+                                var cap = (node.caption && node.caption.text) ? node.caption.text :
+                                          (node.edge_media_to_caption && node.edge_media_to_caption.edges && node.edge_media_to_caption.edges[0] && node.edge_media_to_caption.edges[0].node) ? node.edge_media_to_caption.edges[0].node.text : '';
+                                if (vUrl || node.is_video || node.media_type === 2 || node.product_type === 'clips' || node.clips_metadata) {
+                                    reportReel('instagram', code, 'https://www.instagram.com/reel/' + code + '/', vUrl, cap);
+                                }
+                            }
+                        } else if (host.indexOf('facebook.com') !== -1) {
+                            var fid = node.video_id || node.id;
+                            var fidStr = fid ? String(fid) : '';
+                            if (/^\d{8,25}$/.test(fidStr)) {
+                                var hd = node.browser_native_hd_url || node.playable_url_quality_hd || node.hd_src || '';
+                                var sd = node.browser_native_sd_url || node.playable_url || node.sd_src || '';
+                                if (!hd && Array.isArray(node.progressive_urls)) {
+                                    for (var p = 0; p < node.progressive_urls.length; p++) {
+                                        var pu = node.progressive_urls[p];
+                                        if (pu && pu.progressive_url) {
+                                            if (pu.metadata && pu.metadata.quality === 'HD') hd = pu.progressive_url;
+                                            else if (!sd) sd = pu.progressive_url;
+                                        }
+                                    }
+                                }
+                                var fcap = (node.message && node.message.text) ? node.message.text :
+                                           (node.creation_story && node.creation_story.message && node.creation_story.message.text) ? node.creation_story.message.text : '';
+                                if (hd || sd || node.__typename === 'Video') {
+                                    reportReel('facebook', fidStr, 'https://www.facebook.com/reel/' + fidStr + '/', hd || sd, fcap);
+                                }
+                            }
+                        } else if (host.indexOf('youtube.com') !== -1) {
+                            var yid = node.videoId;
+                            if (typeof yid === 'string' && /^[A-Za-z0-9_-]{11}$/.test(yid)) {
+                                var ytitle = (node.headline && node.headline.simpleText) ? node.headline.simpleText :
+                                             (node.title && node.title.simpleText) ? node.title.simpleText :
+                                             (node.title && node.title.runs && node.title.runs[0]) ? node.title.runs[0].text : '';
+                                reportReel('youtube', yid, 'https://www.youtube.com/shorts/' + yid, '', ytitle);
+                            }
+                        }
+                        var keys = Object.keys(node);
+                        for (var k = 0; k < keys.length; k++) {
+                            var v = node[keys[k]];
+                            if (v && typeof v === 'object') walkPayloadObj(v);
+                        }
+                    }
+
+                    window.__harvestChannelDom = function() {
+                        try {
+                            var host = (window.location && window.location.hostname) ? window.location.hostname.toLowerCase() : '';
+                            var anchors = document.querySelectorAll('a[href]');
+                            for (var i = 0; i < anchors.length; i++) {
+                                var a = anchors[i];
+                                var href = a.href || a.getAttribute('href') || '';
+                                if (!href) continue;
+                                if (host.indexOf('instagram.com') !== -1) {
+                                    var mIg = href.match(/\/(?:reel|reels|p|tv)\/([A-Za-z0-9_-]{8,25})(?:[\/?#]|$)/i);
+                                    if (mIg && mIg[1] && !reservedIg[mIg[1].toLowerCase()]) {
+                                        var img = a.querySelector('img[alt]');
+                                        var alt = img ? (img.getAttribute('alt') || '') : (a.getAttribute('aria-label') || '');
+                                        reportReel('instagram', mIg[1], 'https://www.instagram.com/reel/' + mIg[1] + '/', '', alt);
+                                    }
+                                } else if (host.indexOf('facebook.com') !== -1) {
+                                    var mFb = href.match(/(?:\/(?:reel|reels|videos)\/|watch\/?\?v=)(\d{8,25})/i);
+                                    if (mFb && mFb[1]) {
+                                        var label = a.getAttribute('aria-label') || a.innerText || '';
+                                        reportReel('facebook', mFb[1], 'https://www.facebook.com/reel/' + mFb[1] + '/', '', label);
+                                    }
+                                } else if (host.indexOf('youtube.com') !== -1) {
+                                    var mYt = href.match(/(?:\/shorts\/|watch\?v=)([A-Za-z0-9_-]{11})/i);
+                                    if (mYt && mYt[1]) {
+                                        var yLabel = a.getAttribute('title') || a.getAttribute('aria-label') || a.innerText || '';
+                                        reportReel('youtube', mYt[1], 'https://www.youtube.com/shorts/' + mYt[1], '', yLabel);
+                                    }
+                                }
+                            }
+
+                            var scripts = document.querySelectorAll('script[type="application/json"], script:not([src])');
+                            for (var s = 0; s < scripts.length; s++) {
+                                var sc = scripts[s];
+                                if (sc.__harvested) continue;
+                                var txt = sc.textContent || '';
+                                if (txt.length < 30) continue;
+                                if (txt.indexOf('shortcode') !== -1 || txt.indexOf('"code"') !== -1 || txt.indexOf('video_versions') !== -1 ||
+                                    txt.indexOf('browser_native_') !== -1 || txt.indexOf('playable_url') !== -1 ||
+                                    txt.indexOf('videoId') !== -1 || txt.indexOf('/reel/') !== -1) {
+                                    sc.__harvested = true;
+                                    try {
+                                        if (host.indexOf('instagram.com') !== -1) {
+                                            var igRe = /"(?:code|shortcode)"\s*:\s*"([A-Za-z0-9_-]{9,15})"/g;
+                                            var igMatch;
+                                            while ((igMatch = igRe.exec(txt)) !== null) {
+                                                var c = igMatch[1];
+                                                if (c && !reservedIg[c.toLowerCase()]) {
+                                                    reportReel('instagram', c, 'https://www.instagram.com/reel/' + c + '/', '', '');
+                                                }
+                                            }
+                                        }
+                                        if (txt.trim().charAt(0) === '{' || txt.trim().charAt(0) === '[') {
+                                            walkPayloadObj(JSON.parse(txt));
+                                        }
+                                    } catch(e) {}
+                                }
+                            }
+                        } catch(e) {}
+                    };
+
+                    if (!window.__channelHarvesterHooked) {
+                        window.__channelHarvesterHooked = true;
+
+                        // Hook window.fetch
+                        if (window.fetch) {
+                            var origFetch = window.fetch;
+                            window.fetch = function() {
+                                return origFetch.apply(this, arguments).then(function(response) {
+                                    try {
+                                        var u = (response && response.url) ? response.url.toLowerCase() : '';
+                                        if (u.indexOf('graphql') !== -1 || u.indexOf('/api/v1/') !== -1 || u.indexOf('clips') !== -1 || u.indexOf('youtubei/v1/browse') !== -1) {
+                                            response.clone().text().then(function(t) {
+                                                try {
+                                                    var clean = t.replace(/^for\s*\(\s*;\s*;\s*\)\s*;/, '').trim();
+                                                    var lines = clean.split(/\r?\n/);
+                                                    for (var l = 0; l < lines.length; l++) {
+                                                        var line = lines[l].trim();
+                                                        if (line.charAt(0) === '{' || line.charAt(0) === '[') {
+                                                            walkPayloadObj(JSON.parse(line));
+                                                        }
+                                                    }
+                                                } catch(e) {}
+                                            }).catch(function(){});
+                                        }
+                                    } catch(e) {}
+                                    return response;
+                                });
+                            };
+                        }
+
+                        // Hook XMLHttpRequest
+                        if (window.XMLHttpRequest) {
+                            var origSend = XMLHttpRequest.prototype.send;
+                            XMLHttpRequest.prototype.send = function() {
+                                this.addEventListener('load', function() {
+                                    try {
+                                        var rUrl = (this.responseURL || '').toLowerCase();
+                                        if (rUrl.indexOf('graphql') !== -1 || rUrl.indexOf('/api/v1/') !== -1 || rUrl.indexOf('clips') !== -1 || rUrl.indexOf('youtubei/v1/browse') !== -1) {
+                                            var txt = this.responseText || '';
+                                            var clean = txt.replace(/^for\s*\(\s*;\s*;\s*\)\s*;/, '').trim();
+                                            var lines = clean.split(/\r?\n/);
+                                            for (var l = 0; l < lines.length; l++) {
+                                                var line = lines[l].trim();
+                                                if (line.charAt(0) === '{' || line.charAt(0) === '[') {
+                                                    walkPayloadObj(JSON.parse(line));
+                                                }
+                                            }
+                                        }
+                                    } catch(e) {}
+                                });
+                                return origSend.apply(this, arguments);
+                            };
+                        }
+
+                        window.addEventListener('scroll', function() {
+                            if (window.__harvestChannelDom) window.__harvestChannelDom();
+                        }, { passive: true });
+
+                        var sweepCount = 0;
+                        var sweepTimer = setInterval(function() {
+                            sweepCount++;
+                            if (window.__harvestChannelDom) window.__harvestChannelDom();
+                            if (sweepCount >= 25) clearInterval(sweepTimer);
+                        }, 750);
+                    }
+
+                    window.__harvestChannelDom();
                 } catch(e) {}
             })();
         """
