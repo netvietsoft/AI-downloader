@@ -1,10 +1,13 @@
 package com.nextaitechnology.antidetect.feature.browser
 
+import android.app.AlertDialog
 import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Message
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,15 +24,21 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import java.net.URLEncoder
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.nextaitechnology.antidetect.MainActivity
 import com.nextaitechnology.antidetect.R
+import com.nextaitechnology.antidetect.core.channel.ChannelReelCandidate
+import com.nextaitechnology.antidetect.core.channel.FavoriteChannelRepository
 import com.nextaitechnology.antidetect.core.network.SnifferEngine
 import com.nextaitechnology.antidetect.core.analytics.FirebaseAnalyticsManager
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * MÃ n hÃ¬nh TrÃ¬nh duyá»‡t & Dashboard Trang chá»§ (HomeFragment)
@@ -46,6 +55,12 @@ class HomeFragment : Fragment() {
     private lateinit var btnClearUrl: View
     private lateinit var scrollHomeContent: View
     private lateinit var btnPasteDetect: View
+    private var btnFloatingChannelScan: TextView? = null
+    private var layoutFavoriteChannelsList: LinearLayout? = null
+    private var tvFavoriteChannelsHeader: TextView? = null
+    private lateinit var favoriteChannelRepository: FavoriteChannelRepository
+    private val discoveredChannelReels = LinkedHashMap<String, ChannelReelCandidate>()
+    private var pendingAutoShowChannelDialog: Boolean = false
 
     private val snifferEngine = SnifferEngine()
     @Volatile
@@ -63,6 +78,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        favoriteChannelRepository = FavoriteChannelRepository(requireContext())
         webView = view.findViewById(R.id.web_view)
         webProgressBar = view.findViewById(R.id.web_progress_bar)
         etUrlInput = view.findViewById(R.id.et_url_input)
@@ -70,9 +86,14 @@ class HomeFragment : Fragment() {
         btnClearUrl = view.findViewById(R.id.btn_clear_url)
         scrollHomeContent = view.findViewById(R.id.scroll_home_content)
         btnPasteDetect = view.findViewById(R.id.btn_paste_detect)
+        btnFloatingChannelScan = view.findViewById(R.id.btn_floating_channel_scan)
+        layoutFavoriteChannelsList = view.findViewById(R.id.layout_favorite_channels_list)
+        tvFavoriteChannelsHeader = view.findViewById(R.id.tv_favorite_channels_header)
 
         setupWebView()
         setupSearchBar()
+        setupChannelDownloaderCard(view)
+        renderFavoriteChannelsList()
 
         pendingUrl?.let {
             val toLoad = it
@@ -209,6 +230,22 @@ class HomeFragment : Fragment() {
                                         if (videoInfo != null && videoInfo.qualities.isNotEmpty()) {
                                             activity?.runOnUiThread {
                                                 (activity as? MainActivity)?.notifyVideoInfoDetected(videoInfo)
+                                            }
+                                        }
+                                        val channelReels = FavoriteChannelRepository.harvestChannelReelsFromHtml(url, cleanHtml)
+                                        if (channelReels.isNotEmpty()) {
+                                            activity?.runOnUiThread {
+                                                channelReels.forEach { discoveredChannelReels[it.reelId] = it }
+                                                updateFloatingChannelScanButton(url)
+                                                if (pendingAutoShowChannelDialog) {
+                                                    pendingAutoShowChannelDialog = false
+                                                    showChannelReelsBatchDialog(url)
+                                                }
+                                            }
+                                        } else if (pendingAutoShowChannelDialog) {
+                                            activity?.runOnUiThread {
+                                                pendingAutoShowChannelDialog = false
+                                                showChannelReelsBatchDialog(url)
                                             }
                                         }
                                     } catch (e: Exception) {
@@ -577,6 +614,8 @@ class HomeFragment : Fragment() {
         scrollHomeContent.visibility = View.GONE
         webView.visibility = View.VISIBLE
         etUrlInput.setText(url)
+        discoveredChannelReels.clear()
+        updateFloatingChannelScanButton(url)
         (activity as? MainActivity)?.resetDetectionState()
         webView.loadUrl(url)
     }
@@ -591,7 +630,10 @@ class HomeFragment : Fragment() {
             webView.clearHistory()
             webView.visibility = View.GONE
         }
+        btnFloatingChannelScan?.visibility = View.GONE
+        discoveredChannelReels.clear()
         scrollHomeContent.visibility = View.VISIBLE
+        renderFavoriteChannelsList()
         etUrlInput.setText("")
         btnClearUrl.visibility = View.GONE
         (activity as? MainActivity)?.resetDetectionState()
@@ -603,12 +645,294 @@ class HomeFragment : Fragment() {
             true
         } else if (::webView.isInitialized && webView.visibility == View.VISIBLE) {
             webView.visibility = View.GONE
+            btnFloatingChannelScan?.visibility = View.GONE
             scrollHomeContent.visibility = View.VISIBLE
+            renderFavoriteChannelsList()
             etUrlInput.setText("")
             (activity as? MainActivity)?.resetDetectionState()
             true
         } else {
             false
+        }
+    }
+
+    private fun setupChannelDownloaderCard(root: View) {
+        root.findViewById<View>(R.id.chip_sample_fb)?.setOnClickListener {
+            etUrlInput.setText("https://www.facebook.com/samfamily.6826/reels/")
+            btnClearUrl.visibility = View.VISIBLE
+        }
+        root.findViewById<View>(R.id.chip_sample_ig)?.setOnClickListener {
+            etUrlInput.setText("https://www.instagram.com/instagram/reels/")
+            btnClearUrl.visibility = View.VISIBLE
+        }
+        root.findViewById<View>(R.id.chip_sample_yt)?.setOnClickListener {
+            etUrlInput.setText("https://www.youtube.com/@YouTube/shorts")
+            btnClearUrl.visibility = View.VISIBLE
+        }
+
+        root.findViewById<View>(R.id.btn_scan_channel)?.setOnClickListener {
+            val raw = etUrlInput.text.toString().trim()
+            if (raw.isEmpty()) {
+                Toast.makeText(context, getString(R.string.toast_clipboard_empty), Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            startChannelScanFlow(raw)
+        }
+
+        root.findViewById<View>(R.id.btn_save_favorite_channel)?.setOnClickListener {
+            val raw = etUrlInput.text.toString().trim()
+            if (raw.isEmpty()) {
+                Toast.makeText(context, getString(R.string.toast_clipboard_empty), Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            try {
+                val fav = favoriteChannelRepository.addOrUpdateFavorite(raw)
+                renderFavoriteChannelsList()
+                Toast.makeText(context, getString(R.string.toast_channel_saved, fav.title), Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(context, e.message ?: "URL không hợp lệ", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        btnFloatingChannelScan?.setOnClickListener {
+            val currentUrl = getCurrentUrl() ?: return@setOnClickListener
+            harvestCurrentWebViewAndShowChannelDialog(currentUrl)
+        }
+    }
+
+    private fun updateFloatingChannelScanButton(url: String?) {
+        val u = (url ?: "").lowercase()
+        val isSupportedChannel = u.contains("facebook.com") || u.contains("instagram.com") || u.contains("youtube.com")
+        if (webView.visibility == View.VISIBLE && isSupportedChannel) {
+            btnFloatingChannelScan?.visibility = View.VISIBLE
+            btnFloatingChannelScan?.text = getString(R.string.btn_floating_scan_channel, discoveredChannelReels.size)
+        } else {
+            btnFloatingChannelScan?.visibility = View.GONE
+        }
+    }
+
+    private fun startChannelScanFlow(rawInput: String) {
+        try {
+            val target = FavoriteChannelRepository.normalizeChannelInput(rawInput)
+            pendingAutoShowChannelDialog = true
+            hideKeyboard()
+            loadUrl(target.reelsTabUrl)
+            lifecycleScope.launch(Dispatchers.IO) {
+                val directReels = snifferEngine.scanChannelReels(target.reelsTabUrl)
+                if (directReels.isNotEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        directReels.forEach { discoveredChannelReels[it.reelId] = it }
+                        updateFloatingChannelScanButton(target.reelsTabUrl)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Toast.makeText(context, e.message ?: "URL không hợp lệ", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun harvestCurrentWebViewAndShowChannelDialog(url: String) {
+        webView.evaluateJavascript("(function() { return document.documentElement.outerHTML; })();") { rawHtmlJson ->
+            if (!rawHtmlJson.isNullOrBlank() && rawHtmlJson != "null") {
+                lifecycleScope.launch {
+                    try {
+                        val cleanHtml = withContext(Dispatchers.Default) {
+                            org.json.JSONTokener(rawHtmlJson).nextValue().toString()
+                        }
+                        val harvested = withContext(Dispatchers.Default) {
+                            FavoriteChannelRepository.harvestChannelReelsFromHtml(url, cleanHtml)
+                        }
+                        harvested.forEach { discoveredChannelReels[it.reelId] = it }
+                        updateFloatingChannelScanButton(url)
+                    } catch (_: Exception) {
+                    }
+                    showChannelReelsBatchDialog(url)
+                }
+            } else {
+                showChannelReelsBatchDialog(url)
+            }
+        }
+    }
+
+    private fun showChannelReelsBatchDialog(currentUrl: String) {
+        val ctx = context ?: return
+        val target = try {
+            FavoriteChannelRepository.normalizeChannelInput(currentUrl)
+        } catch (e: Exception) {
+            return
+        }
+
+        val allList = discoveredChannelReels.values.toList()
+        val alreadyDownloaded = favoriteChannelRepository.getDownloadedIdsForSlug(target.pageSlug)
+        val newList = allList.filter { !alreadyDownloaded.contains(it.reelId) }
+        val existingCount = allList.size - newList.size
+
+        val dialogTitle = getString(R.string.channel_scan_dialog_title, target.pageSlug)
+        val summaryMsg = buildString {
+            append(getString(R.string.channel_scan_summary, allList.size, newList.size, existingCount))
+            append("\n• URL: ${target.reelsTabUrl}")
+            if (newList.isNotEmpty()) {
+                append("\n\n")
+                newList.take(8).forEachIndexed { idx, item ->
+                    val fileName = FavoriteChannelRepository.buildVideoFileName(item.reelId, item.caption, item.title, item.hashtags)
+                    val streamTag = if (item.bestStreamUrl != null) "HD Ready" else "Auto-Resolve"
+                    append("${idx + 1}. $fileName [$streamTag]\n")
+                }
+                if (newList.size > 8) {
+                    append("... (+${newList.size - 8} video khác)")
+                }
+            }
+        }
+
+        val builder = AlertDialog.Builder(ctx)
+            .setTitle(dialogTitle)
+            .setMessage(summaryMsg)
+            .setNeutralButton(getString(R.string.btn_scroll_scan_more)) { _, _ ->
+                webView.evaluateJavascript("window.scrollBy(0, Math.max(1200, window.innerHeight * 1.6));", null)
+                webView.postDelayed({
+                    if (isAdded) harvestCurrentWebViewAndShowChannelDialog(currentUrl)
+                }, 1600L)
+            }
+            .setNegativeButton(getString(R.string.btn_save_favorite_channel)) { _, _ ->
+                val fav = favoriteChannelRepository.addOrUpdateFavorite(target.inputUrl, getPageTitle())
+                renderFavoriteChannelsList()
+                Toast.makeText(ctx, getString(R.string.toast_channel_saved, fav.title), Toast.LENGTH_SHORT).show()
+            }
+
+        if (newList.isNotEmpty()) {
+            builder.setPositiveButton(getString(R.string.btn_download_all_new, newList.size)) { _, _ ->
+                batchEnqueueChannelReels(target.pageSlug, newList)
+            }
+        } else {
+            builder.setPositiveButton(getString(R.string.btn_ok), null)
+        }
+
+        builder.show()
+    }
+
+    private fun batchEnqueueChannelReels(pageSlug: String, candidates: List<ChannelReelCandidate>) {
+        val mainAct = activity as? MainActivity ?: return
+        val enqueuedIds = mutableListOf<String>()
+
+        Toast.makeText(
+            mainAct,
+            getString(R.string.toast_channel_batch_started, candidates.size),
+            Toast.LENGTH_LONG
+        ).show()
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            for (cand in candidates) {
+                var streamUrl = cand.bestStreamUrl
+                var fileName = FavoriteChannelRepository.buildVideoFileName(cand.reelId, cand.caption, cand.title, cand.hashtags)
+                val referer = when (cand.platform) {
+                    "instagram" -> "https://www.instagram.com/"
+                    "youtube" -> "https://www.youtube.com/"
+                    else -> "https://www.facebook.com/"
+                }
+
+                if (streamUrl.isNullOrBlank()) {
+                    val info = snifferEngine.extractVideoFromUrl(cand.reelUrl)
+                    streamUrl = info?.qualities?.firstOrNull()?.downloadUrl
+                    if (!info?.title.isNullOrBlank()) {
+                        fileName = info!!.title
+                    }
+                }
+
+                if (!streamUrl.isNullOrBlank()) {
+                    enqueuedIds.add(cand.reelId)
+                    withContext(Dispatchers.Main) {
+                        mainAct.downloadEngine.enqueueDownload(
+                            "${pageSlug}_$fileName",
+                            streamUrl,
+                            "1080p Full HD",
+                            "mp4",
+                            referer
+                        )
+                    }
+                }
+            }
+            favoriteChannelRepository.recordChannelScanResult(pageSlug, discoveredChannelReels.size, enqueuedIds)
+            withContext(Dispatchers.Main) {
+                renderFavoriteChannelsList()
+            }
+        }
+    }
+
+    private fun renderFavoriteChannelsList() {
+        val container = layoutFavoriteChannelsList ?: return
+        val ctx = context ?: return
+        container.removeAllViews()
+
+        val favorites = favoriteChannelRepository.getFavorites()
+        tvFavoriteChannelsHeader?.text = getString(R.string.home_favorites_header, favorites.size)
+
+        if (favorites.isEmpty()) {
+            val emptyTv = TextView(ctx).apply {
+                text = getString(R.string.home_favorites_empty)
+                setTextColor(Color.parseColor("#94A3B8"))
+                textSize = 11f
+                setPadding(0, 6, 0, 6)
+            }
+            container.addView(emptyTv)
+            return
+        }
+
+        val density = ctx.resources.displayMetrics.density
+        for (fav in favorites) {
+            val row = LinearLayout(ctx).apply {
+                orientation = LinearLayout.HORIZONTAL
+                gravity = Gravity.CENTER_VERTICAL
+                setBackgroundColor(Color.parseColor("#0D1424"))
+                val padH = (10 * density).toInt()
+                val padV = (8 * density).toInt()
+                setPadding(padH, padV, padH, padV)
+                val lp = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                lp.topMargin = (6 * density).toInt()
+                layoutParams = lp
+            }
+
+            val badgeIcon = when (fav.platform) {
+                "instagram" -> "📷 IG"
+                "youtube" -> "▶ YT"
+                else -> "📘 FB"
+            }
+
+            val infoTv = TextView(ctx).apply {
+                text = "$badgeIcon • ${fav.title} (${fav.downloadedReelIds.size} đã tải)"
+                setTextColor(Color.WHITE)
+                textSize = 12f
+                layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+            }
+
+            val scanBtn = TextView(ctx).apply {
+                text = getString(R.string.btn_scan_new)
+                setTextColor(Color.parseColor("#46CC6B"))
+                textSize = 11f
+                setPadding((10 * density).toInt(), (4 * density).toInt(), (10 * density).toInt(), (4 * density).toInt())
+                setOnClickListener {
+                    etUrlInput.setText(fav.reelsTabUrl)
+                    startChannelScanFlow(fav.reelsTabUrl)
+                }
+            }
+
+            val delBtn = TextView(ctx).apply {
+                text = "✕"
+                setTextColor(Color.parseColor("#94A3B8"))
+                textSize = 13f
+                setPadding((8 * density).toInt(), (4 * density).toInt(), (4 * density).toInt(), (4 * density).toInt())
+                setOnClickListener {
+                    favoriteChannelRepository.removeFavorite(fav.id)
+                    renderFavoriteChannelsList()
+                }
+            }
+
+            row.addView(infoTv)
+            row.addView(scanBtn)
+            row.addView(delBtn)
+            container.addView(row)
         }
     }
 

@@ -1,6 +1,8 @@
 package com.nextaitechnology.antidetect.core.network
 
 import android.util.Log
+import com.nextaitechnology.antidetect.core.channel.ChannelReelCandidate
+import com.nextaitechnology.antidetect.core.channel.FavoriteChannelRepository
 import com.nextaitechnology.antidetect.core.model.VideoInfo
 import com.nextaitechnology.antidetect.core.model.VideoQuality
 import kotlinx.coroutines.Dispatchers
@@ -161,7 +163,16 @@ class SnifferEngine {
                 Log.i("NextAI_Sniffer", "Ä Ã£ tÃ¬m tháº¥y SD Stream URL: " + sdUrl.take(80) + "...")
             }
 
-            // Fallback: TÃ¬m cÃ¡c URL mp4 fbcdn trá»±c tiáº¿p trong trang
+            // Fallback: TÃ¬m cÃ¡c URL mp4 fbcdn trá»±c tiáº¿p hoặc DASH Manifest XML 1080p trong trang
+            val dashRegex = Pattern.compile(""""dash_manifest(?:_xml_string)?"\s*:\s*"([^"]+)"""")
+            val dashMatcher = dashRegex.matcher(html)
+            if (dashMatcher.find()) {
+                val dashParsed = FavoriteChannelRepository.parseDashManifestXml(dashMatcher.group(1))
+                if (!dashParsed.bestVideoUrl.isNullOrEmpty() && hdUrl.isNullOrEmpty()) {
+                    hdUrl = dashParsed.bestVideoUrl
+                }
+            }
+
             if (hdUrl == null && sdUrl == null) {
                 val fbcdnRegex = Pattern.compile("""https:\\/\\/video[^"]+\\.fbcdn\\.net[^"]+\\.mp4[^"]*""")
                 val fbcdnMatcher = fbcdnRegex.matcher(html)
@@ -170,6 +181,9 @@ class SnifferEngine {
                 }
             }
 
+            hdUrl = hdUrl?.let { FavoriteChannelRepository.stripByteRangeParams(it) }
+            sdUrl = sdUrl?.let { FavoriteChannelRepository.stripByteRangeParams(it) }
+
             if (hdUrl == null && sdUrl == null) {
                 Log.w("NextAI_Sniffer", "KhÃ´ng tÃ¬m tháº¥y luá»“ng phÃ¡t HD/SD trong trang")
                 return@withContext null
@@ -177,7 +191,13 @@ class SnifferEngine {
 
             val videoId = currentUrl.substringAfter("v=").substringBefore('&')
                 .ifEmpty { currentUrl.substringAfter("/videos/").substringBefore('/') }
+                .ifEmpty { currentUrl.substringAfter("/reel/").substringBefore('/') }
                 .ifEmpty { "2120496905227881" }
+
+            val ogTitleRegex = Pattern.compile("""<meta\s+property=["']og:title["']\s+content=["']([^"']+)["']""", Pattern.CASE_INSENSITIVE)
+            val ogTitleMatcher = ogTitleRegex.matcher(html)
+            val rawFbCaption = if (ogTitleMatcher.find()) ogTitleMatcher.group(1) else null
+            val descriptiveFileName = FavoriteChannelRepository.buildVideoFileName(videoId, rawFbCaption)
 
             val qualities = mutableListOf<VideoQuality>()
             if (!hdUrl.isNullOrEmpty()) {
@@ -213,7 +233,7 @@ class SnifferEngine {
             )
 
             VideoInfo(
-                title = "Facebook_Reel_" + videoId + ".mp4",
+                title = descriptiveFileName,
                 sourcePageUrl = currentUrl,
                 thumbnailUrl = "",
                 durationSeconds = 60,
@@ -818,6 +838,23 @@ class SnifferEngine {
                 extractXnxxVideo(url, htmlContent)
             }
         }
+    }
+
+    /**
+     * Quét danh sách Reels / Shorts của một Page Facebook, Kênh Instagram hoặc Kênh YouTube
+     */
+    suspend fun scanChannelReels(channelUrl: String, htmlContent: String? = null): List<ChannelReelCandidate> = withContext(Dispatchers.IO) {
+        val target = try {
+            FavoriteChannelRepository.normalizeChannelInput(channelUrl)
+        } catch (e: Exception) {
+            return@withContext emptyList()
+        }
+        val html = if (!htmlContent.isNullOrBlank()) {
+            htmlContent
+        } else {
+            fetchHtmlWithOkHttp(target.reelsTabUrl)
+        }
+        FavoriteChannelRepository.harvestChannelReelsFromHtml(target.reelsTabUrl, html)
     }
 
     private fun fetchHtmlWithOkHttp(targetUrl: String): String {

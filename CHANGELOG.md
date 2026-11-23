@@ -4,6 +4,22 @@ Tất cả các thay đổi quan trọng trong dự án **AI Video Downloader** 
 
 ---
 
+## [1.0.8] - 2026-11-23 (Build 14)
+
+### Đã bổ sung & Nâng cấp (Added & Changed)
+- **Tích hợp hệ thống Tải Video Theo Kênh / Page (Facebook Page Reels, Instagram Channel Reels, YouTube Channel Shorts/Videos) & Theo Dõi Kênh Yêu Thích từ `D:\Decompiler\App\Downloader\download`:**
+  - **Web Platform (`WWW/` & `WWW/Backend/`):**
+    - Tích hợp `reelsService.js` và bộ REST API `/api/v1/reels/*` (`/auto-download`, `/jobs`, `/favorites`, `/library`, `/normalize`, `/session/status`, `/file/:pageSlug/:fileName`).
+    - Tích hợp giao diện quản lý tải kênh & kênh yêu thích tại `/reels/` (`WWW/public/reels/index.html`, `app.js`, `style.css`) và gắn liên kết điều hướng trực tiếp trên trang chủ.
+    - Nâng cấp `snifferService.js` với bộ bóc tách Relay GraphQL (`walkRelayObject`), DASH Manifest XML 1080p (`parseDashManifestXml`), Meta `efg=` (`parseMetaEfg`), Instagram `video_versions` (`walkInstagramObject`) và đặt tên file tự động kèm caption & hashtags (`buildVideoFileName`).
+  - **Android App (`CONVERT/apps/android` — Version Code 14 / `v1.0.8`):**
+    - Xây dựng `FavoriteChannelRepository.kt` hỗ trợ chuẩn hóa URL Kênh/Page đa nền tảng (`normalizeChannelInput`), phân tích DASH Manifest XML 1080p (`parseDashManifestXml`), trích xuất caption/hashtags đặt tên file thông minh (`buildVideoFileName`), bóc tách danh sách Reels/Shorts hàng loạt từ HTML & Relay JSON (`harvestChannelReelsFromHtml`), và lưu trữ Danh sách Kênh Yêu Thích kèm lịch sử ID đã tải (Incremental Mode).
+    - Nâng cấp `SnifferEngine.kt` (`extractFacebookVideo`, `scanChannelReels`) hỗ trợ DASH Manifest XML 1080p và loại bỏ tham số byte-range (`stripByteRangeParams`).
+    - Nâng cấp `HomeFragment.kt` và `fragment_home.xml`: bổ sung thẻ **📺 Tải Video Theo Kênh / Page (FB • IG • YT) & Kênh Yêu Thích**, nút nổi **📥 Quét Video Kênh** khi duyệt Page/Kênh trên WebView, và hộp thoại tải hàng loạt video mới (`showChannelReelsBatchDialog`).
+    - Bổ sung bộ unit test `ChannelDownloaderTest.kt` (6/6 tests) kết hợp `CurrencyFormatterTest.kt` (14/14 tests).
+
+---
+
 ## [1.0.7] - 2026-11-10 (Build 13)
 
 ### Đã khắc phục & Nâng cấp (Fixed & Changed)

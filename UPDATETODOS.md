@@ -21,6 +21,7 @@
 | **9. Khắc Phục Misleading Claims & Release Build 11** | `DONE` | Agent 3 (Android) | Bóc tách Instagram/Meta CDN, Private Vault độc lập, Purge 4K/8K, Build 11 |
 | **10. Tuân Thủ Chính Sách Subscriptions & Release Build 12** | `DONE` | Agent 3 (Android) | Currency Parity động từ Google Play, Connection Queue, Build 12 (AAB 11.05MB, APK 7.30MB) |
 | **11. Khắc Phục Triệt Để Currency Localization & Release Build 13** | `DONE` | Agent 3 / Agent 7 | Bảo toàn Country ISO trong LocaleHelper, Single-Flight Billing Query, Clone Format Play Store, Build 13 (AAB 11.07MB, APK 7.31MB) |
+| **12. Tích Hợp Bộ Tải Video Theo Kênh/Page & Kênh Yêu Thích (VC 14)** | `DONE` | Agent 2 / Agent 3 | Tích hợp tải Kênh/Page FB, IG, YT, Danh sách Kênh Yêu Thích, Relay/DASH Harvester từ `download` vào Web & Android |
 
 ---
 
@@ -76,4 +77,8 @@
   - **Nâng cấp `CurrencyFormatter.kt` (Clone Format & 190-Country/50-Language Localization):** Sao chép chính xác tiền tố/hậu tố ký hiệu tiền tệ và dấu phân cách từ `formattedPrice` của Google Play khi tính giá chia theo tháng (`formatAmountMatchingPlayPrice`), bổ sung ánh xạ đầy đủ 50 ngôn ngữ & 190 quốc gia/múi giờ, tuyệt đối không rò rỉ `$2.99 / $19.99 / $1.66 / $39.99` USD tại các quốc gia ngoài Mỹ.
   - **Nâng cấp `PaymentWallActivity.kt`:** Đồng bộ hiển thị trạng thái tải và bắt buộc `refreshPricing()` ngay trước khi mở Google Play Payment Cart, tự động điều chỉnh nút CTA & điều khoản theo loại gói (Subscription vs One-time Lifetime).
   - **Version Code 13:** Cập nhật `versionCode = 13`, `versionName = "1.0.7"` trong `app/build.gradle.kts`, chạy 14/14 unit tests pass và đóng gói AAB Release (`com.ai.video.downloader.videodownloader_v1.0.7_vc13.aab`, 11.07 MB) + APK Release (`com.ai.video.downloader.videodownloader_v1.0.7_vc13.apk`, 7.31 MB) ký số hoàn chỉnh.
+- [x] **TASK-014:** Tích hợp hệ thống Tải Video Theo Kênh/Page (Facebook Page Reels, Instagram Channel Reels, YouTube Channel Shorts/Videos) & Theo Dõi Kênh Yêu Thích từ `D:\Decompiler\App\Downloader\download` vào Web Platform (`WWW/`) và Android App (`v1.0.8` / `VC 14`):
+  - **Web Platform (`WWW/` & `WWW/Backend/`):** Tích hợp `reelsService.js`, hệ thống REST API `/api/v1/reels/*` (`/auto-download`, `/jobs`, `/favorites`, `/library`, `/normalize`, `/session/*`), nâng cấp `snifferService.js` với bộ bóc tách Relay GraphQL + DASH Manifest XML + Meta `efg=`, và tích hợp giao diện Web `/reels/` đồng bộ với trang chủ.
+  - **Android App (`CONVERT/apps/android`):** Nâng cấp `SnifferEngine.kt` (bổ sung `normalizeChannelInput`, `parseDashManifestXml`, `parseMetaEfg`, `extractCaptionTitleAndHashtags`, `buildVideoFileName`, `extractChannelReelsFromHtml`), xây dựng `FavoriteChannelRepository.kt`, bổ sung khu vực **Tải Video Theo Kênh / Page & Kênh Yêu Thích** trên `HomeFragment` kèm tính năng tự động cuộn quét & tải hàng loạt Reels/Shorts (Incremental Mode bỏ qua video đã tải).
+  - **Kiểm thử & Đóng gói (Version Code 14 / `v1.0.8`):** Bổ sung unit test `ChannelDownloaderTest.kt`, build Release AAB/APK ký số và cập nhật hồ sơ quản trị.
 

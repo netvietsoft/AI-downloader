@@ -5,13 +5,23 @@
  * @author NextAI Technology Core Team
  */
 
+const {
+    harvestPayloadText,
+    harvestInstagramText,
+    parseDashManifestXml,
+    stripByteRangeParams,
+    extractCaptionTitleAndHashtags
+} = require('./reelsService');
+
 function sanitizeMediaUrl(raw) {
     if (!raw) return '';
-    return raw
-        .replace(/\\u0025/g, '%')
-        .replace(/\\u0026/g, '&')
-        .replace(/\\\//g, '/')
-        .replace(/\\/g, '');
+    return stripByteRangeParams(
+        raw
+            .replace(/\\u0025/g, '%')
+            .replace(/\\u0026/g, '&')
+            .replace(/\\\//g, '/')
+            .replace(/\\/g, '')
+    );
 }
 
 function decodeHtmlEntities(str) {
@@ -136,12 +146,29 @@ class SnifferService {
             duration = formatDuration(parseInt(durMatch[1], 10));
         }
 
-        // Luồng HD & SD
+        // Luồng HD & SD + Relay GraphQL + DASH Manifest XML (1080p)
         const hdMatch = html.match(/"(?:browser_native_hd_url|playable_url_quality_hd|hd_src)":"([^"]+)"/);
         const sdMatch = html.match(/"(?:browser_native_sd_url|playable_url|sd_src)":"([^"]+)"/);
 
         let hdUrl = hdMatch ? sanitizeMediaUrl(hdMatch[1]) : null;
         let sdUrl = sdMatch ? sanitizeMediaUrl(sdMatch[1]) : null;
+        let dashVideoUrl = null;
+
+        const harvestCtx = { candidates: new Map() };
+        harvestPayloadText(html, harvestCtx);
+        for (const cand of harvestCtx.candidates.values()) {
+            if (cand.hdUrl && !hdUrl) hdUrl = cand.hdUrl;
+            if (cand.sdUrl && !sdUrl) sdUrl = cand.sdUrl;
+            if (cand.dashVideoUrl && !dashVideoUrl) dashVideoUrl = cand.dashVideoUrl;
+            if (cand.caption && title === 'Facebook Video') {
+                const meta = extractCaptionTitleAndHashtags(cand.caption, title);
+                if (meta.title) title = meta.title;
+            }
+        }
+
+        if (!hdUrl && dashVideoUrl) {
+            hdUrl = dashVideoUrl;
+        }
 
         if (!hdUrl && !sdUrl) {
             const fbcdnMatch = html.match(/https:\\\/\\\/video[^"]+\.fbcdn\.net[^"]+\.mp4[^"]*/);
@@ -529,6 +556,62 @@ class SnifferService {
         if (platform.id === 'vimeo') {
             const vmRes = await this.sniffVimeo(cleanUrl);
             if (vmRes) return vmRes;
+        }
+
+        // 4B. Instagram Reels / Post
+        if (platform.id === 'instagram') {
+            try {
+                const igRes = await fetch(cleanUrl, {
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+                        Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+                    },
+                    redirect: 'follow'
+                });
+                if (igRes.ok) {
+                    const igHtml = await igRes.text();
+                    const igCtx = { candidates: new Map() };
+                    harvestInstagramText(igHtml, igCtx);
+                    const ogVid = igHtml.match(/<meta\s+property=["']og:video(?::secure_url)?["']\s+content=["']([^"']+)["']/i);
+                    const ogTit = igHtml.match(/<meta\s+property=["']og:title["']\s+content=["']([^"']+)["']/i);
+                    const ogImg = igHtml.match(/<meta\s+property=["']og:image["']\s+content=["']([^"']+)["']/i);
+                    const firstCand = Array.from(igCtx.candidates.values())[0];
+                    const streamUrl = (ogVid && sanitizeMediaUrl(ogVid[1])) || firstCand?.hdUrl || firstCand?.dashVideoUrl;
+                    if (streamUrl) {
+                        const igTitle = (ogTit && decodeHtmlEntities(ogTit[1])) || firstCand?.caption || 'Instagram Reel HD';
+                        const igThumb = (ogImg && ogImg[1]) || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=640';
+                        const igResult = {
+                            originalUrl: cleanUrl,
+                            platform,
+                            title: igTitle,
+                            author: 'Instagram Creator',
+                            duration: formatDuration(firstCand?.durationSec || 30),
+                            thumbnail: igThumb,
+                            formats: [
+                                {
+                                    id: 'fmt_ig_hd',
+                                    label: '1080p Full HD (Instagram Reel Gốc)',
+                                    quality: '1080p HD',
+                                    format: 'MP4',
+                                    size: '16.4 MB',
+                                    resolution: '1080x1920',
+                                    fps: 30,
+                                    hasAudio: true,
+                                    isRecommended: true,
+                                    streamUrl,
+                                    downloadUrl: `/api/download/stream?url=${encodeURIComponent(cleanUrl)}&quality=1080p&formatId=fmt_ig_hd&streamUrl=${encodeURIComponent(streamUrl)}`
+                                }
+                            ],
+                            isMonetized: false,
+                            detectedAt: new Date().toISOString()
+                        };
+                        this.cache.set(cleanUrl, igResult);
+                        return igResult;
+                    }
+                }
+            } catch (e) {
+                console.warn('[Sniffer] IG error:', e.message);
+            }
         }
 
         // 5. Fallback tổng quát cho các nền tảng còn lại
