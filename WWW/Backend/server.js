@@ -5,6 +5,7 @@ const fs = require('fs');
 const archiver = require('archiver');
 const db = require('./database');
 const snifferService = require('./snifferService');
+const { createReelsRouter } = require('./reelsService');
 
 const app = express();
 const PORT = 3080;
@@ -51,14 +52,20 @@ function authenticate(req, res, next) {
 app.use(authenticate);
 
 // --- 1. HEALTH CHECK ---
-app.get('/api/health', (req, res) => {
+app.get(['/api/health', '/healthz'], (req, res) => {
     res.json({
         status: 'UP',
-        service: 'AI Downloader Sniffer Backend',
+        service: 'AI Downloader Sniffer & Channel Reels Backend',
+        version: '1.0.8',
         port: PORT,
         timestamp: new Date().toISOString()
     });
 });
+
+// --- 1B. CHANNEL / PAGE REELS DOWNLOADER & FAVORITES WATCHLIST API ---
+const reelsRouter = createReelsRouter();
+app.use('/api/v1/reels', reelsRouter);
+app.use('/api/reels', reelsRouter);
 
 // --- 2. AUTHENTICATION (ĐĂNG KÝ / ĐĂNG NHẬP) ---
 app.post('/api/auth/register', (req, res) => {
@@ -427,12 +434,16 @@ app.get('/api/extension/status', (req, res) => {
 });
 
 // Endpoint tải xuống gói Extension dạng file .zip
-app.get('/api/extension/download-package', (req, res) => {
-    const zipPath = path.join(__dirname, '..', 'ai-downloader-extension.zip');
+app.get(['/api/extension/download-package', '/download-extension'], (req, res) => {
+    let zipPath = path.join(__dirname, 'ai-downloader-extension.zip');
     if (!fs.existsSync(zipPath)) {
-        return res.status(404).json({ success: false, message: 'File zip Extension chưa được khởi tạo!' });
+        zipPath = path.join(__dirname, '..', 'ai-downloader-extension.zip');
     }
-    res.download(zipPath, 'AI_Video_Downloader_Extension.zip');
+    if (fs.existsSync(zipPath)) {
+        res.download(zipPath, 'AI_Video_Downloader_Extension.zip');
+    } else {
+        res.status(404).json({ success: false, message: 'File zip Extension chưa được khởi tạo!' });
+    }
 });
 
 // SPA fallback về index.html cho các route giao diện (Tương thích Express 5)

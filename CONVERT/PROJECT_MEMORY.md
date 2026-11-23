@@ -32,10 +32,14 @@
 
 ---
 
-## BỘ NHỚ VẬN HÀNH & CHUẨN HÓA PHÁT HÀNH GOOGLE PLAY (v1.0.2 -> v1.0.7 VC 13)
+## BỘ NHỚ VẬN HÀNH & CHUẨN HÓA PHÁT HÀNH GOOGLE PLAY (v1.0.2 -> v1.0.8 VC 14)
 - **Định danh phát hành chính thức (Google Play ID)**: `com.ai.video.downloader.videodownloader`
-- **Phiên bản hiện tại**: `1.0.7` (Version Code: `13`)
+- **Phiên bản hiện tại**: `1.0.8` (Version Code: `14`)
 - **Target SDK**: `compileSdk = 36`, `targetSdk = 36` (Android 16 - Tuân thủ chính sách Google Play 2026)
+- **Hệ Thống Tải Video Theo Kênh / Page & Theo Dõi Kênh Yêu Thích (Tích hợp từ `download`)**:
+  - Hỗ trợ chuẩn hóa và quét hàng loạt video từ Facebook Page Reels (`/reels/`, `profile.php?id=...&sk=reels_tab`), Instagram Channel Reels (`/reels/`), và YouTube Channel Shorts/Videos (`/@handle/shorts`).
+  - Bóc tách Relay GraphQL (`walkRelayObject`), DASH Manifest XML 1080p (`parseDashManifestXml`), Meta `efg=` (`parseMetaEfg`) và đặt tên file tự động kèm caption & hashtags (`buildVideoFileName`).
+  - Quản lý Danh sách Kênh Yêu Thích (`FavoriteChannelRepository.kt` trên Android & `reelsService.js` `/api/v1/reels/*` trên Web Platform `WWW/`) với chế độ Incremental Scan tự động bỏ qua các video đã tải.
 - **Google Play Billing v8.0.0 Compliance**:
   - Tách biệt hoàn toàn truy vấn `SUBS` (`weekly_pro`, `yearly_pro`) và `INAPP` (`lifetime_pro`) tránh ngoại lệ `IllegalArgumentException`.
   - Triển khai **Connection Queue** + **Single-Flight Product Query Deduplication** (`isQueryingProducts` + `pendingQueryCallbacks` + `isLoadingProducts: StateFlow<Boolean>`) và **Auto-Retry Backoff** chống rớt callback hoặc trùng truy vấn khi kết nối BillingClient.

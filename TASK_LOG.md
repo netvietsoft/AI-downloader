@@ -4,6 +4,22 @@ Tài liệu ghi nhận toàn bộ tiến trình và hoạt động thực thi th
 
 ---
 
+## [2026-11-23 10:50] TASK-014: Tích Hợp Hệ Thống Tải Video Theo Kênh / Page (FB • IG • YT) & Theo Dõi Kênh Yêu Thích Từ `download` Vào Web Platform & Android App (v1.0.8 VC 14)
+- **Agent chịu trách nhiệm:** Agent 2 (Backend & Web Platform) / Agent 3 (Android Frontend & Core Sniffer) / Agent 0 (CEO Orchestrator)
+- **Bối cảnh:** Kiểm tra thư mục `D:\Decompiler\App\Downloader\download` (module `page-video-downloader` hỗ trợ tải hàng loạt Facebook Page Reels, Instagram Channel Reels, YouTube Channel Shorts/Videos, quản lý Kênh Yêu Thích & Thư viện video) và tích hợp toàn diện các tính năng, thuật toán bóc tách vào cả Web Platform (`WWW/`) và Android App (`CONVERT/apps/android`).
+- **Hành động đã thực hiện:**
+  1. **Web Platform (`WWW/` & `WWW/Backend/`):**
+     - Xây dựng `WWW/reelsService.js` tích hợp bộ chuẩn hóa URL kênh (`normalizeFacebookInput`), bộ bóc tách Relay GraphQL (`walkRelayObject`, `harvestPayloadText`), DASH Manifest XML 1080p (`parseDashManifestXml`), Meta `efg=` (`parseMetaEfg`), Instagram `video_versions` (`walkInstagramObject`, `harvestInstagramText`), trích xuất caption/hashtags (`extractCaptionTitleAndHashtags`, `buildVideoFileName`) và quản lý Jobs + Danh sách Kênh Yêu Thích (`ReelsChannelManager`).
+     - Gắn router `/api/v1/reels/*` và `/api/reels/*` vào `WWW/server.js`, tích hợp giao diện `/reels/` (`WWW/public/reels/*`) và thêm nút điều hướng trên `WWW/public/index.html`.
+     - Nâng cấp `WWW/snifferService.js` sử dụng `harvestPayloadText`, `parseDashManifestXml`, `stripByteRangeParams` và bổ sung bóc tách thật cho Instagram Reels.
+  2. **Android App (`CONVERT/apps/android`):**
+     - Xây dựng `FavoriteChannelRepository.kt` và nâng cấp `SnifferEngine.kt` (`scanChannelReels`, DASH XML 1080p parser, descriptive file naming).
+     - Nâng cấp `fragment_home.xml` và `HomeFragment.kt`: bổ sung thẻ **📺 Tải Video Theo Kênh / Page (FB • IG • YT)**, danh sách **⭐ Kênh Yêu Thích**, nút nổi **📥 Quét Video Kênh** trên WebView, và hộp thoại tự động cuộn quét + tải hàng loạt video mới (Incremental Mode bỏ qua các Reel/Short đã tải).
+     - Bổ sung unit test `ChannelDownloaderTest.kt`, nâng `versionCode = 14` (`versionName = "1.0.8"`) và đóng gói AAB/APK ký số.
+- **Trạng thái:** `COMPLETED`
+
+---
+
 ## [2026-11-10 14:45] TASK-013: Khắc Phục Triệt Để Vi Phạm Chính Sách Subscriptions (LocaleHelper Country Preservation & Play Price Format Cloning) & Release Build 13 (v1.0.7)
 - **Agent chịu trách nhiệm:** Agent 3 (Android Frontend & Billing) / Agent 7 (Fixer) / Agent 0 (CEO Orchestrator)
 - **Bối cảnh:** Google Play Console từ chối bản build Version Code 12 theo chính sách Subscriptions Policy: *"Currency differences with prominent display price. Ensure that currency displayed is consistent through multiple screens such as offers page and payment cart within the purchase flow and is appropriately localized for each country that your app is targeting."* Ảnh chụp từ Reviewer hiển thị cả 3 gói trên Paywall đều hiện giá fallback USD (`$2.99`, `$19.99`, `Just $1.66 / month • Save 70%`, `$39.99`) dù 3 mã `weekly_pro`, `yearly_pro`, `lifetime_pro` đã được Active trên Google Play Console.

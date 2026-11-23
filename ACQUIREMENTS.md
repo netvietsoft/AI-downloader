@@ -118,3 +118,15 @@ Tài liệu chưng cất kinh nghiệm, nguyên tắc và giải pháp kỹ thu�
 
 
 
+
+---
+
+## [ACQ-010] Kiến Trúc Tải Video Theo Kênh / Page (Facebook Reels, Instagram Reels, YouTube Shorts) & Bóc Tách Relay GraphQL / DASH Manifest XML 1080p
+- **Bối cảnh:** Khi tích hợp module tải video theo Kênh / Page (`D:\Decompiler\App\Downloader\download`) vào Web Platform (`WWW/`) và Android App (`CONVERT/apps/android`), người dùng cần quét và tải hàng loạt video từ một Page Facebook, Profile Instagram hoặc Kênh YouTube kèm khả năng theo dõi Kênh Yêu Thích (Favorite Channels Watchlist) mà không tải trùng các video cũ.
+- **Giải pháp kỹ thuật tối ưu:**
+  1. **Chuẩn hóa URL Kênh đa nền tảng (`normalizeChannelInput`):** Tự động chuyển đổi mọi biến thể URL hoặc shorthand handle (`@YouTube`, `samfamily.6826`, `profile.php?id=...`, `/people/...`, `instagram.com/username`) về đúng tab chứa danh sách video ngắn (`/reels/`, `&sk=reels_tab`, `/shorts`) và sinh định danh thư mục chuẩn `pageSlug`.
+  2. **Bóc tách đa tầng Relay GraphQL & DASH Manifest XML 1080p (`parseDashManifestXml` + `harvestChannelReelsFromHtml`):**
+     - Kết hợp quét liên kết DOM (`/reel/ID`, `/shorts/ID`) với phân tích cây JSON Relay (`browser_native_hd_url`, `playable_url_quality_hd`, `progressive_urls`, `video_versions`) và giải mã `dash_manifest` XML để lấy `<BaseURL>` có độ phân giải cao nhất (`1080x1920`, ưu tiên codec `avc1`), đồng thời tự động loại bỏ tham số giới hạn chunk `bytestart`/`byteend` (`stripByteRangeParams`).
+  3. **Đặt tên file thông minh kèm Hashtags & Incremental Mode (`buildVideoFileName`):**
+     - Tách tiêu đề sạch và danh sách hashtags (`#tag`) từ caption để tạo tên file có cấu trúc `<Tiêu đề> - <#hashtags> [<reelId>].mp4`, giúp nhận diện chính xác `reelId` đã tải và tự động bỏ qua các video đã có trong chế độ quét kênh yêu thích (Incremental Scan).
+- **Lợi ích:** Thống nhất 100% năng lực tải video đơn lẻ và tải hàng loạt theo Kênh/Page trên cả nền tảng Web và Android.

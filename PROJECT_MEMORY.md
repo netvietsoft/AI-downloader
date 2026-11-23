@@ -8,12 +8,13 @@ Tài liệu lưu giữ toàn bộ bối cảnh vận hành, kiến trúc hiện 
 
 - **Tên dự án:** AI Video Downloader & Player Platform
 - **Mã định danh ứng dụng (Application ID):** `com.ai.video.downloader.videodownloader`
-- **Phiên bản hiện tại:** `1.0.7` (Version Code: `13`)
+- **Phiên bản hiện tại:** `1.0.8` (Version Code: `14`)
 - **Chuẩn quản trị:** Development Workspace Standard V2.1.2 (Design-Gated)
 - **Kho lưu trữ:** `git@github.com:netvietsoft/AI-downloader.git`
 - **Các nhánh hoạt động:**
   - `main`: Mã nguồn toàn thể (Android Kotlin + Web Platform + Governance)
   - `web`: Nhánh trích xuất độc lập phục vụ server production `snaptik2.com`
+  - `feat/channel-downloader-v1.0.8`: Nhánh tích hợp Tải Video Theo Kênh/Page (FB, IG, YT) & Kênh Yêu Thích (VC 14)
   - `fix/subscription-currency-v1.0.7`: Nhánh xử lý Subscriptions Currency Localization, LocaleHelper Country Preservation & Billing Single-Flight Query (VC 13)
   - `fix/subscription-currency-v1.0.6`: Nhánh xử lý Subscriptions Currency Parity & Connection Queue (VC 12)
   - `fix/misleading-claims-v1.0.5`: Nhánh xử lý Misleading Claims & Private Vault
@@ -67,8 +68,10 @@ Tài liệu lưu giữ toàn bộ bối cảnh vận hành, kiến trúc hiện 
 
 | File | Phiên bản | Dung lượng | Vị trí lưu trữ |
 | :--- | :---: | :---: | :--- |
-| **AAB (Play Store Release)** | **VC 13 (v1.0.7)** | **11.07 MB** | [`CONVERT/apps/android/app/build/outputs/bundle/release/com.ai.video.downloader.videodownloader_v1.0.7_vc13.aab`](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/CONVERT/apps/android/app/build/outputs/bundle/release/com.ai.video.downloader.videodownloader_v1.0.7_vc13.aab) |
-| **APK (Thiết bị thật Release)** | **VC 13 (v1.0.7)** | **7.31 MB** | [`CONVERT/apps/android/app/build/outputs/apk/release/com.ai.video.downloader.videodownloader_v1.0.7_vc13.apk`](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/CONVERT/apps/android/app/build/outputs/apk/release/com.ai.video.downloader.videodownloader_v1.0.7_vc13.apk) |
+| **AAB (Play Store Release)** | **VC 14 (v1.0.8)** | **11.08 MB** | [`CONVERT/apps/android/app/build/outputs/bundle/release/com.ai.video.downloader.videodownloader_v1.0.8_vc14.aab`](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/CONVERT/apps/android/app/build/outputs/bundle/release/com.ai.video.downloader.videodownloader_v1.0.8_vc14.aab) |
+| **APK (Thiết bị thật Release)** | **VC 14 (v1.0.8)** | **7.32 MB** | [`CONVERT/apps/android/app/build/outputs/apk/release/com.ai.video.downloader.videodownloader_v1.0.8_vc14.apk`](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/CONVERT/apps/android/app/build/outputs/apk/release/com.ai.video.downloader.videodownloader_v1.0.8_vc14.apk) |
+| **AAB (Bản build 13)** | VC 13 (v1.0.7) | 11.07 MB | [`CONVERT/apps/android/app/build/outputs/bundle/release/com.ai.video.downloader.videodownloader_v1.0.7_vc13.aab`](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/CONVERT/apps/android/app/build/outputs/bundle/release/com.ai.video.downloader.videodownloader_v1.0.7_vc13.aab) |
+| **APK (Bản build 13)** | VC 13 (v1.0.7) | 7.31 MB | [`CONVERT/apps/android/app/build/outputs/apk/release/com.ai.video.downloader.videodownloader_v1.0.7_vc13.apk`](file:///d:/Decompiler/App/Downloader/videoplayer.videodownloader.downloader/CONVERT/apps/android/app/build/outputs/apk/release/com.ai.video.downloader.videodownloader_v1.0.7_vc13.apk) |
 | **AAB (Bản build 12)** | VC 12 (v1.0.6) | 11.05 MB | `CONVERT/apps/android/app/build/outputs/bundle/release/com.ai.video.downloader.videodownloader_v1.0.6_vc12.aab` |
 | **APK (Bản build 12)** | VC 12 (v1.0.6) | 7.30 MB | `CONVERT/apps/android/app/build/outputs/apk/release/com.ai.video.downloader.videodownloader_v1.0.6_vc12.apk` |
 | **AAB (Bản build 11)** | VC 11 (v1.0.5) | 11.05 MB | `CONVERT/apps/android/app/build/outputs/bundle/release/com.ai.video.downloader.videodownloader_v1.0.5_vc11.aab` |

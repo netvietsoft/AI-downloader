@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Video Downloader - Hệ Thống Tải Video Kênh Facebook, Instagram, YouTube</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-job-status="IDLE">
+  <div class="app-shell">
+    <!-- Top Header -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">VD</div>
+        <div class="brand-text">
+          <h1>Video Downloader</h1>
+          <p>Hệ thống tự động tải video kênh Facebook, Instagram, YouTube và theo dõi kênh yêu thích</p>
+        </div>
+      </div>
+
+      <div class="session-menu" aria-label="Phiên đăng nhập trình duyệt">
+        <span class="session-label">Phiên trình duyệt:</span>
+        <button type="button" class="btn btn-secondary btn-sm btn-login-platform" data-platform="facebook" data-testid="btn-open-fb-login">
+          Đăng nhập Facebook
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm btn-login-platform" data-platform="instagram" data-testid="btn-open-ig-login">
+          Đăng nhập Instagram
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm btn-login-platform" data-platform="youtube" data-testid="btn-open-yt-login">
+          Đăng nhập YouTube
+        </button>
+      </div>
+    </header>
+
+    <!-- Scientific Main Navigation Bar -->
+    <nav class="main-nav" aria-label="Menu chức năng chính">
+      <div class="nav-tabs" role="tablist">
+        <button type="button" class="btn nav-tab active" data-tab-target="panel-downloader" role="tab" aria-selected="true">
+          Tải Kênh &amp; Tiến Trình
+        </button>
+        <button type="button" class="btn nav-tab" data-tab-target="panel-favorites" role="tab" aria-selected="false">
+          Kênh Yêu Thích (<span id="favorites-count">0</span>)
+        </button>
+        <button type="button" class="btn nav-tab" data-tab-target="panel-library" role="tab" aria-selected="false">
+          Thư Viện Đã Tải (<span id="library-count">0</span>)
+        </button>
+        <button type="button" class="btn nav-tab" data-tab-target="panel-agent" role="tab" aria-selected="false">
+          API &amp; Dữ Liệu Agent
+        </button>
+        <button type="button" class="btn nav-tab" data-tab-target="panel-all" role="tab" aria-selected="false">
+          Hiển Thị Tất Cả
+        </button>
+      </div>
+
+      <div class="nav-status-summary">
+        <span class="summary-label">Trạng thái máy chủ:</span>
+        <strong id="job-status-badge" class="status-text status-idle" data-testid="job-status-badge">IDLE</strong>
+      </div>
+    </nav>
+
+    <!-- PANEL 1: DOWNLOADER & LIVE PROGRESS -->
+    <div id="panel-downloader" class="tab-panel active">
+      <section class="card" aria-label="Nhập liên kết kênh cần tải">
+        <div class="card-header">
+          <div>
+            <h2>Tải video theo Kênh / Page</h2>
+            <p class="muted">Nhập liên kết Facebook Page, Kênh Instagram hoặc Kênh YouTube để tự động quét và tải toàn bộ video</p>
+          </div>
+        </div>
+
+        <form id="reels-download-form" autocomplete="off">
+          <div class="field">
+            <label for="page-url-input" class="input-label">Địa chỉ liên kết (URL) của Page hoặc Kênh</label>
+            <div class="url-input-row">
+              <input
+                type="text"
+                id="page-url-input"
+                name="url"
+                data-testid="page-url-input"
+                aria-label="Channel or Page URL"
+                placeholder="https://www.facebook.com/samfamily.6826/ hoặc https://www.instagram.com/username/ hoặc https://www.youtube.com/@channel"
+                required
+              />
+              <button
+                type="submit"
+                id="btn-auto-download"
+                data-testid="btn-auto-download"
+                class="btn btn-primary"
+              >
+                Tự động tải kênh
+              </button>
+              <button
+                type="button"
+                id="btn-add-favorite"
+                data-testid="btn-add-favorite"
+                class="btn btn-secondary"
+              >
+                Lưu vào kênh yêu thích
+              </button>
+              <button
+                type="button"
+                id="btn-stop-job"
+                data-testid="btn-stop-job"
+                class="btn btn-danger"
+                style="display: none;"
+              >
+                Dừng tác vụ
+              </button>
+            </div>
+          </div>
+
+          <div class="quick-fill-row">
+            <span class="muted">Chọn nhanh liên kết mẫu:</span>
+            <button type="button" class="btn btn-secondary btn-xs" data-sample-url="https://www.facebook.com/samfamily.6826/">
+              Mẫu Facebook Page
+            </button>
+            <button type="button" class="btn btn-secondary btn-xs" data-sample-url="https://www.instagram.com/instagram/reels/">
+              Mẫu Kênh Instagram
+            </button>
+            <button type="button" class="btn btn-secondary btn-xs" data-sample-url="https://www.youtube.com/@YouTube/shorts">
+              Mẫu Kênh YouTube
+            </button>
+            <span id="normalized-preview" class="normalized-hint"></span>
+          </div>
+
+          <div class="options-grid">
+            <div class="field">
+              <label for="opt-quality">Chất lượng video</label>
+              <select id="opt-quality" name="preferQuality" data-testid="opt-quality">
+                <option value="1080p" selected>1080p Full HD (Ghép âm thanh gốc)</option>
+                <option value="hd">720p HD (Tốc độ cao)</option>
+                <option value="sd">SD (Tiết kiệm dung lượng)</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="opt-max-reels">Giới hạn số lượng (0 = Tải toàn bộ)</label>
+              <input
+                type="number"
+                id="opt-max-reels"
+                name="maxReels"
+                data-testid="opt-max-reels"
+                min="0"
+                max="5000"
+                value="0"
+              />
+            </div>
+
+            <div class="field field-wide">
+              <label for="opt-output-dir">Thư mục lưu trữ trên máy</label>
+              <input
+                type="text"
+                id="opt-output-dir"
+                name="outputDir"
+                data-testid="opt-output-dir"
+                placeholder="Để trống để dùng thư mục mặc định"
+              />
+            </div>
+
+            <div class="field field-checkbox">
+              <div class="checkbox-row">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="opt-incremental" name="incrementalOnly" data-testid="opt-incremental" />
+                  <span>Chỉ quét nhanh video mới (dừng cuộn ngay khi gặp loạt video đã có trên ổ cứng)</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" id="opt-force" name="forceRedownload" data-testid="opt-force" />
+                  <span>Tải đè lại các video đã có sẵn trên ổ cứng</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- Live Job Progress -->
+      <section class="card" id="active-job-section">
+        <div class="card-header">
+          <div>
+            <h2 id="job-title">Tiến trình xử lý</h2>
+            <p id="job-message" class="muted">Sẵn sàng — Nhập liên kết kênh và bấm "Tự động tải kênh".</p>
+          </div>
+        </div>
+
+        <div class="progress-track">
+          <div id="job-progress-bar" class="progress-fill" style="width: 0%;"></div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-box">
+            <span class="stat-label">Tổng video phát hiện</span>
+            <strong id="stat-discovered" data-testid="stat-discovered">0</strong>
+          </div>
+          <div class="stat-box stat-success">
+            <span class="stat-label">Đã tải mới</span>
+            <strong id="stat-downloaded" data-testid="stat-downloaded">0</strong>
+          </div>
+          <div class="stat-box stat-info">
+            <span class="stat-label">Đã có sẵn (Bỏ qua)</span>
+            <strong id="stat-skipped" data-testid="stat-skipped">0</strong>
+          </div>
+          <div class="stat-box stat-danger">
+            <span class="stat-label">Thất bại</span>
+            <strong id="stat-failed" data-testid="stat-failed">0</strong>
+          </div>
+        </div>
+
+        <div class="output-paths" id="job-paths-box" style="display: none;">
+          <div><strong>Thư mục lưu:</strong> <span id="job-output-dir" class="mono-text"></span></div>
+          <div><strong>Tệp Manifest:</strong> <span id="job-manifest-path" class="mono-text"></span></div>
+        </div>
+
+        <div class="log-block">
+          <h3>Nhật ký hoạt động gần nhất</h3>
+          <pre id="job-logs" class="plain-pre">Chưa có tác vụ nào đang chạy.</pre>
+        </div>
+      </section>
+
+      <!-- Video Items List in Current Job -->
+      <section class="card" id="job-items-section" style="display: none;">
+        <div class="card-header">
+          <h2>Danh sách video trong phiên quét (<span id="items-count">0</span>)</h2>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="reels-items-table">
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Tiêu đề - Nội dung, Hashtag &amp; Tên tệp MP4</th>
+                <th>Lượt xem / Thời lượng</th>
+                <th>Chất lượng &amp; Âm thanh</th>
+                <th>Dung lượng</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="reels-items-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- PANEL 2: FAVORITE CHANNELS / DAILY WATCHLIST -->
+    <div id="panel-favorites" class="tab-panel">
+      <section class="card" id="favorites-section" data-testid="favorites-section">
+        <div class="card-header">
+          <div>
+            <h2>Danh sách Page / Kênh Yêu Thích</h2>
+            <p class="muted" id="scheduler-status-text">
+              Hệ thống định kỳ quét các kênh trong danh sách; khi có video mới sẽ lập tức tải về thư mục của kênh.
+            </p>
+          </div>
+          <div class="favorites-controls">
+            <label class="scheduler-select-label" for="scheduler-interval-select">Chu kỳ quét:</label>
+            <select id="scheduler-interval-select" class="scheduler-select" data-testid="scheduler-interval-select">
+              <option value="15">Mỗi 15 phút</option>
+              <option value="30">Mỗi 30 phút</option>
+              <option value="60">Mỗi 1 giờ</option>
+              <option value="360">Mỗi 6 giờ</option>
+              <option value="720">Mỗi 12 giờ</option>
+              <option value="1440" selected>Hàng ngày (24 giờ)</option>
+            </select>
+            <button type="button" id="btn-toggle-scheduler" class="btn btn-secondary btn-sm" data-testid="btn-toggle-scheduler">
+              Tự động quét: Đang bật
+            </button>
+            <button type="button" id="btn-scan-all-favorites" class="btn btn-primary btn-sm" data-testid="btn-scan-all-favorites">
+              Quét tất cả kênh ngay
+            </button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data-table" id="favorites-table">
+            <thead>
+              <tr>
+                <th>Nền tảng</th>
+                <th>Tên Page / Kênh</th>
+                <th>Video trong kho</th>
+                <th>Lần quét trước</th>
+                <th>Lịch quét kế tiếp</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="favorites-tbody">
+              <tr>
+                <td colspan="7" class="muted">Đang tải danh sách kênh yêu thích...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- PANEL 3: DOWNLOADED VIDEO LIBRARY -->
+    <div id="panel-library" class="tab-panel">
+      <section class="card" id="library-section">
+        <div class="card-header">
+          <div>
+            <h2>Thư viện Video đã lưu trên ổ cứng</h2>
+            <p class="muted" id="library-root-label"></p>
+          </div>
+          <button type="button" id="btn-refresh-library" class="btn btn-secondary btn-sm">Làm mới thư viện</button>
+        </div>
+        <div id="library-pages-list" class="library-grid"></div>
+      </section>
+    </div>
+
+    <!-- PANEL 4: AI AGENT TELEMETRY & API DOCUMENTATION -->
+    <div id="panel-agent" class="tab-panel">
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <h2>Dữ liệu trạng thái JSON chuẩn cho AI Agent</h2>
+            <p class="muted">Cập nhật trực tiếp theo thời gian thực trong DOM và qua REST API</p>
+          </div>
+        </div>
+        <pre id="agent-job-json" data-testid="agent-job-json" class="plain-pre">{"status":"IDLE"}</pre>
+      </section>
+
+      <section class="card">
+        <div class="card-header">
+          <h2>Hướng dẫn kết nối nhanh cho AI Agent (REST API / URL / CLI)</h2>
+        </div>
+        <div class="api-examples">
+          <div class="api-item">
+            <strong>1. Tải toàn bộ Kênh Facebook / Instagram / YouTube (HTTP POST)</strong>
+            <div class="mono-text">POST http://127.0.0.1:6031/api/v1/reels/auto-download</div>
+            <pre class="plain-pre">{"url": "https://www.facebook.com/samfamily.6826/", "preferQuality": "1080p", "maxReels": 0}</pre>
+          </div>
+          <div class="api-item">
+            <strong>2. Lưu Kênh Yêu Thích &amp; Tự động quét hàng ngày (HTTP POST)</strong>
+            <div class="mono-text">POST http://127.0.0.1:6031/api/v1/reels/favorites</div>
+            <pre class="plain-pre">{"url": "https://www.youtube.com/@YouTube/shorts", "checkIntervalMinutes": 1440, "scanNow": true}</pre>
+          </div>
+          <div class="api-item">
+            <strong>3. Kích hoạt qua trình duyệt hoặc dòng lệnh CLI</strong>
+            <div class="mono-text">http://127.0.0.1:6031/reels/?url=https://www.facebook.com/samfamily.6826/&amp;auto=1</div>
+            <pre class="plain-pre">npm run download-page -- "https://www.instagram.com/instagram/reels/" --favorite</pre>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Video Preview Modal -->
+  <div id="preview-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="preview-title">Xem trước Video</h3>
+        <button type="button" id="btn-close-preview" class="btn btn-secondary btn-sm">Đóng</button>
+      </div>
+      <video id="preview-video" controls playsinline></video>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
