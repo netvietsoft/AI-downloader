@@ -11,6 +11,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.CookieManager
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -117,8 +118,23 @@ class HomeFragment : Fragment() {
             settings.allowContentAccess = false
             settings.cacheMode = WebSettings.LOAD_DEFAULT
 
-            // Cấu hình Mobile User-Agent & Responsive hiển thị tối ưu cho màn hình di động
-            settings.userAgentString = SnifferEngine.MOBILE_USER_AGENT
+            // Bật Cookie & Third-Party Cookies chuẩn trình duyệt để Google Search, YouTube, Facebook lưu phiên hợp lệ
+            try {
+                val cookieManager = CookieManager.getInstance()
+                cookieManager.setAcceptCookie(true)
+                cookieManager.setAcceptThirdPartyCookies(this, true)
+            } catch (_: Exception) {
+            }
+
+            // Đồng bộ User-Agent thực tế của Chromium hệ thống (loại bỏ cờ "; wv" để khớp 100% với Sec-CH-UA Client Hints, tránh bị Google Search chặn nhầm là bot)
+            val defaultUa = try {
+                WebSettings.getDefaultUserAgent(requireContext())
+                    .replace("; wv)", ")")
+                    .replace("Version/4.0 ", "")
+            } catch (_: Exception) {
+                SnifferEngine.MOBILE_USER_AGENT
+            }
+            settings.userAgentString = defaultUa
             settings.useWideViewPort = true
             settings.loadWithOverviewMode = true
             settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING
@@ -201,8 +217,12 @@ class HomeFragment : Fragment() {
                     }
                 }
 
-                                override fun onPageFinished(view: WebView?, url: String?) {
+                override fun onPageFinished(view: WebView?, url: String?) {
                     super.onPageFinished(view, url)
+                    try {
+                        CookieManager.getInstance().flush()
+                    } catch (_: Exception) {
+                    }
                     val pageTitle = view?.title ?: ""
                     if (pageTitle.isNotEmpty() && !pageTitle.startsWith("http")) { currentWebTitle = pageTitle }
                     if (url != null) {
@@ -553,6 +573,9 @@ class HomeFragment : Fragment() {
             trimmed.startsWith("fb://fullscreen_video/") -> {
                 val vid = trimmed.substringAfter("fullscreen_video/").substringBefore('?')
                 "https://www.facebook.com/reel/" + vid
+            }
+            trimmed.startsWith("@") && !trimmed.contains(" ") -> {
+                "https://www.youtube.com/$trimmed"
             }
             trimmed.startsWith("http://", ignoreCase = true) || trimmed.startsWith("https://", ignoreCase = true) -> {
                 trimmed
@@ -1026,42 +1049,59 @@ class HomeFragment : Fragment() {
                         }
                     }, true);
 
-                    // 4. Phát hiện và loại bỏ các lớp phủ tàng hình bẫy click (invisible ad overlay / click-jacking)
-                    var removeOverlays = function() {
-                        try {
-                            var elements = document.querySelectorAll('div, a, span');
-                            for (var i = 0; i < elements.length; i++) {
-                                var el = elements[i];
-                                var style = window.getComputedStyle(el);
-                                if (style.position === 'fixed' || style.position === 'absolute') {
-                                    var zIndex = parseInt(style.zIndex, 10);
-                                    if (zIndex >= 9999) {
-                                        var rect = el.getBoundingClientRect();
-                                        if (rect.width >= window.innerWidth * 0.8 && rect.height >= window.innerHeight * 0.8) {
-                                            var opacity = parseFloat(style.opacity);
-                                            if (opacity === 0 || style.backgroundColor === 'transparent' || style.backgroundColor.indexOf('rgba(0, 0, 0, 0)') !== -1) {
-                                                console.log('[AntiPopup] Removed invisible ad overlay:', el);
-                                                el.remove();
+                    // 4. Phát hiện và loại bỏ các lớp phủ tàng hình bẫy click trên trang web bên thứ 3
+                    // Tuyệt đối không can thiệp vào DOM của Google, reCAPTCHA, YouTube, Facebook, Instagram, TikTok
+                    var currHost = (window.location && window.location.hostname) ? window.location.hostname.toLowerCase() : '';
+                    var isTrustedFirstParty = currHost.indexOf('google.') !== -1 ||
+                                              currHost.indexOf('gstatic.') !== -1 ||
+                                              currHost.indexOf('recaptcha.') !== -1 ||
+                                              currHost.indexOf('youtube.') !== -1 ||
+                                              currHost.indexOf('facebook.') !== -1 ||
+                                              currHost.indexOf('instagram.') !== -1 ||
+                                              currHost.indexOf('tiktok.') !== -1;
+                    if (!isTrustedFirstParty) {
+                        var removeOverlays = function() {
+                            try {
+                                var elements = document.querySelectorAll('div, a, span');
+                                for (var i = 0; i < elements.length; i++) {
+                                    var el = elements[i];
+                                    if (el.querySelector && el.querySelector('iframe')) continue;
+                                    var style = window.getComputedStyle(el);
+                                    if (style.position === 'fixed' || style.position === 'absolute') {
+                                        var zIndex = parseInt(style.zIndex, 10);
+                                        if (zIndex >= 9999) {
+                                            var rect = el.getBoundingClientRect();
+                                            if (rect.width >= window.innerWidth * 0.8 && rect.height >= window.innerHeight * 0.8) {
+                                                var opacity = parseFloat(style.opacity);
+                                                if (opacity === 0 || style.backgroundColor === 'transparent' || style.backgroundColor.indexOf('rgba(0, 0, 0, 0)') !== -1) {
+                                                    console.log('[AntiPopup] Removed invisible ad overlay:', el);
+                                                    el.remove();
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
-                        } catch(e) {}
-                    };
-                    setTimeout(removeOverlays, 800);
-                    setTimeout(removeOverlays, 2000);
+                            } catch(e) {}
+                        };
+                        setTimeout(removeOverlays, 800);
+                        setTimeout(removeOverlays, 2000);
+                    }
                 } catch(err) {
                     console.error('[AntiPopup] Error injecting script:', err);
                 }
             })();
         """
 
-        // [VI] Script JavaScript bảo đảm 100% trang web hiển thị chuẩn Mobile Responsive
-        // [EN] JavaScript script ensuring 100% of websites render fluidly and responsively for mobile screens
+        // [VI] Script JavaScript bảo đảm trang web hiển thị chuẩn Mobile Responsive mà KHÔNG làm hỏng kích thước iframe/table/sprite (như Google Search / Widget)
         private const val MOBILE_RESPONSIVE_JS = """
             (function() {
                 try {
+                    var currHost = (window.location && window.location.hostname) ? window.location.hostname.toLowerCase() : '';
+                    if (currHost.indexOf('google.') !== -1 || currHost.indexOf('gstatic.') !== -1 || currHost.indexOf('recaptcha.') !== -1) {
+                        var oldStyle = document.getElementById('ai-downloader-mobile-responsive');
+                        if (oldStyle) oldStyle.remove();
+                        return;
+                    }
                     // 1. Kiểm tra hoặc chèn thẻ meta viewport chuẩn thiết bị di động
                     var vp = document.querySelector('meta[name="viewport"]');
                     if (!vp) {
@@ -1071,13 +1111,13 @@ class HomeFragment : Fragment() {
                     }
                     vp.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
 
-                    // 2. Chèn CSS Reset Responsive di động chống tràn ngang và co giãn media tự động
+                    // 2. Chèn CSS Responsive nhẹ nhàng, KHÔNG ép iframe { height: auto !important } hay table { display: block !important } làm cắt mất khung iframe
                     var styleId = 'ai-downloader-mobile-responsive';
                     if (!document.getElementById(styleId)) {
                         var css = document.createElement('style');
                         css.id = styleId;
                         css.type = 'text/css';
-                        css.innerHTML = 'html, body { max-width: 100vw !important; overflow-x: hidden !important; -webkit-text-size-adjust: 100% !important; } img, video, iframe, embed, object { max-width: 100% !important; height: auto !important; } table { max-width: 100% !important; display: block !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; } pre, code { white-space: pre-wrap !important; word-break: break-word !important; }';
+                        css.innerHTML = 'html, body { max-width: 100vw !important; overflow-x: hidden !important; -webkit-text-size-adjust: 100% !important; } video { max-width: 100% !important; height: auto !important; } pre, code { white-space: pre-wrap !important; word-break: break-word !important; }';
                         (document.head || document.documentElement).appendChild(css);
                     }
                 } catch(e) {}
