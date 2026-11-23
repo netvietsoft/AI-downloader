@@ -302,4 +302,24 @@ Tài liệu ghi nhận các lỗi đã gặp trong dự án, nguyên nhân gốc
   - Tuyệt đối không bao giờ gọi `Locale.setDefault(Locale(langCode))` thiếu tham số `country` vì sẽ làm hỏng toàn bộ hệ thống nhận diện vùng/tiền tệ của JVM và Android.
   - Khi hiển thị giá chia nhỏ (theo tháng/tuần) từ gói thuê bao Google Play, luôn sao chép tiền tố/hậu tố tiền tệ trực tiếp từ `ProductDetails.PricingPhase.formattedPrice`.
 
+---
+
+## [ERR-015] Quét Kênh Instagram / Facebook Reels Trên Mobile WebView Trả Về 0 Video Do Bẫy `intent://...com.instagram.lite` & Thiếu Desktop Navigation Headers `Sec-Fetch-*`
+- **Mức độ:** HIGH
+- **Ngày phát hiện:** 2026-11-23
+- **Triệu chứng:**
+  - Khi quét kênh `https://www.instagram.com/instagram/reels/` trên thiết bị Samsung Galaxy A07, dù lưới 3 cột Reels hiển thị phía dưới WebView nhưng hộp thoại **Channel Reels Scanner** báo: `Discovered 0 Reels/Shorts (0 new, 0 already downloaded)`.
+- **Root Cause:**
+  1. **Bẫy Mobile User-Agent của Instagram & Facebook:** Khi `WebView` gửi Mobile User-Agent (`Mozilla/5.0 (Linux; Android ...)`), Instagram Mobile Web thay thế toàn bộ thẻ `<a href="/instagram/reel/SHORTCODE/">` trong lưới 3 cột bằng liên kết ép mở ứng dụng `intent://instagram.com/_u/instagram?...#Intent;package=com.instagram.lite...` và lược bỏ sạch `shortcode` / `video_versions` khỏi DOM. Tương tự, Facebook Mobile Web trả về màn hình chặn mở ứng dụng với 0 Reels.
+  2. **Thiếu Header `Sec-Fetch-Mode: navigate` / `Sec-Fetch-Dest: document` trong `OkHttp`:** Khi `SnifferEngine.fetchHtmlWithOkHttp()` gọi `GET https://www.instagram.com/instagram/reels/` mà không đính kèm bộ header điều hướng trình duyệt (`Sec-Fetch-Dest: document`, `Sec-Fetch-Mode: navigate`, `Sec-Fetch-Site: none`, `Sec-Fetch-User: ?1`, `Upgrade-Insecure-Requests: 1`), máy chủ Instagram chỉ trả về khung vỏ React rỗng (539KB, 0 shortcode) thay vì tài liệu SSR đầy đủ (647KB chứa toàn bộ 12 `XIGPolarisVideoMedia` shortcodes và 10 luồng `.mp4` `video_versions`).
+  3. **Khoảng cách JSON trong Facebook Relay Payload (>10KB `dash_manifest`):** Trên trang Facebook Page Reels, chuỗi XML `"dash_manifest"` dài ~10.000 ký tự nằm chen giữa `"video_id"` và `"browser_native_sd_url"`, vượt quá cửa sổ `[\s\S]{1,3500}?` của biểu thức chính quy cũ.
+- **Giải pháp:**
+  1. Trong `HomeFragment.loadUrl()`, tự động chuyển `webView.settings.userAgentString = SnifferEngine.DESKTOP_USER_AGENT` kèm bộ header `Sec-Fetch-Dest: document`, `Sec-Fetch-Mode: navigate`, `Sec-Fetch-Site: none`, `Sec-Fetch-User: ?1` khi truy cập các trang Kênh/Reels của Instagram, Facebook, YouTube Shorts (đồng thời khôi phục `defaultMobileUserAgent` khi duyệt Google Search để bảo toàn 100% tương thích Client Hints).
+  2. Bổ sung cơ chế `pollForChannelReelsAndShowDialog()` và `CHANNEL_HARVESTER_JS` (hook `window.fetch`, `XMLHttpRequest`, DOM & `<script type="application/json">`) để đợi SPA render xong lưới Reels trước khi mở hộp thoại kết quả.
+  3. Cập nhật `SnifferEngine.fetchHtmlWithOkHttp()` và `extractInstagramVideo()` sử dụng `DESKTOP_USER_AGENT` kèm đầy đủ `Sec-Fetch-*` headers và regex `video_versions` linh hoạt.
+  4. Tối ưu `FavoriteChannelRepository.harvestChannelReelsFromHtml()` cho Facebook theo thuật toán neo trực tiếp vào `"browser_native_sd_url"` / `"playable_url"` và quét cửa sổ cục bộ (`-18.000..+3.500` ký tự), xử lý mượt mà cả payload có `dash_manifest` dài >10KB.
+- **Ngăn ngừa:**
+  - Mọi yêu cầu thu thập SSR HTML hoặc hiển thị WebView cho trang Kênh/Page của Instagram và Facebook đều phải sử dụng `DESKTOP_USER_AGENT` kèm bộ `Sec-Fetch-Mode: navigate` / `Sec-Fetch-Dest: document` headers để không bị nền tảng chuyển hướng sang giao diện khóa ép cài app di động (`intent://`).
+
+
 

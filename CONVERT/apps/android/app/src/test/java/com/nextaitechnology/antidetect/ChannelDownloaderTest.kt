@@ -111,5 +111,26 @@ class ChannelDownloaderTest {
         """.trimIndent()
         val ytReels = FavoriteChannelRepository.harvestChannelReelsFromHtml("https://www.youtube.com/@YouTube/shorts", ytHtml)
         assertEquals(2, ytReels.size)
+
+        val igHtml = """
+            <a href="/instagram/reel/C8abcDEF_12/">Reel 1</a>
+            <a href="/reels/D1xyzUVW_99/?hl=en">Reel 2</a>
+            <script type="application/json">{"shortcode":"E5mnoPQR_77","video_url":"https:\/\/scontent.cdninstagram.com\/v\/t50.2886-16\/reel3.mp4"}</script>
+            <script type="application/json">{"code":"en_US","node":{"__typename":"XIGPolarisVideoMedia","product_type":"clips","play_count":57081696,"code":"Df7khkFoAZq"}}</script>
+        """.trimIndent()
+        val igReels = FavoriteChannelRepository.harvestChannelReelsFromHtml("https://www.instagram.com/instagram/reels/", igHtml)
+        assertEquals(4, igReels.size)
+        assertTrue(igReels.any { it.reelId == "Df7khkFoAZq" })
+        assertFalse(igReels.any { it.reelId == "en_US" })
+
+        val longDashXml = "x".repeat(8500)
+        val fbLargeRelayHtml = """
+            {"video_id":"29380452708263804","dash_manifest":"$longDashXml","dash_manifest_url":"https:\/\/www.facebook.com\/dash_mpd_debug.mpd?v=29380452708263804&dummy=.mpd","browser_native_sd_url":"https:\/\/video.fbcdn.net\/o1\/v\/t2\/f2\/sd_stream.mp4?bytestart=0&byteend=999","browser_native_hd_url":"https:\/\/video.fbcdn.net\/o1\/v\/t2\/f2\/hd_stream.mp4"}
+        """.trimIndent()
+        val fbLargeReels = FavoriteChannelRepository.harvestChannelReelsFromHtml("https://www.facebook.com/samfamily.6826/reels/", fbLargeRelayHtml)
+        assertEquals(1, fbLargeReels.size)
+        assertEquals("29380452708263804", fbLargeReels[0].reelId)
+        assertEquals("https://video.fbcdn.net/o1/v/t2/f2/hd_stream.mp4", fbLargeReels[0].hdUrl)
+        assertEquals("https://video.fbcdn.net/o1/v/t2/f2/sd_stream.mp4", fbLargeReels[0].sdUrl)
     }
 }

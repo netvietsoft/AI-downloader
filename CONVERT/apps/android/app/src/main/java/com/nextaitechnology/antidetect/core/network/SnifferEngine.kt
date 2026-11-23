@@ -258,15 +258,7 @@ class SnifferEngine {
             Log.i("NextAI_Sniffer", "Bắt đầu bóc tách video Instagram từ: $pageUrl")
             var html = htmlContent ?: ""
             if (html.isBlank()) {
-                val request = Request.Builder()
-                    .url(pageUrl)
-                    .header("User-Agent", MOBILE_USER_AGENT)
-                    .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
-                    .header("Accept-Language", "en-US,en;q=0.9")
-                    .build()
-                val response: Response = httpClient.newCall(request).execute()
-                html = response.body?.string() ?: ""
-                response.close()
+                html = fetchHtmlWithOkHttp(pageUrl)
             }
 
             if (html.isBlank()) {
@@ -283,9 +275,19 @@ class SnifferEngine {
                 Log.i("NextAI_Sniffer", "Tìm thấy Instagram stream qua og:video: " + streamUrl.take(80))
             }
 
-            // 2. Trích xuất từ JSON payload video_versions hoặc video_url / playable_url
+            // 2. Trích xuất từ JSON payload video_versions (hỗ trợ cả cấu trúc có type/width/height đứng trước url)
             if (streamUrl.isNullOrEmpty()) {
-                val jsonUrlRegex = Pattern.compile(""""(?:video_url|playable_url|playable_url_quality_hd)":"([^"]+)"""")
+                val versionsRegex = Pattern.compile(""""video_versions"\s*:\s*\[\s*\{[^}]*?"url"\s*:\s*"(https?:[^"]+)"""")
+                val vMatcher = versionsRegex.matcher(html)
+                if (vMatcher.find()) {
+                    streamUrl = sanitizeMediaUrl(vMatcher.group(1) ?: "")
+                    Log.i("NextAI_Sniffer", "Tìm thấy Instagram stream qua video_versions: " + streamUrl.take(80))
+                }
+            }
+
+            // 3. Trích xuất từ JSON payload video_url / playable_url
+            if (streamUrl.isNullOrEmpty()) {
+                val jsonUrlRegex = Pattern.compile(""""(?:video_url|playable_url|playable_url_quality_hd)"\s*:\s*"(https?:[^"]+)"""")
                 val jsonMatcher = jsonUrlRegex.matcher(html)
                 if (jsonMatcher.find()) {
                     streamUrl = sanitizeMediaUrl(jsonMatcher.group(1) ?: "")
@@ -293,17 +295,9 @@ class SnifferEngine {
                 }
             }
 
+            // 4. Fallback: Quét các link cdninstagram.com hoặc fbcdn mp4 trong HTML
             if (streamUrl.isNullOrEmpty()) {
-                val versionsRegex = Pattern.compile(""""video_versions":\[\{"url":"([^"]+)"""")
-                val vMatcher = versionsRegex.matcher(html)
-                if (vMatcher.find()) {
-                    streamUrl = sanitizeMediaUrl(vMatcher.group(1) ?: "")
-                }
-            }
-
-            // 3. Fallback: Quét các link cdninstagram.com hoặc fbcdn mp4 trong HTML
-            if (streamUrl.isNullOrEmpty()) {
-                val cdnRegex = Pattern.compile("""https:\\/\\/[^"']*(?:cdninstagram\.com|\.fbcdn\.net)[^"']*\.mp4[^"']*""")
+                val cdnRegex = Pattern.compile("""https?:\\/\\/[^"']*(?:cdninstagram\.com|\.fbcdn\.net)[^"']*\.mp4[^"']*""")
                 val cdnMatcher = cdnRegex.matcher(html)
                 if (cdnMatcher.find()) {
                     streamUrl = sanitizeMediaUrl(cdnMatcher.group(0) ?: "")
@@ -316,23 +310,28 @@ class SnifferEngine {
             }
 
             // Clean byte range parameters if present
-            streamUrl = streamUrl.replace(Regex("&?byte(start|end)=\\d+"), "")
+            streamUrl = FavoriteChannelRepository.stripByteRangeParams(streamUrl)
 
-            // Trích xuất tiêu đề
-            val titleRegex = Pattern.compile("""<meta\s+property=["']og:title["']\s+content=["']([^"']+)["']""", Pattern.CASE_INSENSITIVE)
-            val titleMatcher = titleRegex.matcher(html)
-            val rawTitle = if (titleMatcher.find()) {
-                titleMatcher.group(1)?.replace(Regex("[^a-zA-Z0-9 _-]"), "")?.trim()
+            // Trích xuất tiêu đề / caption + hashtag
+            val captionJsonRegex = Pattern.compile(""""caption"\s*:\s*\{[^{}]*?"text"\s*:\s*"((?:[^"\\]|\\.)*)"""")
+            val captionMatcher = captionJsonRegex.matcher(html)
+            var rawCaption: String? = if (captionMatcher.find()) {
+                FavoriteChannelRepository.unescapeMediaUrl(captionMatcher.group(1))
             } else null
 
-            val reelId = pageUrl.substringAfter("/reel/").substringAfter("/p/").substringBefore("/").substringBefore("?")
-            val finalTitle = if (!rawTitle.isNullOrBlank() && rawTitle.length > 3) {
-                "Instagram_${rawTitle.take(30)}.mp4"
-            } else if (reelId.isNotBlank()) {
-                "Instagram_Reel_${reelId}.mp4"
-            } else {
-                "Instagram_Video_${System.currentTimeMillis()}.mp4"
+            if (rawCaption.isNullOrBlank()) {
+                val titleRegex = Pattern.compile("""<meta\s+property=["']og:title["']\s+content=["']([^"']+)["']""", Pattern.CASE_INSENSITIVE)
+                val titleMatcher = titleRegex.matcher(html)
+                if (titleMatcher.find()) {
+                    rawCaption = titleMatcher.group(1)?.trim()
+                }
             }
+
+            val reelId = pageUrl.substringAfter("/reel/").substringAfter("/reels/").substringAfter("/p/").substringBefore("/").substringBefore("?")
+            val finalTitle = FavoriteChannelRepository.buildVideoFileName(
+                reelId.ifBlank { "ig_${System.currentTimeMillis()}" },
+                rawCaption
+            )
 
             val qualities = mutableListOf<VideoQuality>()
             qualities.add(
@@ -862,8 +861,13 @@ class SnifferEngine {
             val request = Request.Builder()
                 .url(targetUrl)
                 .header("User-Agent", DESKTOP_USER_AGENT)
-                .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+                .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8")
                 .header("Accept-Language", "en-US,en;q=0.9,vi;q=0.8")
+                .header("Sec-Fetch-Dest", "document")
+                .header("Sec-Fetch-Mode", "navigate")
+                .header("Sec-Fetch-Site", "none")
+                .header("Sec-Fetch-User", "?1")
+                .header("Upgrade-Insecure-Requests", "1")
                 .build()
             val response: Response = httpClient.newCall(request).execute()
             val body = response.body?.string() ?: ""
