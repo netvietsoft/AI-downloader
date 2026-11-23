@@ -186,7 +186,7 @@
                 android:id="@+id/card_channel_downloader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="14dp"
                 app:cardBackgroundColor="#131B2E"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp">
@@ -195,25 +195,34 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="15dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:text="@string/home_channel_title"
                         android:textColor="@color/text_white"
                         android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:autoSizeMaxTextSize="15sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="1sp"
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
+                        android:ellipsize="end"
+                        android:lineSpacingExtra="2dp"
+                        android:maxLines="2"
                         android:text="@string/home_channel_desc"
                         android:textColor="@color/text_muted"
                         android:textSize="12sp" />
 
-                    <!-- Quick Platform Sample Chips -->
+                    <!-- Quick Platform Sample Chips (Responsive single-line pills) -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -223,79 +232,128 @@
                         <TextView
                             android:id="@+id/chip_sample_fb"
                             android:layout_width="0dp"
-                            android:layout_height="32dp"
+                            android:layout_height="34dp"
                             android:layout_weight="1"
-                            android:background="#1E293B"
+                            android:background="@drawable/bg_plan_unselected"
+                            android:ellipsize="end"
                             android:gravity="center"
-                            android:text="Facebook Page"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:paddingStart="6dp"
+                            android:paddingEnd="6dp"
+                            android:text="@string/chip_channel_fb"
                             android:textColor="#60A5FA"
                             android:textSize="11sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            app:autoSizeMaxTextSize="11sp"
+                            app:autoSizeMinTextSize="9sp"
+                            app:autoSizeStepGranularity="1sp"
+                            app:autoSizeTextType="uniform" />
 
                         <TextView
                             android:id="@+id/chip_sample_ig"
                             android:layout_width="0dp"
-                            android:layout_height="32dp"
+                            android:layout_height="34dp"
                             android:layout_marginStart="6dp"
                             android:layout_weight="1"
-                            android:background="#1E293B"
+                            android:background="@drawable/bg_plan_unselected"
+                            android:ellipsize="end"
                             android:gravity="center"
-                            android:text="Instagram Reels"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:paddingStart="6dp"
+                            android:paddingEnd="6dp"
+                            android:text="@string/chip_channel_ig"
                             android:textColor="#F472B6"
                             android:textSize="11sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            app:autoSizeMaxTextSize="11sp"
+                            app:autoSizeMinTextSize="9sp"
+                            app:autoSizeStepGranularity="1sp"
+                            app:autoSizeTextType="uniform" />
 
                         <TextView
                             android:id="@+id/chip_sample_yt"
                             android:layout_width="0dp"
-                            android:layout_height="32dp"
+                            android:layout_height="34dp"
                             android:layout_marginStart="6dp"
                             android:layout_weight="1"
-                            android:background="#1E293B"
+                            android:background="@drawable/bg_plan_unselected"
+                            android:ellipsize="end"
                             android:gravity="center"
-                            android:text="YouTube Shorts"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:paddingStart="6dp"
+                            android:paddingEnd="6dp"
+                            android:text="@string/chip_channel_yt"
                             android:textColor="#F87171"
                             android:textSize="11sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            app:autoSizeMaxTextSize="11sp"
+                            app:autoSizeMinTextSize="9sp"
+                            app:autoSizeStepGranularity="1sp"
+                            app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
-                    <!-- Action Buttons: Scan & Download Channel + Save Favorite Channel -->
+                    <!-- Action Buttons: Responsive Single-Line Pill Buttons fitting all mobile widths -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="10dp"
                         android:orientation="horizontal">
 
-                        <Button
+                        <TextView
                             android:id="@+id/btn_scan_channel"
                             android:layout_width="0dp"
                             android:layout_height="42dp"
-                            android:layout_weight="1.35"
+                            android:layout_weight="1.15"
                             android:background="@drawable/bg_pill_btn"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
                             android:text="@string/btn_scan_channel"
                             android:textColor="#FFFFFF"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            app:autoSizeMaxTextSize="12sp"
+                            app:autoSizeMinTextSize="9sp"
+                            app:autoSizeStepGranularity="1sp"
+                            app:autoSizeTextType="uniform" />
 
-                        <Button
+                        <TextView
                             android:id="@+id/btn_save_favorite_channel"
                             android:layout_width="0dp"
                             android:layout_height="42dp"
                             android:layout_marginStart="8dp"
-                            android:layout_weight="1"
-                            android:background="#1E293B"
+                            android:layout_weight="0.95"
+                            android:background="@drawable/bg_plan_selected"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
                             android:text="@string/btn_save_favorite_channel"
                             android:textColor="#F59E0B"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            app:autoSizeMaxTextSize="12sp"
+                            app:autoSizeMinTextSize="9sp"
+                            app:autoSizeStepGranularity="1sp"
+                            app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
                     <!-- Favorite Channels Watchlist Section -->
                     <TextView
                         android:id="@+id/tv_favorite_channels_header"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
+                        android:layout_marginTop="12dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:text="@string/home_favorites_header"
                         android:textColor="#F59E0B"
                         android:textSize="11sp"
@@ -305,7 +363,7 @@
                         android:id="@+id/layout_favorite_channels_list"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="4dp"
                         android:orientation="vertical" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
