@@ -905,9 +905,9 @@ class HomeFragment : Fragment() {
             val row = LinearLayout(ctx).apply {
                 orientation = LinearLayout.HORIZONTAL
                 gravity = Gravity.CENTER_VERTICAL
-                setBackgroundColor(Color.parseColor("#0D1424"))
+                setBackgroundResource(R.drawable.bg_plan_unselected)
                 val padH = (10 * density).toInt()
-                val padV = (8 * density).toInt()
+                val padV = (7 * density).toInt()
                 setPadding(padH, padV, padH, padV)
                 val lp = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
@@ -924,9 +924,11 @@ class HomeFragment : Fragment() {
             }
 
             val infoTv = TextView(ctx).apply {
-                text = "$badgeIcon • ${fav.title} (${fav.downloadedReelIds.size} đã tải)"
+                text = "$badgeIcon • ${fav.title} (${fav.downloadedReelIds.size})"
                 setTextColor(Color.WHITE)
-                textSize = 12f
+                textSize = 11.5f
+                maxLines = 1
+                ellipsize = android.text.TextUtils.TruncateAt.END
                 layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
             }
 
@@ -934,7 +936,9 @@ class HomeFragment : Fragment() {
                 text = getString(R.string.btn_scan_new)
                 setTextColor(Color.parseColor("#46CC6B"))
                 textSize = 11f
-                setPadding((10 * density).toInt(), (4 * density).toInt(), (10 * density).toInt(), (4 * density).toInt())
+                maxLines = 1
+                setTypeface(typeface, android.graphics.Typeface.BOLD)
+                setPadding((10 * density).toInt(), (4 * density).toInt(), (8 * density).toInt(), (4 * density).toInt())
                 setOnClickListener {
                     etUrlInput.setText(fav.reelsTabUrl)
                     startChannelScanFlow(fav.reelsTabUrl)
